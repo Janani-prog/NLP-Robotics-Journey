@@ -10,12 +10,12 @@ This repository documents my summer internship journey under the guidance of Pro
 * **Deliverable:** A comprehensive presentation outlining findings and insights from the dataset analysis.
 * **Location:** See `01_Task_Dataset_Analysis/` for the presentation and a summary of findings.
 
-### 💻 Task 2: Basic Simulation Development (In Progress / Recently Completed)
+### 💻 Task 2: Basic Simulation Development (Recently Completed)
 * **Objective:** To implement basic simulations demonstrating the potential for language-to-robot mapping using few-shot examples from selected datasets (KITTI for navigation context and `milistu/robot-instructions` for direct command execution).
 * **Deliverables:** Python codes for each simulation, along with detailed documentation of their logic and implementation.
 * **Location:** All code and specific notes related to these simulations can be found in `02_Task_Simulations/`.
 
-### 🤖 Task 3: Humanoid Robot Command Replication (Upcoming / In Progress)
+### 🤖 Task 3: Humanoid Robot Command Replication (In Progress)
 * **Objective:** To replicate and adapt the robotic commands derived in previous tasks to control a humanoid robot. This phase will involve bridging the gap between simulated commands and actual robot actions.
 * **Deliverables:** Code for humanoid robot control, demonstration of command execution, and documentation of challenges and solutions.
 * **Location:** Progress on this task will be documented in `03_Task_Humanoid_Replication/`.
