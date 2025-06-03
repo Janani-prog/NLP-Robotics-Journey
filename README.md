@@ -1,7 +1,7 @@
 # Summer NLP for Robotics Internship: Language-to-Robot Interface Development
 
 ## Overview
-This repository documents my summer internship journey under the guidance of Professor [Professor's Name] from NIT Trichy. The internship focuses on developing Natural Language Processing (NLP) capabilities for robotics, progressing through distinct phases from dataset analysis to practical robot command execution.
+This repository documents my summer internship journey under the guidance of Professor S.Sangeetha from NIT Trichy. The internship focuses on developing Natural Language Processing (NLP) capabilities for robotics, progressing through distinct phases from dataset analysis to practical robot command execution.
 
 ## Internship Phases & Progress
 
@@ -55,7 +55,4 @@ This repository documents my summer internship journey under the guidance of Pro
 * **`mint-lab/awesome-robotics-datasets`**: A curated list of various robotics datasets for autonomous driving, flying, underwater, etc. (Link: [https://github.com/mint-lab/awesome-robotics-datasets](https://github.com/mint-lab/awesome-robotics-datasets))
 * **`milistu/robot-instructions`**: A dataset focused on mapping natural language instructions to robot function calls. (Link: [https://huggingface.co/datasets/milistu/robot-instructions](https://huggingface.co/datasets/milistu/robot-instructions))
 
-## Contact
-* [Your Name]
-* [Your Email]
-* [Your LinkedIn Profile (Optional)]
+
