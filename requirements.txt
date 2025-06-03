@@ -1,0 +1,5 @@
+opencv-python==4.8.1.78
+numpy==1.26.4          # Supports Python 3.12
+matplotlib==3.8.4      # Supports Python 3.12
+Pillow==10.3.0         # Latest
+ultralytics==8.1.25    # Newer version likely compatible with Python 3.12
