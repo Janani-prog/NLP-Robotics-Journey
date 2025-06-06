@@ -1,0 +1,9 @@
+# Robot Simulation Requirements
+pybullet>=3.2.0
+numpy>=1.19.0
+datasets>=2.0.0
+requests>=2.25.0
+
+# Optional but recommended
+matplotlib>=3.3.0
+scipy>=1.7.0
