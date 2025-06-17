@@ -1,0 +1,1289 @@
+[
+  {
+    "id": "disaster_001",
+    "intent": "search_survivors",
+    "english": "Use thermal sensors to locate survivors in the collapsed apartment near Gandhi Nagar.",
+    "tamil": "காந்தி நகரில் உள்ள இடிந்த கட்டிடத்தில் வெப்ப கதிரியக்க சென்சார்களைப் பயன்படுத்தி உயிரோடு இருப்பவர்களை கண்டறியவும்.",
+    "parameters": {
+      "sensor_type": "thermal",
+      "landmark": "Gandhi Nagar",
+      "structure_type": "apartment"
+    },
+    "safety_critical": true,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_002",
+    "intent": "deploy_supplies",
+    "english": "Airdrop 50 survival kits to coordinates 13.0827°N, 80.2707°E with high priority.",
+    "tamil": "13.0827°N, 80.2707°E ஆயங்களுக்கு 50 உயிர்காப்பு கிடங்களை உயர் முன்னுரிமையுடன் விமானம் மூலம் வீசவும்.",
+    "parameters": {
+      "quantity": 50,
+      "supply_type": "survival kits",
+      "coordinates": "13.0827°N, 80.2707°E",
+      "priority": "high"
+    },
+    "safety_critical": false,
+    "confirmation_required": false
+  },
+  {
+    "id": "disaster_003",
+    "intent": "hazard_warning",
+    "english": "Issue chemical leak alert within 500m radius of the damaged factory.",
+    "tamil": "சேதமடைந்த தொழிற்சாலையின் 500 மீட்டர் ஆரத்தில் இரசாயன கசிவு எச்சரிக்கையை வெளியிடவும்.",
+    "parameters": {
+      "hazard_type": "chemical leak",
+      "radius": "500m",
+      "landmark": "factory"
+    },
+    "safety_critical": true,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_004",
+    "intent": "clear_path",
+    "english": "Remove debris blocking Route NH48 between kilometer markers 120 and 125.",
+    "tamil": "120 முதல் 125 கிலோமீட்டர் குறிப்பான்களுக்கு இடையே உள்ள NH48 சாலையில் உள்ள குப்பைகளை அகற்றவும்.",
+    "parameters": {
+      "obstacle_type": "debris",
+      "route": "NH48",
+      "start_marker": 120,
+      "end_marker": 125
+    },
+    "safety_critical": true,
+    "confirmation_required": false
+  },
+  {
+    "id": "disaster_005",
+    "intent": "medical_assistance",
+    "english": "Set up temporary medical camp at the flood relief center in Cuddalore.",
+    "tamil": "கடலூர் வெள்ள நிவாரண மையத்தில் தற்காலிக மருத்துவ முகாமை அமைக்கவும்.",
+    "parameters": {
+      "facility_type": "medical camp",
+      "disaster_type": "flood",
+      "location": "Cuddalore relief center"
+    },
+    "safety_critical": false,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_006",
+    "intent": "structural_assessment",
+    "english": "Scan building at 25/7 Velachery Main Road for structural integrity using LiDAR.",
+    "tamil": "25/7 வேளச்சேரி மெயின் ரோடில் உள்ள கட்டிடத்தை லிடார் மூலம் கட்டமைப்பு ஒருங்கிணைப்புக்காக ஸ்கேன் செய்யவும்.",
+    "parameters": {
+      "technology": "LiDAR",
+      "address": "25/7 Velachery Main Road",
+      "assessment_type": "structural integrity"
+    },
+    "safety_critical": true,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_007",
+    "intent": "water_rescue",
+    "english": "Deploy amphibious drones for water rescue operations in Marina Beach area.",
+    "tamil": "மரீனா கடற்கரை பகுதியில் நீர் மீட்பு செயல்பாடுகளுக்கு நீர்நில விமானங்களை அனுப்பவும்.",
+    "parameters": {
+      "equipment": "amphibious drones",
+      "operation": "water rescue",
+      "location": "Marina Beach"
+    },
+    "safety_critical": true,
+    "confirmation_required": false
+  },
+  {
+    "id": "disaster_008",
+    "intent": "fire_containment",
+    "english": "Create firebreak perimeter 200m around burning oil depot in Ennore.",
+    "tamil": "எண்ணூரில் எரிந்து கொண்டிருக்கும் எண்ணெய் கிடங்கிற்கு 200 மீட்டர் சுற்றளவில் தீ தடுப்பு வலயத்தை உருவாக்கவும்.",
+    "parameters": {
+      "measure": "firebreak",
+      "radius": "200m",
+      "hazard": "burning oil depot",
+      "location": "Ennore"
+    },
+    "safety_critical": true,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_009",
+    "intent": "evacuation_route",
+    "english": "Mark safe evacuation routes from Central Railway Station using LED beacons.",
+    "tamil": "எல்.ஈ.டி பீக்கன்களைப் பயன்படுத்தி சென்ட்ரல் ரயில் நிலையத்திலிருந்து பாதுகாப்பான வெளியேற்றம் செய்யும் வழிகளைக் குறிக்கவும்.",
+    "parameters": {
+      "technology": "LED beacons",
+      "starting_point": "Central Railway Station",
+      "purpose": "evacuation routes"
+    },
+    "safety_critical": true,
+    "confirmation_required": false
+  },
+  {
+    "id": "disaster_010",
+    "intent": "communication_restore",
+    "english": "Establish emergency mesh network in cyclone-affected Nagapattinam district.",
+    "tamil": "சூறாவளி பாதிப்புக்குள்ளான நாகப்பட்டினம் மாவட்டத்தில் அவசர ஜால பிணையத்தை நிறுவவும்.",
+    "parameters": {
+      "technology": "mesh network",
+      "disaster_type": "cyclone",
+      "location": "Nagapattinam district"
+    },
+    "safety_critical": false,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_011",
+    "intent": "chemical_neutralization",
+    "english": "Disperse neutralizing agents for ammonia leak at 9.9252°N, 78.1198°E.",
+    "tamil": "9.9252°N, 78.1198°E இல் அமோனியா கசிவுக்கு நடுநிலையாக்கும் முகவர்களை பரப்பவும்.",
+    "parameters": {
+      "chemical": "ammonia",
+      "action": "neutralization",
+      "coordinates": "9.9252°N, 78.1198°E"
+    },
+    "safety_critical": true,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_012",
+    "intent": "power_restoration",
+    "english": "Prioritize electricity restoration to Government General Hospital using mobile generators.",
+    "tamil": "அசையும் மின்னாக்கிகளைப் பயன்படுத்தி அரசு பொது மருத்துவமனைக்கு மின்சார மீட்பை முன்னுரிமையாக அளிக்கவும்.",
+    "parameters": {
+      "facility": "Government General Hospital",
+      "equipment": "mobile generators",
+      "priority": "high"
+    },
+    "safety_critical": true,
+    "confirmation_required": false
+  },
+  {
+    "id": "disaster_013",
+    "intent": "missing_persons",
+    "english": "Cross-reference facial recognition data with survivor lists at all Chennai shelters.",
+    "tamil": "சென்னையில் உள்ள அனைத்து தங்குமிடங்களிலும் முக அங்கீகார தரவை உயிர் பிழைத்தவர்களின் பட்டியலுடன் குறுக்கு-குறிப்பிடவும்.",
+    "parameters": {
+      "technology": "facial recognition",
+      "location": "all Chennai shelters",
+      "purpose": "missing persons identification"
+    },
+    "safety_critical": false,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_014",
+    "intent": "drone_surveillance",
+    "english": "Initiate 24/7 aerial surveillance of breached dam in Mettur with thermal imaging.",
+    "tamil": "மேட்டூரில் உடைந்த அணையின் 24/7 வான்வழி கண்காணிப்பை வெப்ப படமாக்கத்துடன் தொடங்கவும்.",
+    "parameters": {
+      "duration": "24/7",
+      "technology": "thermal imaging",
+      "location": "Mettur dam",
+      "condition": "breached"
+    },
+    "safety_critical": true,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_015",
+    "intent": "water_purification",
+    "english": "Deploy portable water purification units to tsunami-affected coastal villages.",
+    "tamil": "சுனாமி பாதிக்கப்பட்ட கடற்கரை கிராமங்களுக்கு சிற்றளவு நீர் சுத்திகரிப்பு அலகுகளை அமைக்கவும்.",
+    "parameters": {
+      "equipment": "water purification units",
+      "disaster_type": "tsunami",
+      "location": "coastal villages"
+    },
+    "safety_critical": false,
+    "confirmation_required": false
+  },
+  {
+    "id": "disaster_016",
+    "intent": "bridge_inspection",
+    "english": "Conduct ultrasonic testing on damaged Adyar bridge before allowing traffic.",
+    "tamil": "போக்குவரத்துக்கு அனுமதிக்கும் முன் சேதமடைந்த அடையார் பாலத்தில் அல்ட்ராசோனிக் சோதனை நடத்தவும்.",
+    "parameters": {
+      "technology": "ultrasonic testing",
+      "structure": "Adyar bridge",
+      "condition": "damaged"
+    },
+    "safety_critical": true,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_017",
+    "intent": "animal_rescue",
+    "english": "Coordinate with forest department for wildlife rescue in flooded Mudumalai reserve.",
+    "tamil": "வெள்ளத்தால் பாதிக்கப்பட்ட முதுமலை காப்பகத்தில் வனவிலங்குகளை மீட்பதற்கு வனத்துறையுடன் ஒருங்கிணைக்கவும்.",
+    "parameters": {
+      "agency": "forest department",
+      "operation": "wildlife rescue",
+      "location": "Mudumalai reserve",
+      "disaster_type": "flood"
+    },
+    "safety_critical": false,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_018",
+    "intent": "radiation_monitoring",
+    "english": "Monitor radiation levels every 30 minutes at Kalpakkam nuclear plant perimeter.",
+    "tamil": "கல்பாக்கம் அணுமின் நிலையத்தின் சுற்றளவில் ஒவ்வொரு 30 நிமிடங்களுக்கும் கதிரியக்க அளவுகளை கண்காணிக்கவும்.",
+    "parameters": {
+      "interval": "30 minutes",
+      "hazard": "radiation",
+      "location": "Kalpakkam nuclear plant perimeter"
+    },
+    "safety_critical": true,
+    "confirmation_required": false
+  },
+  {
+    "id": "disaster_019",
+    "intent": "landshed_warning",
+    "english": "Activate landslide early warning system for Nilgiris district hillslopes.",
+    "tamil": "நீலகிரி மாவட்ட மலைச் சரிவுகளுக்கு நிலச்சரிவு முன்னெச்சரிக்கை அமைப்பை செயல்படுத்தவும்.",
+    "parameters": {
+      "system": "landslide early warning",
+      "location": "Nilgiris district hillslopes"
+    },
+    "safety_critical": true,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_020",
+    "intent": "data_relay",
+    "english": "Establish satellite data relay for relief operations in cutoff Andaman islands.",
+    "tamil": "துண்டிக்கப்பட்ட அந்தமான் தீவுகளில் நிவாரண நடவடிக்கைகளுக்கு செயற்கைக்கோள் தரவு ரிலேயை நிறுவவும்.",
+    "parameters": {
+      "technology": "satellite data relay",
+      "location": "Andaman islands",
+      "condition": "cutoff"
+    },
+    "safety_critical": false,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_021",
+    "intent": "gas_leak_control",
+    "english": "Seal gas pipeline valves in T.Nagar area after detecting methane concentrations above 500ppm.",
+    "tamil": "500ppm க்கு மேல் மீத்தேன் செறிவு கண்டறியப்பட்டதால், தியாகராய நகர் பகுதியில் எரிவாயு குழாய் வால்வுகளை மூடவும்.",
+    "parameters": {
+      "hazard": "methane leak",
+      "threshold": "500ppm",
+      "location": "T.Nagar",
+      "action": "seal valves"
+    },
+    "safety_critical": true,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_022",
+    "intent": "evacuation_assistance",
+    "english": "Guide visually impaired residents via audio instructions to nearest shelter at 12.9716°N, 77.5946°E.",
+    "tamil": "பார்வைக் குறைபாடுள்ள குடியிருப்பாளர்களை ஒலி வழிகாட்டுதல்கள் மூலம் 12.9716°N, 77.5946°E அருகிலுள்ள தங்குமிடத்திற்கு வழிநடத்தவும்.",
+    "parameters": {
+      "assistance_type": "audio guidance",
+      "target_group": "visually impaired",
+      "coordinates": "12.9716°N, 77.5946°E"
+    },
+    "safety_critical": true,
+    "confirmation_required": false
+  },
+  {
+    "id": "disaster_023",
+    "intent": "structural_shoring",
+    "english": "Install temporary supports for leaning building on GST Road near Tambaram.",
+    "tamil": "தாம்பரம் அருகே ஜிஎஸ்டி சாலையில் சாய்ந்து கிடக்கும் கட்டிடத்திற்கு தற்காலிக ஆதாரங்களை நிறுவவும்.",
+    "parameters": {
+      "intervention": "temporary supports",
+      "structure_condition": "leaning",
+      "location": "GST Road, Tambaram"
+    },
+    "safety_critical": true,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_024",
+    "intent": "medical_telemetry",
+    "english": "Transmit vital signs of 15 critical patients from Kilpauk Medical College to central command.",
+    "tamil": "கில்பாக் மருத்துவக் கல்லூரியில் உள்ள 15 முக்கிய நோயாளிகளின் உயிரியல் குறிகைகளை மைய கட்டளைக்கு அனுப்பவும்.",
+    "parameters": {
+      "data_type": "vital signs",
+      "patient_count": 15,
+      "facility": "Kilpauk Medical College",
+      "priority": "critical"
+    },
+    "safety_critical": true,
+    "confirmation_required": false
+  },
+  {
+    "id": "disaster_025",
+    "intent": "contamination_zone",
+    "english": "Mark 1km exclusion zone around radioactive spill site at Kalpakkam with automated beacons.",
+    "tamil": "கல்பாக்கத்தில் ரேடியோ யாக்டிவ் கசிவு இடத்தைச் சுற்றி 1கிமீ தடை மண்டலத்தை தானியங்கி பீக்கன்களால் குறிக்கவும்.",
+    "parameters": {
+      "hazard": "radioactive spill",
+      "radius": "1km",
+      "marking_method": "automated beacons",
+      "location": "Kalpakkam"
+    },
+    "safety_critical": true,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_026",
+    "intent": "waterway_clearance",
+    "english": "Clear submerged vehicles from Adyar river near Kotturpuram bridge using amphibious excavators.",
+    "tamil": "நீரில் மூழ்கிய வாகனங்களை கோட்டூர்புரம் பாலத்தருகே அடையாறு நதியில் இருந்து நீர்நில வெட்டிகள் மூலம் அகற்றவும்.",
+    "parameters": {
+      "obstacle": "submerged vehicles",
+      "waterway": "Adyar river",
+      "equipment": "amphibious excavators",
+      "landmark": "Kotturpuram bridge"
+    },
+    "safety_critical": false,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_027",
+    "intent": "epidemic_prevention",
+    "english": "Disinfect temporary shelters in Cuddalore district after flood waters recede.",
+    "tamil": "வெள்ளம் வடிந்த பிறகு கடலூர் மாவட்டத்தில் உள்ள தற்காலிக தங்குமிடங்களை கிருமி நீக்கம் செய்யவும்.",
+    "parameters": {
+      "action": "disinfection",
+      "facilities": "temporary shelters",
+      "disaster_type": "flood",
+      "location": "Cuddalore district"
+    },
+    "safety_critical": false,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_028",
+    "intent": "power_grid_repair",
+    "english": "Replace damaged transformers in Besant Nagar substation to restore power to 5km radius.",
+    "tamil": "5கிமீ ஆரத்தில் மின்சாரம் மீட்பதற்கு பெசன்ட் நகர் துணை மின்நிலையத்தில் சேதமடைந்த மின்மாற்றிகளை மாற்றவும்.",
+    "parameters": {
+      "repair_type": "transformer replacement",
+      "facility": "Besant Nagar substation",
+      "impact_radius": "5km"
+    },
+    "safety_critical": true,
+    "confirmation_required": false
+  },
+  {
+    "id": "disaster_029",
+    "intent": "food_distribution",
+    "english": "Coordinate drone deliveries of 2000 meal packets to marooned villages in Thanjavur district.",
+    "tamil": "தஞ்சாவூர் மாவட்டத்தில் தனிமைப்படுத்தப்பட்ட கிராமங்களுக்கு 2000 உணவு பொதிகளை ட்ரோன் மூலம் விநியோகிக்க ஒருங்கிணைக்கவும்.",
+    "parameters": {
+      "delivery_method": "drone",
+      "supplies": "meal packets",
+      "quantity": 2000,
+      "location": "Thanjavur district",
+      "condition": "marooned"
+    },
+    "safety_critical": false,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_030",
+    "intent": "bridge_collapse",
+    "english": "Deploy sonar equipment to search for vehicles submerged under collapsed Hosur highway overpass.",
+    "tamil": "இடிந்த ஓசூர் நெடுஞ்சாலை மேம்பாலத்தின் கீழ் மூழ்கிய வாகனங்களைத் தேட சோனார் உபகரணங்களை அனுப்பவும்.",
+    "parameters": {
+      "technology": "sonar",
+      "incident": "bridge collapse",
+      "location": "Hosur highway overpass",
+      "target": "submerged vehicles"
+    },
+    "safety_critical": true,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_031",
+    "intent": "railway_clearance",
+    "english": "Clear derailed coaches from Chennai Central to Tambaram rail line within 6 hours.",
+    "tamil": "6 மணி நேரத்திற்குள் சென்னை சென்ட்ரல் முதல் தாம்பரம் வரை உள்ள ரயில் பாதையில் வழிதவறிய பெட்டிகளை அகற்றவும்.",
+    "parameters": {
+      "obstacle": "derailed coaches",
+      "route": "Chennai Central-Tambaram",
+      "timeframe": "6 hours"
+    },
+    "safety_critical": true,
+    "confirmation_required": false
+  },
+  {
+    "id": "disaster_032",
+    "intent": "mudslide_rescue",
+    "english": "Use ground-penetrating radar to locate survivors in Ooty mudslide area.",
+    "tamil": "ஊட்டி சேறு சரிவு பகுதியில் உயிரோடு இருப்பவர்களைக் கண்டறிய தரை ஊடுருவி ரேடாரைப் பயன்படுத்தவும்.",
+    "parameters": {
+      "technology": "ground-penetrating radar",
+      "disaster_type": "mudslide",
+      "location": "Ooty"
+    },
+    "safety_critical": true,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_033",
+    "intent": "communication_jammer",
+    "english": "Activate emergency signal jammer at 11.0168°N, 76.9558°E to prevent detonation signals.",
+    "tamil": "வெடிப்பு சைகைகளைத் தடுக்க 11.0168°N, 76.9558°E இல் அவசர சிக்னல் ஜாமரை செயல்படுத்தவும்.",
+    "parameters": {
+      "device": "signal jammer",
+      "purpose": "prevent detonation",
+      "coordinates": "11.0168°N, 76.9558°E"
+    },
+    "safety_critical": true,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_034",
+    "intent": "mobile_hospital",
+    "english": "Set up robotic surgical unit at temporary field hospital in Vellore flood zone.",
+    "tamil": "வேலூர் வெள்ளம் பாதிக்கப்பட்ட பகுதியில் தற்காலிக கள மருத்துவமனையில் ரோபோடிக் அறுவை சிகிச்சை யூனிட்டை அமைக்கவும்.",
+    "parameters": {
+      "facility": "robotic surgical unit",
+      "hospital_type": "field hospital",
+      "disaster_type": "flood",
+      "location": "Vellore"
+    },
+    "safety_critical": false,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_035",
+    "intent": "chemical_identification",
+    "english": "Analyze unknown chemical spill at Ambattur Industrial Estate using spectrometers.",
+    "tamil": "ஸ்பெக்ட்ரோமீட்டர்களைப் பயன்படுத்தி அம்பத்தூர் தொழிற்துறை எஸ்டேட்டில் அறியப்படாத இரசாயன கசிவை பகுப்பாய்வு செய்யவும்.",
+    "parameters": {
+      "technology": "spectrometers",
+      "hazard": "unknown chemical",
+      "location": "Ambattur Industrial Estate"
+    },
+    "safety_critical": true,
+    "confirmation_required": false
+  },
+  {
+    "id": "disaster_036",
+    "intent": "aerial_mapping",
+    "english": "Generate 3D damage assessment maps of cyclone-hit Karaikal coast using drone swarm.",
+    "tamil": "ட்ரோன் கூட்டத்தைப் பயன்படுத்தி சூறாவளி பாதித்த காரைக்கால் கடற்கரையின் 3D சேத மதிப்பீட்டு வரைபடங்களை உருவாக்கவும்.",
+    "parameters": {
+      "output": "3D damage maps",
+      "technology": "drone swarm",
+      "disaster_type": "cyclone",
+      "location": "Karaikal coast"
+    },
+    "safety_critical": false,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_037",
+    "intent": "underground_search",
+    "english": "Deploy snake robots to inspect collapsed metro tunnel near LIC building.",
+    "tamil": "எல்.ஐ.சி கட்டிடத்திற்கு அருகில் இடிந்த மெட்ரோ சுரங்கப்பாதையை ஆய்வு செய்ய பாம்பு ரோபோக்களை அனுப்பவும்.",
+    "parameters": {
+      "robots": "snake robots",
+      "environment": "collapsed tunnel",
+      "landmark": "LIC building"
+    },
+    "safety_critical": true,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_038",
+    "intent": "water_sampling",
+    "english": "Collect and analyze water samples every 2 hours from Cooum river for contamination.",
+    "tamil": "கூவம் நதியில் இருந்து 2 மணி நேரத்திற்கு ஒருமுறை நீர் மாதிரிகளை சேகரித்து மாசுபாட்டிற்கு பகுப்பாய்வு செய்யவும்.",
+    "parameters": {
+      "target": "water quality",
+      "location": "Cooum river",
+      "frequency": "every 2 hours",
+      "analysis": "contamination"
+    },
+    "safety_critical": false,
+    "confirmation_required": false
+  },
+  {
+    "id": "disaster_039",
+    "intent": "crowd_control",
+    "english": "Deploy autonomous barriers to manage crowds at Anna Nagar relief material distribution center.",
+    "tamil": "அண்ணா நகர் நிவாரண பொருள் விநியோக மையத்தில் கூட்டத்தை நிர்வகிக்க தன்னாட்சி தடுப்புகளை அமைக்கவும்.",
+    "parameters": {
+      "technology": "autonomous barriers",
+      "purpose": "crowd management",
+      "location": "Anna Nagar relief center"
+    },
+    "safety_critical": false,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_040",
+    "intent": "firefighting",
+    "english": "Direct unmanned firefighting vehicles to chemical warehouse blaze in Manali.",
+    "tamil": "மணலியில் உள்ள இரசாயன கிடங்கு தீயில் ஆளில்லா தீயணைக்கும் வாகனங்களை செலுத்தவும்.",
+    "parameters": {
+      "equipment": "unmanned firefighting vehicles",
+      "hazard": "chemical fire",
+      "location": "Manali"
+    },
+    "safety_critical": true,
+    "confirmation_required": false
+  },
+  {
+    "id": "disaster_041",
+    "intent": "debris_sorting",
+    "english": "Use AI-powered robotic arms to separate recyclable materials from earthquake debris in Trichy.",
+    "tamil": "திருச்சியில் நிலநடுக்கக் குப்பைகளில் இருந்து மீளுருவாக்க பொருட்களை பிரிக்க AI இயந்திர கைகளைப் பயன்படுத்தவும்.",
+    "parameters": {
+      "technology": "AI robotic arms",
+      "task": "debris sorting",
+      "disaster_type": "earthquake",
+      "location": "Trichy"
+    },
+    "safety_critical": false,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_042",
+    "intent": "radiation_decontamination",
+    "english": "Begin robotic decontamination of 200m radius around leaked radiation source in Tarapur.",
+    "tamil": "தாராபூரில் கசிந்த கதிரியக்க மூலத்தைச் சுற்றி 200மீ ஆரத்தில் ரோபோடிக் கதிரியக்கத் தூய்மைப்படுத்தலைத் தொடங்கவும்.",
+    "parameters": {
+      "process": "robotic decontamination",
+      "hazard": "radiation leak",
+      "radius": "200m",
+      "location": "Tarapur"
+    },
+    "safety_critical": true,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_043",
+    "intent": "missing_children",
+    "english": "Match lost children database with facial recognition scans at all Chennai railway stations.",
+    "tamil": "தொலைந்து போன குழந்தைகள் தரவுத்தளத்தை சென்னை அனைத்து ரயில் நிலையங்களிலும் முக அங்கீகார ஸ்கேன்களுடன் பொருத்தவும்.",
+    "parameters": {
+      "technology": "facial recognition",
+      "target": "missing children",
+      "locations": "all Chennai railway stations"
+    },
+    "safety_critical": false,
+    "confirmation_required": false
+  },
+  {
+    "id": "disaster_044",
+    "intent": "sewer_inspection",
+    "english": "Send waterproof drones to inspect damaged sewer lines in Mylapore area.",
+    "tamil": "மயிலாப்பூர் பகுதியில் சேதமடைந்த கழிவு குழாய்களை ஆய்வு செய்ய நீர்ப்புகா ட்ரோன்களை அனுப்பவும்.",
+    "parameters": {
+      "equipment": "waterproof drones",
+      "infrastructure": "sewer lines",
+      "location": "Mylapore",
+      "condition": "damaged"
+    },
+    "safety_critical": false,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_045",
+    "intent": "tsunami_alert",
+    "english": "Activate all coastal warning sirens from Mahabalipuram to Nagapattinam.",
+    "tamil": "மகாபலிபுரம் முதல் நாகப்பட்டினம் வரையிலான கடற்கரை எச்சரிக்கை சைரன்களை இயக்கவும்.",
+    "parameters": {
+      "alert_type": "tsunami warning",
+      "system": "coastal sirens",
+      "coverage": "Mahabalipuram to Nagapattinam"
+    },
+    "safety_critical": true,
+    "confirmation_required": false
+  },
+  {
+    "id": "disaster_046",
+    "intent": "livestock_rescue",
+    "english": "Coordinate animal rescue teams for stranded cattle in Ramanathapuram flood plains.",
+    "tamil": "ராமநாதபுரம் வெள்ளச் சமவெளிகளில் சிக்கிய கால்நடைகளை மீட்பதற்காக விலங்கு மீட்பு குழுக்களை ஒருங்கிணைக்கவும்.",
+    "parameters": {
+      "operation": "livestock rescue",
+      "animals": "cattle",
+      "location": "Ramanathapuram",
+      "disaster_type": "flood"
+    },
+    "safety_critical": false,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_047",
+    "intent": "power_line_repair",
+    "english": "Deploy insulated robotic crews to repair high-voltage lines in Neyveli township.",
+    "tamil": "நெய்வேலி நகரத்தில் உயர் மின்னழுத்த கம்பிகளை சரிசெய்ய காப்பிடப்பட்ட ரோபோடிக் குழுக்களை அனுப்பவும்.",
+    "parameters": {
+      "crew_type": "insulated robots",
+      "repair_target": "high-voltage lines",
+      "location": "Neyveli"
+    },
+    "safety_critical": true,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_048",
+    "intent": "emergency_broadcast",
+    "english": "Override local radio frequencies to broadcast evacuation instructions in Villupuram district.",
+    "tamil": "விழுப்புரம் மாவட்டத்தில் வெளியேற்ற வழிமுறைகளை ஒலிபரப்ப உள்ளூர் ரேடியோ அதிர்வெண்களை மேலெழுதவும்.",
+    "parameters": {
+      "communication": "emergency broadcast",
+      "content": "evacuation instructions",
+      "location": "Villupuram district"
+    },
+    "safety_critical": true,
+    "confirmation_required": false
+  },
+  {
+    "id": "disaster_049",
+    "intent": "temporary_shelter",
+    "english": "Assemble 50 prefabricated shelters in open ground near Madurai Meenakshi Temple.",
+    "tamil": "மதுரை மீனாட்சி கோயிலுக்கு அருகிலுள்ள திறந்த மைதானத்தில் 50 முன் கட்டப்பட்ட தங்குமிடங்களை ஒருங்கிணைக்கவும்.",
+    "parameters": {
+      "shelter_type": "prefabricated",
+      "quantity": 50,
+      "location": "near Meenakshi Temple, Madurai"
+    },
+    "safety_critical": false,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_050",
+    "intent": "data_backup",
+    "english": "Secure backup of hospital patient records from flood-threatened CMC Vellore servers.",
+    "tamil": "வெள்ள அச்சுறுத்தலுக்கு உள்ளான சிஎம்சி வேலூர் சேவையகங்களில் இருந்து மருத்துவமனை நோயாளி பதிவுகளின் காப்புப் பிரதியை பாதுகாப்பாக்கவும்.",
+    "parameters": {
+      "data_type": "patient records",
+      "facility": "CMC Vellore",
+      "threat": "flood",
+      "action": "secure backup"
+    },
+    "safety_critical": false,
+    "confirmation_required": false
+  },
+  {
+    "id": "disaster_051",
+    "intent": "landslide_monitoring",
+    "english": "Install real-time soil moisture sensors along Nilgiri Mountain roads to predict landslide risks.",
+    "tamil": "நிலச்சரிவு அபாயங்களை கணிக்க நீலகிரி மலை சாலைகளில் நிகழ்நேர மண் ஈரப்பதம் சென்சார்களை நிறுவவும்.",
+    "parameters": {
+      "technology": "soil moisture sensors",
+      "purpose": "landslide prediction",
+      "location": "Nilgiri Mountain roads"
+    },
+    "safety_critical": true,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_052",
+    "intent": "factory_fire",
+    "english": "Deploy fire-resistant robots to extinguish lithium battery fire at electronics factory in Sriperumbudur.",
+    "tamil": "ஸ்ரீபெரும்புதூர் மின்னணு தொழிற்சாலையில் லித்தியம் பேட்டரி தீயை அணைக்க தீ எதிர்ப்பு ரோபோக்களை அனுப்பவும்.",
+    "parameters": {
+      "robot_type": "fire-resistant",
+      "hazard": "lithium battery fire",
+      "location": "Sriperumbudur electronics factory"
+    },
+    "safety_critical": true,
+    "confirmation_required": false
+  },
+  {
+    "id": "disaster_053",
+    "intent": "gas_pipeline_repair",
+    "english": "Use magnetic crawler robots to repair ruptured gas pipeline near Ennore Port.",
+    "tamil": "எண்ணூர் துறைமுகத்திற்கு அருகில் உடைந்த எரிவாயு குழாயை சரிசெய்ய காந்த கிராலர் ரோபோக்களை பயன்படுத்தவும்.",
+    "parameters": {
+      "robot_type": "magnetic crawler",
+      "infrastructure": "gas pipeline",
+      "location": "near Ennore Port"
+    },
+    "safety_critical": true,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_054",
+    "intent": "coastal_erosion",
+    "english": "Monitor erosion patterns along Marina Beach using autonomous underwater drones.",
+    "tamil": "தன்னாட்சி நீரடி ட்ரோன்களைப் பயன்படுத்தி மரீனா கடற்கரையில் அரிப்பு முறைகளை கண்காணிக்கவும்.",
+    "parameters": {
+      "technology": "autonomous underwater drones",
+      "hazard": "coastal erosion",
+      "location": "Marina Beach"
+    },
+    "safety_critical": false,
+    "confirmation_required": false
+  },
+  {
+    "id": "disaster_055",
+    "intent": "tunnel_collapse",
+    "english": "Send snake-arm robots through rubble to locate trapped workers in Chennai Metro tunnel collapse.",
+    "tamil": "சென்னை மெட்ரோ சுரங்கப்பாதை இடிபாடுகளில் சிக்கிய தொழிலாளர்களை கண்டறிய பாம்பு-கை ரோபோக்களை அனுப்பவும்.",
+    "parameters": {
+      "robot_type": "snake-arm",
+      "incident": "tunnel collapse",
+      "location": "Chennai Metro"
+    },
+    "safety_critical": true,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_056",
+    "intent": "oil_spill",
+    "english": "Deploy oil-absorbent drone skimmers to contain spill off Chennai coast near Thiruvanmiyur.",
+    "tamil": "திருவான்மியூர் அருகே சென்னை கடற்கரையில் எண்ணெய் கசிவைக் கட்டுப்படுத்த எண்ணெய் உறிஞ்சும் ட்ரோன் ஸ்கிம்மர்களை அனுப்பவும்.",
+    "parameters": {
+      "equipment": "drone skimmers",
+      "hazard": "oil spill",
+      "location": "off Thiruvanmiyur coast"
+    },
+    "safety_critical": true,
+    "confirmation_required": false
+  },
+  {
+    "id": "disaster_057",
+    "intent": "dam_inspection",
+    "english": "Conduct ultrasonic thickness testing on Mettur Dam spillway using climbing robots.",
+    "tamil": "ஏறும் ரோபோக்களைப் பயன்படுத்தி மேட்டூர் அணையின் ஸ்பில்வேயில் அல்ட்ராசோனிக் தடிமன் சோதனை செய்யவும்.",
+    "parameters": {
+      "robot_type": "climbing robots",
+      "technology": "ultrasonic testing",
+      "structure": "Mettur Dam spillway"
+    },
+    "safety_critical": true,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_058",
+    "intent": "chemical_neutralization",
+    "english": "Mix and disperse neutralizing agents for sulfuric acid leak at Ranipet tannery.",
+    "tamil": "ராணிப்பேட்டை தோல் தொழிற்சாலையில் கந்தக அமில கசிவுக்கான நடுநிலையாக்கும் முகவர்களை கலந்து பரப்பவும்.",
+    "parameters": {
+      "chemical": "sulfuric acid",
+      "action": "neutralization",
+      "location": "Ranipet tannery"
+    },
+    "safety_critical": true,
+    "confirmation_required": false
+  },
+  {
+    "id": "disaster_059",
+    "intent": "bridge_inspection",
+    "english": "Deploy aerial drones with LiDAR to assess damage to Pamban Bridge after cyclone impact.",
+    "tamil": "சூறாவளி தாக்கத்திற்குப் பின் பாம்பன் பாலத்தின் சேதத்தை மதிப்பிடுவதற்கு லிடார் கொண்ட வான்வழி ட்ரோன்களை அனுப்பவும்.",
+    "parameters": {
+      "technology": "LiDAR drones",
+      "structure": "Pamban Bridge",
+      "disaster_type": "cyclone"
+    },
+    "safety_critical": true,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_060",
+    "intent": "underground_fire",
+    "english": "Lower fire-suppression robots into manholes to control methane fire in T.Nagar sewers.",
+    "tamil": "தியாகராய நகர் கழிவுநீர் குழாய்களில் மீத்தேன் தீயை கட்டுப்படுத்த மேன்ஹோல்களில் தீ அணைப்பு ரோபோக்களை இறக்கவும்.",
+    "parameters": {
+      "robot_type": "fire-suppression",
+      "hazard": "methane fire",
+      "location": "T.Nagar sewers"
+    },
+    "safety_critical": true,
+    "confirmation_required": false
+  },
+  {
+    "id": "disaster_061",
+    "intent": "tsunami_debris",
+    "english": "Clear marine debris from Nagapattinam fishing harbor using amphibious excavators.",
+    "tamil": "நாகப்பட்டினம் மீன்பிடி துறைமுகத்திலிருந்து கடல் குப்பைகளை நீர்நில வெட்டிகள் மூலம் அகற்றவும்.",
+    "parameters": {
+      "equipment": "amphibious excavators",
+      "debris_type": "marine",
+      "location": "Nagapattinam fishing harbor"
+    },
+    "safety_critical": false,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_062",
+    "intent": "radiation_mapping",
+    "english": "Create real-time radiation heatmap of Kalpakkam nuclear complex using sensor drones.",
+    "tamil": "சென்சார் ட்ரோன்களைப் பயன்படுத்தி கல்பாக்கம் அணு மையத்தின் நிகழ்நேர கதிரியக்க வெப்ப வரைபடத்தை உருவாக்கவும்.",
+    "parameters": {
+      "output": "radiation heatmap",
+      "technology": "sensor drones",
+      "location": "Kalpakkam nuclear complex"
+    },
+    "safety_critical": true,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_063",
+    "intent": "tunnel_ventilation",
+    "english": "Activate emergency ventilation in Chennai Port tunnel after smoke detection.",
+    "tamil": "புகை கண்டறியப்பட்டதைத் தொடர்ந்து சென்னை துறைமுக சுரங்கப்பாதையில் அவசர காற்றோட்டத்தை செயல்படுத்தவும்.",
+    "parameters": {
+      "system": "emergency ventilation",
+      "trigger": "smoke detection",
+      "location": "Chennai Port tunnel"
+    },
+    "safety_critical": true,
+    "confirmation_required": false
+  },
+  {
+    "id": "disaster_064",
+    "intent": "flood_barrier",
+    "english": "Deploy automatic flood barriers along Adyar river at Saidapet vulnerable points.",
+    "tamil": "ஆடையாறு நதியின் சைதாப்பேட் பகுதியில் உள்ள பாதிக்கப்படக்கூடிய புள்ளிகளில் தானியங்கி வெள்ள தடுப்புகளை அமைக்கவும்.",
+    "parameters": {
+      "equipment": "automatic flood barriers",
+      "location": "Adyar river, Saidapet"
+    },
+    "safety_critical": true,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_065",
+    "intent": "industrial_accident",
+    "english": "Evacuate 500m radius around chemical plant explosion in Manali industrial area.",
+    "tamil": "மணலி தொழிற்பகுதியில் உள்ள இரசாயன ஆலை வெடிப்பைச் சுற்றி 500மீ ஆரத்தில் உள்ளோரை வெளியேற்றவும்.",
+    "parameters": {
+      "incident": "chemical plant explosion",
+      "evacuation_radius": "500m",
+      "location": "Manali industrial area"
+    },
+    "safety_critical": true,
+    "confirmation_required": false
+  },
+  {
+    "id": "disaster_066",
+    "intent": "power_grid_stabilization",
+    "english": "Activate grid stabilization protocols for Chennai metro area during cyclone-induced outages.",
+    "tamil": "சூறாவளி காரணமான மின்னிழப்புகளின் போது சென்னை பெருநகரப் பகுதிக்கான கிரிட் நிலைப்படுத்தல் நெறிமுறைகளை செயல்படுத்தவும்.",
+    "parameters": {
+      "action": "grid stabilization",
+      "threat": "cyclone-induced outages",
+      "location": "Chennai metro area"
+    },
+    "safety_critical": true,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_067",
+    "intent": "military_ammunition",
+    "english": "Establish 2km exclusion zone around burning ammunition depot in Avadi.",
+    "tamil": "ஆவடியில் எரிந்து கொண்டிருக்கும் தோட்டாக்கள் கிடங்கிற்கு 2கிமீ தடை மண்டலத்தை அமைக்கவும்.",
+    "parameters": {
+      "hazard": "burning ammunition depot",
+      "exclusion_zone": "2km",
+      "location": "Avadi"
+    },
+    "safety_critical": true,
+    "confirmation_required": false
+  },
+  {
+    "id": "disaster_068",
+    "intent": "water_treatment",
+    "english": "Deploy mobile water treatment plants to flood-affected areas of Cuddalore.",
+    "tamil": "வெள்ளம் பாதித்த கடலூர் பகுதிகளுக்கு சிற்றளவு நீர் சுத்திகரிப்பு ஆலைகளை அமைக்கவும்.",
+    "parameters": {
+      "equipment": "mobile water treatment plants",
+      "disaster_type": "flood",
+      "location": "Cuddalore"
+    },
+    "safety_critical": false,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_069",
+    "intent": "railway_track_repair",
+    "english": "Use automated track-laying machines to restore Chennai-Villupuram rail line.",
+    "tamil": "சென்னை-விழுப்புரம் ரயில் பாதையை மீட்பதற்கு தானியங்கி பாதை அமைப்பு இயந்திரங்களை பயன்படுத்தவும்.",
+    "parameters": {
+      "equipment": "automated track-laying machines",
+      "route": "Chennai-Villupuram"
+    },
+    "safety_critical": true,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_070",
+    "intent": "telemedicine",
+    "english": "Establish satellite-linked telemedicine units in cutoff Nilgiris villages.",
+    "tamil": "தொடர்பு துண்டிக்கப்பட்ட நீலகிரி கிராமங்களில் செயற்கைக்கோள் இணைப்புள்ள தொலைமருத்துவ அலகுகளை அமைக்கவும்.",
+    "parameters": {
+      "facility": "telemedicine units",
+      "technology": "satellite-linked",
+      "location": "Nilgiris villages",
+      "condition": "cutoff"
+    },
+    "safety_critical": false,
+    "confirmation_required": false
+  },
+  {
+    "id": "disaster_071",
+    "intent": "forest_fire",
+    "english": "Coordinate water-bombing drones to contain wildfire in Sathyamangalam Tiger Reserve.",
+    "tamil": "சத்தியமங்கலம் புலிகள் காப்பகத்தில் காட்டுத் தீயைக் கட்டுப்படுத்த நீர் குண்டுகள் வீசும் ட்ரோன்களை ஒருங்கிணைக்கவும்.",
+    "parameters": {
+      "equipment": "water-bombing drones",
+      "hazard": "wildfire",
+      "location": "Sathyamangalam Tiger Reserve"
+    },
+    "safety_critical": true,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_072",
+    "intent": "gas_leak_detection",
+    "english": "Scan residential areas of Ambattur for LPG leaks using mobile gas detectors.",
+    "tamil": "அம்பத்தூர் குடியிருப்பு பகுதிகளில் எல்பீஜி கசிவுகளை கண்டறிய மொபைல் வாயு கண்டறிதல்களை பயன்படுத்தவும்.",
+    "parameters": {
+      "equipment": "mobile gas detectors",
+      "hazard": "LPG leak",
+      "location": "Ambattur residential areas"
+    },
+    "safety_critical": true,
+    "confirmation_required": false
+  },
+  {
+    "id": "disaster_073",
+    "intent": "bridge_repair",
+    "english": "Initiate emergency repair of damaged pillars on Napier Bridge using robotic concrete printers.",
+    "tamil": "ரோபோடிக் கான்கிரீட் அச்சிடும் இயந்திரங்களைப் பயன்படுத்தி நேப்பியர் பாலத்தின் சேதமடைந்த தூண்களை அவசரமாக சரிசெய்யத் தொடங்கவும்.",
+    "parameters": {
+      "technology": "robotic concrete printers",
+      "structure": "Napier Bridge pillars",
+      "priority": "emergency"
+    },
+    "safety_critical": true,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_074",
+    "intent": "water_rescue",
+    "english": "Deploy amphibious rescue robots for flooded areas of Pattukkottai town.",
+    "tamil": "பட்டுக்கோட்டை நகரத்தின் வெள்ளம் பாதித்த பகுதிகளுக்கு நீர்நில மீட்பு ரோபோக்களை அனுப்பவும்.",
+    "parameters": {
+      "robot_type": "amphibious rescue",
+      "disaster_type": "flood",
+      "location": "Pattukkottai"
+    },
+    "safety_critical": true,
+    "confirmation_required": false
+  },
+  {
+    "id": "disaster_075",
+    "intent": "epidemic_control",
+    "english": "Dispatch UV-disinfection robots to containment zones in Madurai during dengue outbreak.",
+    "tamil": "மதுரையில் டெங்கு காய்ச்சல் பரவலின் போது கட்டுப்பாட்டு மண்டலங்களுக்கு புற ஊதா கிருமிநீக்கம் செய்யும் ரோபோக்களை அனுப்பவும்.",
+    "parameters": {
+      "robot_type": "UV-disinfection",
+      "purpose": "epidemic control",
+      "disease": "dengue",
+      "location": "Madurai"
+    },
+    "safety_critical": false,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_076",
+    "intent": "debris_removal",
+    "english": "Clear earthquake debris from Rameswaram temple complex using robotic excavators.",
+    "tamil": "ராமேஸ்வரம் கோயில் வளாகத்திலுள்ள நிலநடுக்கக் குப்பைகளை ரோபோடிக் அகழ்வாய்வு இயந்திரங்களால் அகற்றவும்.",
+    "parameters": {
+      "equipment": "robotic excavators",
+      "debris_source": "earthquake",
+      "location": "Rameswaram temple complex"
+    },
+    "safety_critical": false,
+    "confirmation_required": false
+  },
+  {
+    "id": "disaster_077",
+    "intent": "nuclear_emergency",
+    "english": "Activate radiation-hardened robots for inspection at Kudankulam plant after seismic alert.",
+    "tamil": "நிலநடுக்க எச்சரிக்கைக்குப் பிறகு கூடங்குளம் அணு மின் நிலையத்தில் ஆய்வுக்காக கதிரியக்க-தடுப்பு ரோபோக்களை செயல்படுத்தவும்.",
+    "parameters": {
+      "robot_type": "radiation-hardened",
+      "facility": "Kudankulam nuclear plant",
+      "trigger": "seismic alert"
+    },
+    "safety_critical": true,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_078",
+    "intent": "mine_rescue",
+    "english": "Send explosion-proof crawler robots to search for trapped miners in Neyveli lignite mines.",
+    "tamil": "நெய்வேலி லிக்னைட் சுரங்கங்களில் சிக்கிய சுரங்கத் தொழிலாளர்களைத் தேட வெடிப்பு-தடுப்பு கிராலர் ரோபோக்களை அனுப்பவும்.",
+    "parameters": {
+      "robot_type": "explosion-proof crawler",
+      "incident": "mine collapse",
+      "location": "Neyveli lignite mines"
+    },
+    "safety_critical": true,
+    "confirmation_required": false
+  },
+  {
+    "id": "disaster_079",
+    "intent": "hospital_backup",
+    "english": "Switch to backup power and oxygen systems at GH Chennai using automated failover.",
+    "tamil": "தானியங்கி ஃபெயில்ஓவர் மூலம் சென்னை அரசு மருத்துவமனையில் காப்பு மின்சாரம் மற்றும் ஆக்ஸிஜன் அமைப்புகளுக்கு மாற்றவும்.",
+    "parameters": {
+      "systems": "power and oxygen backup",
+      "facility": "GH Chennai",
+      "technology": "automated failover"
+    },
+    "safety_critical": true,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_080",
+    "intent": "tsunami_evacuation",
+    "english": "Activate all coastal warning systems and direct drones to guide evacuation along ECR.",
+    "tamil": "அனைத்து கடற்கரை எச்சரிக்கை அமைப்புகளையும் செயல்படுத்தி, ஈசிஆர் வழியாக வெளியேற்றத்தை வழிநடத்த ட்ரோன்களை இயக்கவும்.",
+    "parameters": {
+      "systems": "coastal warning",
+      "equipment": "guidance drones",
+      "route": "East Coast Road (ECR)"
+    },
+    "safety_critical": true,
+    "confirmation_required": false
+  },
+  {
+    "id": "disaster_081",
+    "intent": "air_quality",
+    "english": "Deploy mobile air quality monitoring stations across Chennai after industrial fire.",
+    "tamil": "தொழிற்சாலை தீயின் பிறகு சென்னை முழுவதும் சிற்றளவு காற்று தர கண்காணிப்பு நிலையங்களை அமைக்கவும்.",
+    "parameters": {
+      "equipment": "mobile air quality stations",
+      "trigger": "industrial fire",
+      "location": "Chennai"
+    },
+    "safety_critical": false,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_082",
+    "intent": "train_derailment",
+    "english": "Stabilize derailed coaches at Arakkonam junction using hydraulic lift systems.",
+    "tamil": "ஹைட்ராலிக் லிஃப்ட் அமைப்புகளைப் பயன்படுத்தி அரக்கோணம் சந்திப்பில் வழிதவறிய ரயில் பெட்டிகளை நிலைப்படுத்தவும்.",
+    "parameters": {
+      "equipment": "hydraulic lift systems",
+      "incident": "train derailment",
+      "location": "Arakkonam junction"
+    },
+    "safety_critical": true,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_083",
+    "intent": "water_supply",
+    "english": "Restore drinking water supply to Tambaram by repairing broken pipelines with robotic welders.",
+    "tamil": "ரோபோடிக் வெல்டர்களால் உடைந்த குழாய்களை சரிசெய்வதன் மூலம் தாம்பரத்திற்கு குடிநீர் விநியோகத்தை மீண்டும் தொடங்கவும்.",
+    "parameters": {
+      "technology": "robotic welders",
+      "utility": "water pipeline repair",
+      "location": "Tambaram"
+    },
+    "safety_critical": false,
+    "confirmation_required": false
+  },
+  {
+    "id": "disaster_084",
+    "intent": "building_demolition",
+    "english": "Prepare unstable high-rise in T.Nagar for controlled demolition using explosive drones.",
+    "tamil": "வெடிக்கும் ட்ரோன்களைப் பயன்படுத்தி தியாகராய நகரில் உள்ள நிலையற்ற உயரமான கட்டிடத்தை கட்டுப்பாட்டுடன் இடிப்பதற்கு தயார்படுத்தவும்.",
+    "parameters": {
+      "equipment": "explosive drones",
+      "structure": "unstable high-rise",
+      "location": "T.Nagar",
+      "action": "controlled demolition"
+    },
+    "safety_critical": true,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_085",
+    "intent": "animal_tracking",
+    "english": "Monitor displaced wildlife in Mudumalai forest using GPS-enabled drone surveillance.",
+    "tamil": "ஜிபிஎஸ் இணைக்கப்பட்ட ட்ரோன் கண்காணிப்பைப் பயன்படுத்தி முதுமலை காட்டில் இடம்பெயர்ந்த வனவிலங்குகளைக் கண்காணிக்கவும்.",
+    "parameters": {
+      "technology": "GPS drone surveillance",
+      "target": "displaced wildlife",
+      "location": "Mudumalai forest"
+    },
+    "safety_critical": false,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_086",
+    "intent": "port_closure",
+    "english": "Secure Chennai Port cranes and activate storm moorings for ships ahead of cyclone landfall.",
+    "tamil": "சூறாவளி தரையிறங்குவதற்கு முன் சென்னை துறைமுக கிரேன்களை பாதுகாப்பாக்கவும் மற்றும் கப்பல்களுக்கு புயல் நங்கூரத்தை செயல்படுத்தவும்.",
+    "parameters": {
+      "facility": "Chennai Port",
+      "equipment": "cranes and ships",
+      "preparation": "cyclone landfall"
+    },
+    "safety_critical": true,
+    "confirmation_required": false
+  },
+  {
+    "id": "disaster_087",
+    "intent": "telecom_restoration",
+    "english": "Deploy mobile cell towers to restore communication in cutoff Nagapattinam villages.",
+    "tamil": "தொடர்பு துண்டிக்கப்பட்ட நாகப்பட்டினம் கிராமங்களில் தொடர்பை மீண்டும் ஏற்படுத்த மொபைல் செல் கோபுரங்களை அமைக்கவும்.",
+    "parameters": {
+      "equipment": "mobile cell towers",
+      "service": "communication restoration",
+      "location": "Nagapattinam villages",
+      "condition": "cutoff"
+    },
+    "safety_critical": false,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_088",
+    "intent": "school_safety",
+    "english": "Inspect structural damage to 15 government schools in Coimbatore earthquake zone.",
+    "tamil": "கோயம்புத்தூர் நிலநடுக்க மண்டலத்தில் உள்ள 15 அரசு பள்ளிகளின் கட்டமைப்பு சேதத்தை ஆய்வு செய்யவும்.",
+    "parameters": {
+      "facilities": "government schools",
+      "assessment": "structural damage",
+      "disaster_type": "earthquake",
+      "location": "Coimbatore"
+    },
+    "safety_critical": true,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_089",
+    "intent": "road_repair",
+    "english": "Use 3D asphalt printers to repair damaged sections of GST Road between Chromepet and Tambaram.",
+    "tamil": "குரோம்பேட்டுக்கும் தாம்பரத்திற்கும் இடையே உள்ள ஜிஎஸ்டி சாலையின் சேதமடைந்த பகுதிகளை சரிசெய்ய 3D நிலக்கீல் அச்சிடும் இயந்திரங்களைப் பயன்படுத்தவும்.",
+    "parameters": {
+      "technology": "3D asphalt printers",
+      "route": "GST Road",
+      "section": "Chromepet to Tambaram"
+    },
+    "safety_critical": false,
+    "confirmation_required": false
+  },
+  {
+    "id": "disaster_090",
+    "intent": "evacuation_shelter",
+    "english": "Set up 20 temporary shelters with sanitation facilities at Madurai Race Course grounds.",
+    "tamil": "மதுரை ரேஸ் கோர்ஸ் மைதானத்தில் சுகாதார வசதிகளுடன் 20 தற்காலிக தங்குமிடங்களை அமைக்கவும்.",
+    "parameters": {
+      "shelters": 20,
+      "facilities": "sanitation",
+      "location": "Madurai Race Course"
+    },
+    "safety_critical": false,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_091",
+    "intent": "gas_storage",
+    "english": "Transfer LPG from damaged storage tanks in Korukkupet to secure facilities using robotic handlers.",
+    "tamil": "ரோபோடிக் கையாளுதல் இயந்திரங்களைப் பயன்படுத்தி கோருக்குப்பேட்டில் சேதமடைந்த சேமிப்பு தொட்டிகளிலிருந்து பாதுகாப்பான வசதிகளுக்கு எல்பீஜியை மாற்றவும்.",
+    "parameters": {
+      "material": "LPG",
+      "equipment": "robotic handlers",
+      "action": "hazardous material transfer",
+      "location": "Korukkupet"
+    },
+    "safety_critical": true,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_092",
+    "intent": "sewage_overflow",
+    "english": "Pump out flooded sewage systems in Mylapore using submersible robotic pumps.",
+    "tamil": "நீர்மூழ்கி ரோபோடிக் பம்புகளைப் பயன்படுத்தி மயிலாப்பூரில் வெள்ளத்தால் பாதிக்கப்பட்ட கழிவுநீர் அமைப்புகளை வெளியேற்றவும்.",
+    "parameters": {
+      "equipment": "submersible robotic pumps",
+      "problem": "sewage overflow",
+      "location": "Mylapore"
+    },
+    "safety_critical": false,
+    "confirmation_required": false
+  },
+  {
+    "id": "disaster_093",
+    "intent": "heritage_protection",
+    "english": "Deploy moisture-absorbent drones to protect ancient murals in Thanjavur temple from flood damage.",
+    "tamil": "தஞ்சாவூர் கோயிலின் புராதன சுவர் ஓவியங்களை வெள்ள சேதத்திலிருந்து பாதுகாக்க ஈரப்பதம் உறிஞ்சும் ட்ரோன்களை அனுப்பவும்.",
+    "parameters": {
+      "equipment": "moisture-absorbent drones",
+      "target": "ancient murals",
+      "location": "Thanjavur temple",
+      "threat": "flood damage"
+    },
+    "safety_critical": false,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_094",
+    "intent": "power_line_inspection",
+    "english": "Inspect 230kV transmission lines between Neyveli and Chennai using autonomous climbing robots.",
+    "tamil": "தன்னாட்சி ஏறும் ரோபோக்களைப் பயன்படுத்தி நெய்வேலி மற்றும் சென்னைக்கு இடையேயான 230kV பரிமாற்ற கோடுகளை ஆய்வு செய்யவும்.",
+    "parameters": {
+      "robot_type": "autonomous climbing",
+      "infrastructure": "230kV transmission lines",
+      "route": "Neyveli to Chennai"
+    },
+    "safety_critical": true,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_095",
+    "intent": "medical_evacuation",
+    "english": "Prepare rooftop drone landing pads at GH Chennai for emergency medical evacuations.",
+    "tamil": "அவசர மருத்துவ வெளியேற்றங்களுக்காக சென்னை அரசு மருத்துவமனையில் கூரை ட்ரோன் இறங்கு தளங்களை தயார்படுத்தவும்.",
+    "parameters": {
+      "facility": "GH Chennai",
+      "equipment": "drone landing pads",
+      "purpose": "medical evacuation"
+    },
+    "safety_critical": true,
+    "confirmation_required": false
+  },
+  {
+    "id": "disaster_096",
+    "intent": "food_safety",
+    "english": "Inspect flood-affected food warehouses in Trichy using contamination-detection robots.",
+    "tamil": "மாசு-கண்டறிதல் ரோபோக்களைப் பயன்படுத்தி திருச்சியில் வெள்ளம் பாதித்த உணவு கிடங்குகளை ஆய்வு செய்யவும்.",
+    "parameters": {
+      "robot_type": "contamination-detection",
+      "facilities": "food warehouses",
+      "disaster_type": "flood",
+      "location": "Trichy"
+    },
+    "safety_critical": false,
+    "confirmation_required": true
+  },
+  {
+    "id": "disaster_097",
+    "intent": "bridge_safety",
+    "english": "Monitor vibration levels on new Poonamallee bypass bridge using IoT sensors.",
+    "tamil": "ஐஓடி சென்சார்களைப் பயன்படுத்தி புதிய பூந்தமல்லி பைபாஸ் பாலத்தின் அதிர்வு அளவுகளை கண்காணிக்கவும்.",
+    "parameters": {
+      "technology": "IoT sensors",
+      "measurement": "vibration levels",
+      "structure": "Poonamallee bypass bridge"
+    },
+    "safety_critical": true,
+    "confirmation_required": true
+  }
+]
