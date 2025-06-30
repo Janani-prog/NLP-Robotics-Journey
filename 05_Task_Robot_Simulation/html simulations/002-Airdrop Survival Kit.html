@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Airdrop Survival Kits - Priority Drop Zone</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(180deg, #87CEEB, #4682B4);
+            font-family: 'Courier New', monospace;
+            color: #000;
+            overflow: hidden;
+        }
+        .container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+        
+        .aircraft {
+            position: absolute;
+            width: 80px;
+            height: 30px;
+            background: #333;
+            top: 15%;
+            left: -100px;
+            animation: flyAcross 12s infinite linear;
+            border-radius: 15px;
+        }
+        .aircraft::before {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 4px;
+            background: #555;
+            top: 12px;
+            left: -10px;
+            border-radius: 2px;
+        }
+        .aircraft::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 15px;
+            background: #444;
+            top: -7px;
+            right: 10px;
+            transform: rotate(45deg);
+        }
+        
+        .supply-kit {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: #ff6600;
+            border: 2px solid #cc5500;
+            animation: fallDown 4s infinite ease-in;
+        }
+        
+        .parachute {
+            position: absolute;
+            width: 30px;
+            height: 20px;
+            background: #fff;
+            border-radius: 50% 50% 0 0;
+            border: 1px solid #ccc;
+            top: -25px;
+            left: -7px;
+        }
+        .parachute::before {
+            content: '';
+            position: absolute;
+            width: 1px;
+            height: 20px;
+            background: #333;
+            left: 50%;
+            bottom: -20px;
+        }
+        
+        .ground {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 30%;
+            background: linear-gradient(0deg, #8B4513, #A0522D);
+        }
+        
+        .target-zone {
+            position: absolute;
+            bottom: 30%;
+            left: 45%;
+            width: 100px;
+            height: 100px;
+            border: 3px dashed #ff0000;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        .coordinates {
+            position: absolute;
+            bottom: 20%;
+            left: 42%;
+            color: #ff0000;
+            font-weight: bold;
+            font-size: 12px;
+            text-align: center;
+        }
+        
+        .hud {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: #fff;
+            font-size: 14px;
+            background: rgba(0,0,0,0.8);
+            padding: 15px;
+            border: 1px solid #fff;
+        }
+        
+        .drop-counter {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: #ff6600;
+            font-size: 18px;
+            background: rgba(0,0,0,0.8);
+            padding: 15px;
+            border: 1px solid #ff6600;
+        }
+        
+        @keyframes flyAcross {
+            0% { left: -100px; }
+            20% { left: 40%; }
+            21% { left: 40%; }
+            100% { left: 120%; }
+        }
+        
+        @keyframes fallDown {
+            0% { top: 18%; opacity: 0; }
+            10% { opacity: 1; }
+            100% { top: 65%; }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="aircraft"></div>
+        
+        <div class="ground"></div>
+        
+        <div class="target-zone"></div>
+        <div class="coordinates">
+            13.0827°N<br>
+            80.2707°E
+        </div>
+        
+        <div class="hud">
+            <div>AIRDROP MISSION ACTIVE</div>
+            <div>Target Coordinates: 13.0827°N, 80.2707°E</div>
+            <div>Payload: 50 Survival Kits</div>
+            <div>Priority: HIGH</div>
+            <div>Wind Speed: 5 km/h</div>
+            <div>Altitude: 500m</div>
+        </div>
+        
+        <div class="drop-counter">
+            <div>PACKAGES DEPLOYED</div>
+            <div id="counter">0 / 50</div>
+        </div>
+    </div>
+    
+    <script>
+        let dropCount = 0;
+        let dropInterval;
+        
+        function createSupplyDrop() {
+            if (dropCount >= 50) return;
+            
+            const kit = document.createElement('div');
+            kit.className = 'supply-kit';
+            kit.style.left = (45 + Math.random() * 10) + '%';
+            kit.style.animationDelay = Math.random() * 2 + 's';
+            
+            const parachute = document.createElement('div');
+            parachute.className = 'parachute';
+            kit.appendChild(parachute);
+            
+            document.querySelector('.container').appendChild(kit);
+            
+            dropCount++;
+            document.getElementById('counter').textContent = `${dropCount} / 50`;
+            
+            setTimeout(() => {
+                if (kit.parentNode) {
+                    kit.parentNode.removeChild(kit);
+                }
+            }, 4000);
+        }
+        
+        // Start dropping supplies
+        setTimeout(() => {
+            dropInterval = setInterval(createSupplyDrop, 200);
+        }, 2000);
+        
+        setTimeout(() => {
+            clearInterval(dropInterval);
+        }, 12000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LED Evacuation Route Beacons - Central Railway Station</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(180deg, #1a1a1a, #2d2d2d);
+            font-family: 'Courier New', monospace;
+            color: #fff;
+            overflow: hidden;
+        }
+        .container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+        
+        .station-building {
+            position: absolute;
+            width: 300px;
+            height: 200px;
+            background: #444;
+            bottom: 30%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 3px solid #666;
+        }
+        
+        .station-building::before {
+            content: 'CENTRAL RAILWAY STATION';
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .led-beacon {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #00ff00;
+            border-radius: 50%;
+            animation: beaconFlash 1s infinite;
+            box-shadow: 0 0 10px #00ff00;
+        }
+        
+        .route-path {
+            position: absolute;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #00ff00, transparent);
+            animation: pathFlow 2s infinite;
+        }
+        
+        .exit-sign {
+            position: absolute;
+            width: 40px;
+            height: 20px;
+            background: #ff0000;
+            color: #fff;
+            font-size: 10px;
+            text-align: center;
+            line-height: 20px;
+            font-weight: bold;
+            animation: exitBlink 2s infinite;
+        }
+        
+        .crowd-indicator {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #ffff00;
+            border-radius: 50%;
+            animation: crowdMove 3s infinite linear;
+        }
+        
+        .directional-arrow {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 15px solid #00ff00;
+            animation: arrowPulse 1.5s infinite;
+        }
+        
+        .emergency-light {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: radial-gradient(circle, #ff6600, #ff0000);
+            border-radius: 50%;
+            animation: emergencyFlash 0.5s infinite alternate;
+        }
+        
+        .hud {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: #fff;
+            font-size: 14px;
+            background: rgba(0,0,0,0.8);
+            padding: 15px;
+            border: 1px solid #fff;
+        }
+        
+        .beacon-status {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: #00ff00;
+            font-size: 14px;
+            background: rgba(0,0,0,0.8);
+            padding: 15px;
+            border: 1px solid #00ff00;
+        }
+        
+        .route-info {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ffff00;
+            font-size: 12px;
+            text-align: center;
+            background: rgba(0,0,0,0.6);
+            padding: 10px;
+        }
+        
+        @keyframes beaconFlash {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(1.2); }
+        }
+        
+        @keyframes pathFlow {
+            0% { background-position: -100px 0; }
+            100% { background-position: 100px 0; }
+        }
+        
+        @keyframes exitBlink {
+            0%, 100% { background: #ff0000; }
+            50% { background: #990000; }
+        }
+        
+        @keyframes crowdMove {
+            0% { left: 45%; }
+            25% { left: 20%; }
+            50% { left: 10%; }
+            75% { left: 5%; }
+            100% { left: 0%; opacity: 0; }
+        }
+        
+        @keyframes arrowPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.3); opacity: 0.7; }
+        }
+        
+        @keyframes emergencyFlash {
+            0% { opacity: 1; }
+            100% { opacity: 0.3; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="station-building"></div>
+        
+        <!-- LED Beacons -->
+        <div class="led-beacon" style="bottom: 40%; left: 45%;"></div>
+        <div class="led-beacon" style="bottom: 35%; left: 40%;"></div>
+        <div class="led-beacon" style="bottom: 30%; left: 35%;"></div>
+        <div class="led-beacon" style="bottom: 25%; left: 30%;"></div>
+        <div class="led-beacon" style="bottom: 20%; left: 25%;"></div>
+        <div class="led-beacon" style="bottom: 15%; left: 20%;"></div>
+        
+        <!-- Route Path -->
+        <div class="route-path" style="top: 58%; left: 45%; width: 100px; transform: rotate(-30deg);"></div>
+        <div class="route-path" style="top: 65%; left: 35%; width: 80px; transform: rotate(-45deg);"></div>
+        <div class="route-path" style="top: 75%; left: 25%; width: 60px; transform: rotate(-60deg);"></div>
+        
+        <!-- Exit Signs -->
+        <div class="exit-sign" style="bottom: 10%; left: 15%;">EXIT</div>
+        <div class="exit-sign" style="bottom: 40%; left: 55%;">EXIT</div>
+        <div class="exit-sign" style="bottom: 35%; right: 20%;">EXIT</div>
+        
+        <!-- Directional Arrows -->
+        <div class="directional-arrow" style="bottom: 37%; left: 42%; transform: rotate(-45deg);"></div>
+        <div class="directional-arrow" style="bottom: 32%; left: 37%; transform: rotate(-45deg);"></div>
+        <div class="directional-arrow" style="bottom: 27%; left: 32%; transform: rotate(-45deg);"></div>
+        
+        <!-- Emergency Lights -->
+        <div class="emergency-light" style="top: 20%; left: 30%;"></div>
+        <div class="emergency-light" style="top: 25%; right: 25%;"></div>
+        <div class="emergency-light" style="bottom: 20%; left: 60%;"></div>
+        
+        <div class="hud">
+            <div>EVACUATION SYSTEM ACTIVE</div>
+            <div>Location: Central Railway Station</div>
+            <div>Technology: LED Beacons</div>
+            <div>Routes Marked: 5 Primary</div>
+            <div>Capacity: 15,000 people/hour</div>
+            <div>Safety Critical: YES</div>
+        </div>
+        
+        <div class="beacon-status">
+            <div>BEACON STATUS</div>
+            <div>Active Beacons: <span id="beacons">0</span>/50</div>
+            <div>Route Coverage: 100%</div>
+            <div>Battery Level: 98%</div>
+            <div>Network Status: ONLINE</div>
+            <div>Last Update: <span id="time">00:00</span></div>
+        </div>
+        
+        <div class="route-info">
+            EVACUATION ROUTES ACTIVE<br>
+            Primary Routes: Platform 1-12 to Street Level<br>
+            Emergency Exits: A, B, C, D accessible
+        </div>
+    </div>
+    
+    <script>
+        let beaconCount = 0;
+        let timeCounter = 0;
+        
+        function updateBeaconCount() {
+            beaconCount += 3;
+            document.getElementById('beacons').textContent = Math.min(beaconCount, 50);
+            
+            if (beaconCount < 50) {
+                setTimeout(updateBeaconCount, 300);
+            }
+        }
+        
+        function updateTime() {
+            timeCounter++;
+            const minutes = Math.floor(timeCounter / 60);
+            const seconds = timeCounter % 60;
+            document.getElementById('time').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        
+        function createCrowdIndicator() {
+            const crowd = document.createElement('div');
+            crowd.className = 'crowd-indicator';
+            crowd.style.bottom = (35 + Math.random() * 10) + '%';
+            crowd.style.left = '50%';
+            crowd.style.animationDelay = Math.random() * 2 + 's';
+            
+            document.querySelector('.container').appendChild(crowd);
+            
+            setTimeout(() => {
+                if (crowd.parentNode) {
+                    crowd.parentNode.removeChild(crowd);
+                }
+            }, 3000);
+        }
+        
+        function createAdditionalBeacon() {
+            const beacon = document.createElement('div');
+            beacon.className = 'led-beacon';
+            beacon.style.bottom = (15 + Math.random() * 50) + '%';
+            beacon.style.left = (15 + Math.random() * 70) + '%';
+            beacon.style.animationDelay = Math.random() * 1 + 's';
+            
+            document.querySelector('.container').appendChild(beacon);
+        }
+        
+        updateBeaconCount();
+        setInterval(updateTime, 1000);
+        setInterval(createCrowdIndicator, 1500);
+        
+        // Create additional beacons periodically
+        for (let i = 0; i < 10; i++) {
+            setTimeout(createAdditionalBeacon, i * 500);
+        }
+    </script>
+</body>
+</html>

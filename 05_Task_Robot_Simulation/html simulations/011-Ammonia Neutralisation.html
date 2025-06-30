@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chemical Neutralization - Ammonia Leak at 9.9252°N, 78.1198°E</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(180deg, #2d1b69, #1a0e42);
+            font-family: 'Courier New', monospace;
+            color: #00ff00;
+            overflow: hidden;
+        }
+        .container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+        
+        .leak-area {
+            position: absolute;
+            left: 50%;
+            bottom: 30%;
+            width: 200px;
+            height: 200px;
+            transform: translateX(-50%);
+            background: radial-gradient(circle, rgba(255,255,0,0.8), rgba(255,165,0,0.4), transparent);
+            border-radius: 50%;
+            animation: pulseLeak 2s infinite ease-in-out;
+        }
+        
+        .ammonia-cloud {
+            position: absolute;
+            width: 100px;
+            height: 60px;
+            background: radial-gradient(ellipse, rgba(255,255,0,0.6), transparent);
+            border-radius: 50%;
+            animation: driftCloud 4s infinite ease-in-out;
+        }
+        .cloud1 { left: 40%; bottom: 45%; animation-delay: 0s; }
+        .cloud2 { left: 55%; bottom: 50%; animation-delay: 1s; }
+        .cloud3 { left: 35%; bottom: 55%; animation-delay: 2s; }
+        
+        .neutralizing-drone {
+            position: absolute;
+            bottom: 60%;
+            left: 20%;
+            width: 80px;
+            height: 60px;
+            background: #ff6600;
+            border-radius: 15px;
+            animation: droneMove 10s infinite linear;
+            box-shadow: 0 0 20px #ff6600;
+        }
+        .neutralizing-drone::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 10px;
+            width: 60px;
+            height: 10px;
+            background: #ffaa00;
+            border-radius: 20px;
+        }
+        .neutralizing-drone::after {
+            content: '';
+            position: absolute;
+            top: -25px;
+            left: 5px;
+            width: 70px;
+            height: 5px;
+            background: #333;
+            border-radius: 10px;
+        }
+        
+        .spray-nozzles {
+            position: absolute;
+            bottom: -10px;
+            left: 15px;
+            width: 50px;
+            height: 15px;
+            background: #888;
+            border-radius: 7px;
+        }
+        
+        .neutralizing-spray {
+            position: absolute;
+            width: 3px;
+            height: 30px;
+            background: linear-gradient(0deg, #00ffff, transparent);
+            animation: sprayParticles 1s infinite ease-out;
+        }
+        
+        .coordinates-display {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ffff00;
+            font-size: 16px;
+            background: rgba(0,0,0,0.8);
+            padding: 10px;
+            border: 2px solid #ffff00;
+            border-radius: 5px;
+        }
+        
+        .progress-bar {
+            position: absolute;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 20px;
+            background: #333;
+            border: 2px solid #00ff00;
+            border-radius: 10px;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ffff, #0099cc);
+            border-radius: 8px;
+            width: 0%;
+            animation: neutralizationProgress 10s linear infinite;
+        }
+        
+        .hud {
+            position: absolute;
+            top: 120px;
+            left: 20px;
+            color: #00ff00;
+            font-size: 14px;
+            background: rgba(0,0,0,0.8);
+            padding: 15px;
+            border: 1px solid #00ff00;
+        }
+        
+        .chemical-info {
+            position: absolute;
+            top: 120px;
+            right: 20px;
+            color: #ffff00;
+            font-size: 12px;
+            background: rgba(0,0,0,0.8);
+            padding: 10px;
+            border: 1px solid #ffff00;
+        }
+        
+        .danger-zone {
+            position: absolute;
+            left: 50%;
+            bottom: 20%;
+            width: 300px;
+            height: 300px;
+            transform: translateX(-50%);
+            border: 3px dashed #ff0000;
+            border-radius: 50%;
+            animation: dangerPulse 3s infinite ease-in-out;
+        }
+        
+        @keyframes pulseLeak {
+            0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.8; }
+            50% { transform: translateX(-50%) scale(1.2); opacity: 1; }
+        }
+        
+        @keyframes driftCloud {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-20px) scale(1.1); }
+        }
+        
+        @keyframes droneMove {
+            0% { left: 20%; transform: rotate(0deg); }
+            25% { left: 70%; transform: rotate(15deg); }
+            50% { left: 80%; transform: rotate(0deg); }
+            75% { left: 30%; transform: rotate(-15deg); }
+            100% { left: 20%; transform: rotate(0deg); }
+        }
+        
+        @keyframes sprayParticles {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-50px) scale(0.5); }
+        }
+        
+        @keyframes neutralizationProgress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+        
+        @keyframes dangerPulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.7; }
+        }
+        
+        .neutralized-area {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: radial-gradient(circle, rgba(0,255,255,0.6), transparent);
+            border-radius: 50%;
+            animation: neutralizedEffect 2s ease-out forwards;
+        }
+        
+        @keyframes neutralizedEffect {
+            0% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1.5); }
+            100% { opacity: 0.3; transform: scale(2); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="coordinates-display">
+            TARGET COORDINATES: 9.9252°N, 78.1198°E
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress-fill"></div>
+        </div>
+        
+        <div class="danger-zone"></div>
+        
+        <div class="leak-area"></div>
+        
+        <div class="ammonia-cloud cloud1"></div>
+        <div class="ammonia-cloud cloud2"></div>
+        <div class="ammonia-cloud cloud3"></div>
+        
+        <div class="neutralizing-drone">
+            <div class="spray-nozzles"></div>
+        </div>
+        
+        <div class="hud">
+            <div>CHEMICAL NEUTRALIZATION</div>
+            <div>Agent: NH₃ (Ammonia)</div>
+            <div>Status: NEUTRALIZING</div>
+            <div>Method: Aerial Dispersal</div>
+            <div>Equipment: Autonomous Drone</div>
+            <div>Priority: CRITICAL</div>
+            <div>Confirmation: REQUIRED</div>
+        </div>
+        
+        <div class="chemical-info">
+            <div>CHEMICAL DATA</div>
+            <div>Leak Concentration: HIGH</div>
+            <div>Wind Speed: 12 km/h</div>
+            <div>Neutralizing Agent: Deployed</div>
+            <div>pH Level: <span id="ph">2.1</span></div>
+            <div>Danger Zone: 300m radius</div>
+        </div>
+    </div>
+    
+    <script>
+        let neutralizedCount = 0;
+        let phLevel = 2.1;
+        
+        function createNeutralizedArea(x, y) {
+            const area = document.createElement('div');
+            area.className = 'neutralized-area';
+            area.style.left = x + 'px';
+            area.style.bottom = y + 'px';
+            document.querySelector('.container').appendChild(area);
+            
+            setTimeout(() => {
+                if (area.parentNode) {
+                    area.parentNode.removeChild(area);
+                }
+            }, 2000);
+        }
+        
+        function createSprayParticles() {
+            const drone = document.querySelector('.neutralizing-drone');
+            const rect = drone.getBoundingClientRect();
+            
+            for (let i = 0; i < 5; i++) {
+                const spray = document.createElement('div');
+                spray.className = 'neutralizing-spray';
+                spray.style.left = (rect.left + 20 + i * 10) + 'px';
+                spray.style.bottom = (window.innerHeight - rect.bottom + 10) + 'px';
+                document.querySelector('.container').appendChild(spray);
+                
+                setTimeout(() => {
+                    if (spray.parentNode) {
+                        spray.parentNode.removeChild(spray);
+                    }
+                }, 1000);
+            }
+        }
+        
+        function updatePHLevel() {
+            phLevel += 0.1;
+            if (phLevel > 7.0) phLevel = 7.0;
+            document.getElementById('ph').textContent = phLevel.toFixed(1);
+        }
+        
+        // Create neutralization effects
+        setInterval(() => {
+            const drone = document.querySelector('.neutralizing-drone');
+            const rect = drone.getBoundingClientRect();
+            createNeutralizedArea(rect.left + 40, window.innerHeight - rect.bottom - 50);
+            createSprayParticles();
+            updatePHLevel();
+        }, 1000);
+        
+        // Simulate neutralization completion
+        setTimeout(() => {
+            document.querySelector('.leak-area').style.animation = 'none';
+            document.querySelector('.leak-area').style.opacity = '0.2';
+        }, 8000);
+    </script>
+</body>
+</html>

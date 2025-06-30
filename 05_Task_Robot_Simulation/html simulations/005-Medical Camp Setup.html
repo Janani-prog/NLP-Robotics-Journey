@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Camp Setup - Cuddalore Flood Relief</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(180deg, #2c5282, #2a4365);
+            font-family: 'Courier New', monospace;
+            color: #fff;
+            overflow: hidden;
+        }
+        .container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+        
+        .flood-water {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 20%;
+            background: linear-gradient(0deg, #4299e1, #63b3ed);
+            animation: waterFlow 3s infinite ease-in-out;
+        }
+        
+        .relief-center {
+            position: absolute;
+            bottom: 20%;
+            left: 30%;
+            width: 200px;
+            height: 120px;
+            background: linear-gradient(45deg, #718096, #4a5568);
+            border: 2px solid #e53e3e;
+        }
+        .relief-center::before {
+            content: 'RELIEF CENTER';
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #e53e3e;
+            font-size: 10px;
+            font-weight: bold;
+        }
+        
+        .medical-tent {
+            position: absolute;
+            bottom: 22%;
+            left: 55%;
+            width: 100px;
+            height: 80px;
+            background: #fff;
+            border: 2px solid #38a169;
+            animation: tentSetup 3s ease-out;
+            transform-origin: bottom;
+        }
+        .medical-tent::before {
+            content: '';
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 50px solid transparent;
+            border-right: 50px solid transparent;
+            border-bottom: 30px solid #38a169;
+        }
+        .medical-tent::after {
+            content: '🏥';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+        }
+        
+        .supply-drone {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: #ed8936;
+            border-radius: 50%;
+            top: 15%;
+            left: 10%;
+            animation: supplyDelivery 8s infinite linear;
+            box-shadow: 0 0 15px #ed8936;
+        }
+        .supply-drone::before {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 2px;
+            background: #ed8936;
+            top: 50%;
+            left: -5px;
+            animation: rotor 0.1s infinite;
+        }
+        
+        .medical-supply {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: #e53e3e;
+            border: 1px solid #c53030;
+            animation: supplyDrop 4s infinite ease-in;
+        }
+        .medical-supply::before {
+            content: '💊';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            font-size: 12px;
+        }
+        
+        .ambulance {
+            position: absolute;
+            bottom: 22%;
+            left: 10%;
+            width: 60px;
+            height: 30px;
+            background: #fff;
+            border: 2px solid #e53e3e;
+            border-radius: 5px;
+            animation: ambulanceArrival 6s ease-in-out;
+        }
+        .ambulance::before {
+            content: '🚑';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 20px;
+        }
+        
+        .patient {
+            position: absolute;
+            width: 10px;
+            height: 20px;
+            background: #4299e1;
+            border-radius: 5px 5px 0 0;
+            animation: patientWalk 4s infinite linear;
+        }
+        .patient1 { bottom: 22%; left: 20%; animation-delay: 0s; }
+        .patient2 { bottom: 22%; left: 15%; animation-delay: 1s; }
+        .patient3 { bottom: 22%; left: 25%; animation-delay: 2s; }
+        
+        .medical-staff {
+            position: absolute;
+            bottom: 24%;
+            left: 60%;
+            width: 8px;
+            height: 18px;
+            background: #38a169;
+            border-radius: 4px 4px 0 0;
+            animation: staffMove 3s infinite ease-in-out;
+        }
+        
+        .setup-indicator {
+            position: absolute;
+            bottom: 45%;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #38a169;
+            font-size: 16px;
+            font-weight: bold;
+            animation: setupBlink 1s infinite;
+        }
+        
+        .hud {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: #38a169;
+            font-size: 14px;
+            background: rgba(0,0,0,0.8);
+            padding: 15px;
+            border: 1px solid #38a169;
+        }
+        
+        .medical-status {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: #e53e3e;
+            font-size: 12px;
+            background: rgba(0,0,0,0.8);
+            padding: 10px;
+            border: 1px solid #e53e3e;
+        }
+        
+        @keyframes waterFlow {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(10px); }
+        }
+        
+        @keyframes tentSetup {
+            0% { transform: scaleY(0); opacity: 0; }
+            50% { transform: scaleY(0.5); opacity: 0.7; }
+            100% { transform: scaleY(1); opacity: 1; }
+        }
+        
+        @keyframes supplyDelivery {
+            0% { left: 10%; top: 15%; }
+            30% { left: 60%; top: 12%; }
+            50% { left: 65%; top: 25%; }
+            70% { left: 40%; top: 30%; }
+            100% { left: 10%; top: 15%; }
+        }
+        
+        @keyframes supplyDrop {
+            0% { top: 18%; left: 62%; opacity: 0; }
+            20% { opacity: 1; }
+            100% { top: 45%; left: 62%; }
+        }
+        
+        @keyframes ambulanceArrival {
+            0% { left: -80px; }
+            30% { left: 10%; }
+            70% { left: 10%; }
+            100% { left: -80px; }
+        }
+        
+        @keyframes patientWalk {
+            0% { transform: translateX(0); }
+            50% { transform: translateX(200px); }
+            100% { transform: translateX(400px); }
+        }
+        
+        @keyframes staffMove {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(-30px); }
+        }
+        
+        @keyframes setupBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        
+        @keyframes rotor {
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="flood-water"></div>
+        
+        <div class="relief-center"></div>
+        <div class="medical-tent"></div>
+        
+        <div class="supply-drone"></div>
+        <div class="ambulance"></div>
+        
+        <div class="patient patient1"></div>
+        <div class="patient patient2"></div>
+        <div class="patient patient3"></div>
+        
+        <div class="medical-staff"></div>
+        
+        <div class="setup-indicator">MEDICAL CAMP SETUP IN PROGRESS</div>
+        
+        <div class="hud">
+            <div>MEDICAL CAMP DEPLOYMENT</div>
+            <div>Location: Cuddalore Relief Center</div>
+            <div>Disaster Type: Flood</div>
+            <div>Status: SETTING UP</div>
+            <div>Equipment: Field Hospital</div>
+            <div>Staff: 12 Medical Personnel</div>
+        </div>
+        
+        <div class="medical-status">
+            <div>CAPACITY: 50 Patients</div>
+            <div>Supplies: INCOMING</div>
+            <div>Ambulances: 3 Units</div>
+            <div>Setup Time: 45 min</div>
+            <div>Priority: URGENT</div>
+        </div>
+    </div>
+    
+    <script>
+        function createMedicalSupply() {
+            const supply = document.createElement('div');
+            supply.className = 'medical-supply';
+            supply.style.animationDelay = Math.random() * 2 + 's';
+            document.querySelector('.container').appendChild(supply);
+            
+            setTimeout(() => {
+                if (supply.parentNode) {
+                    supply.parentNode.removeChild(supply);
+                }
+            }, 4000);
+        }
+        
+        // Create medical supplies periodically
+        setInterval(createMedicalSupply, 3000);
+    </script>
+</body>
+</html>

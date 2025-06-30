@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Purification Deployment - Tsunami Relief</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(180deg, #1e3c72, #2a5298);
+            font-family: 'Courier New', monospace;
+            color: #00ff00;
+            overflow: hidden;
+        }
+        .container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+        
+        .mission-header {
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #00ccff;
+            font-size: 18px;
+            background: rgba(0,0,0,0.8);
+            padding: 12px 20px;
+            border: 2px solid #00ccff;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .coastline {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 120px;
+            background: linear-gradient(0deg, #8B4513, #D2691E, #F4A460);
+            border-radius: 0 0 0 0;
+        }
+        
+        .water-line {
+            position: absolute;
+            bottom: 120px;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            background: linear-gradient(0deg, rgba(0,100,200,0.8), rgba(0,150,255,0.6));
+            animation: waterWave 3s infinite ease-in-out;
+        }
+        
+        .village {
+            position: absolute;
+            bottom: 120px;
+            width: 80px;
+            height: 60px;
+            background: #654321;
+            border-radius: 5px 5px 0 0;
+        }
+        .village1 { left: 15%; }
+        .village2 { left: 35%; }
+        .village3 { left: 55%; }
+        .village4 { left: 75%; }
+        
+        .village::before {
+            content: '';
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 40px solid transparent;
+            border-right: 40px solid transparent;
+            border-bottom: 30px solid #8B4513;
+        }
+        
+        .disaster-marker {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            background: #ff4444;
+            border-radius: 50%;
+            animation: disasterBlink 2s infinite ease-in-out;
+        }
+        
+        .purification-unit {
+            position: absolute;
+            bottom: 200px;
+            width: 120px;
+            height: 100px;
+            background: linear-gradient(45deg, #4CAF50, #66BB6A);
+            border: 3px solid #2E7D32;
+            border-radius: 10px;
+            animation: unitDeploy 3s ease-out forwards;
+        }
+        
+        .unit1 { left: 10%; animation-delay: 0s; }
+        .unit2 { left: 30%; animation-delay: 1s; }
+        .unit3 { left: 50%; animation-delay: 2s; }
+        .unit4 { left: 70%; animation-delay: 3s; }
+        
+        .unit-label {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            font-size: 10px;
+            font-weight: bold;
+            text-align: center;
+            background: rgba(0,0,0,0.7);
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        
+        .filtration-system {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 60px;
+            height: 60px;
+            background: #2196F3;
+            border-radius: 50%;
+            animation: filterSpin 4s infinite linear;
+        }
+        
+        .filtration-system::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 40px;
+            height: 40px;
+            background: #fff;
+            border-radius: 50%;
+        }
+        
+        .filtration-system::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 20px;
+            height: 20px;
+            background: #2196F3;
+            border-radius: 50%;
+        }
+        
+        .water-output {
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 20px;
+            background: linear-gradient(0deg, #00ccff, #87CEEB);
+            border-radius: 15px 15px 0 0;
+            animation: waterOutput 2s infinite ease-in-out;
+        }
+        
+        .clean-water-stream {
+            position: absolute;
+            bottom: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 25px;
+            background: linear-gradient(0deg, #00ccff, transparent);
+            animation: streamFlow 1s infinite ease-in-out;
+        }
+        
+        .deployment-vehicles {
+            position: absolute;
+            bottom: 180px;
+            left: -150px;
+            width: 100px;
+            height: 40px;
+            background: #FF9800;
+            border-radius: 5px;
+            animation: vehicleMove 8s infinite linear;
+        }
+        
+        .vehicle-wheels {
+            position: absolute;
+            bottom: -8px;
+            width: 15px;
+            height: 15px;
+            background: #333;
+            border-radius: 50%;
+            animation: wheelSpin 0.5s infinite linear;
+        }
+        .wheel1 { left: 10px; }
+        .wheel2 { right: 10px; }
+        
+        .status-panel {
+            position: absolute;
+            top: 80px;
+            right: 20px;
+            width: 300px;
+            background: rgba(0,0,0,0.9);
+            border: 2px solid #00ff00;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .panel-header {
+            color: #00ccff;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+            font-size: 14px;
+        }
+        
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+        
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-left: 5px;
+        }
+        .deployed { background: #4CAF50; animation: statusPulse 2s infinite ease-in-out; }
+        .processing { background: #FF9800; animation: statusPulse 1s infinite ease-in-out; }
+        .standby { background: #666; }
+        
+        .water-quality-display {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            width: 280px;
+            background: rgba(0,0,0,0.9);
+            border: 2px solid #00ccff;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .quality-meter {
+            width: 100%;
+            height: 20px;
+            background: #333;
+            border-radius: 10px;
+            margin: 5px 0;
+            overflow: hidden;
+        }
+        
+        .quality-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+        .excellent { background: linear-gradient(90deg, #4CAF50, #8BC34A); }
+        .good { background: linear-gradient(90deg, #FF9800, #FFC107); }
+        .poor { background: linear-gradient(90deg, #f44336, #FF5722); }
+        
+        .village-list {
+            position: absolute;
+            top: 350px;
+            right: 20px;
+            width: 300px;
+            background: rgba(0,0,0,0.9);
+            border: 2px solid #ffff00;
+            border-radius: 8px;
+            padding: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .village-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 5px;
+            border-bottom: 1px solid #333;
+        }
+        
+        .village-name {
+            color: #ffff00;
+            font-size: 11px;
+        }
+        
+        .deployment-progress {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,200,0,0.9);
+            color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            display: none;
+            animation: progressPop 0.5s ease-out;
+        }
+        
+        @keyframes waterWave {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes disasterBlink {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        
+        @keyframes unitDeploy {
+            0% { transform: translateY(100px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        
+        @keyframes filterSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes waterOutput {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+        
+        @keyframes streamFlow {
+            0% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+        }
+        
+        @keyframes vehicleMove {
+            0% { left: -150px; }
+            100% { left: 100%; }
+        }
+        
+        @keyframes wheelSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes statusPulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+        
+        @keyframes progressPop {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="mission-header">
+            WATER PURIFICATION DEPLOYMENT - TSUNAMI DISASTER RELIEF
+        </div>
+        
+        <div class="coastline"></div>
+        <div class="water-line"></div>
+        
+        <div class="village village1">
+            <div class="disaster-marker"></div>
+        </div>
+        <div class="village village2">
+            <div class="disaster-marker"></div>
+        </div>
+        <div class="village village3">
+            <div class="disaster-marker"></div>
+        </div>
+        <div class="village village4">
+            <div class="disaster-marker"></div>
+        </div>
+        
+        <div class="purification-unit unit1">
+            <div class="filtration-system">
+                <div class="water-output">
+                    <div class="clean-water-stream"></div>
+                </div>
+            </div>
+            <div class="unit-label">UNIT-01</div>
+        </div>
+        
+        <div class="purification-unit unit2">
+            <div class="filtration-system">
+                <div class="water-output">
+                    <div class="clean-water-stream"></div>
+                </div>
+            </div>
+            <div class="unit-label">UNIT-02</div>
+        </div>
+        
+        <div class="purification-unit unit3">
+            <div class="filtration-system">
+                <div class="water-output">
+                    <div class="clean-water-stream"></div>
+                </div>
+            </div>
+            <div class="unit-label">UNIT-03</div>
+        </div>
+        
+        <div class="purification-unit unit4">
+            <div class="filtration-system">
+                <div class="water-output">
+                    <div class="clean-water-stream"></div>
+                </div>
+            </div>
+            <div class="unit-label">UNIT-04</div>
+        </div>
+        
+        <div class="deployment-vehicles">
+            <div class="vehicle-wheels wheel1"></div>
+            <div class="vehicle-wheels wheel2"></div>
+        </div>
+        
+        <div class="status-panel">
+            <div class="panel-header">DEPLOYMENT STATUS</div>
+            <div class="status-item">
+                <span>Units Deployed:</span>
+                <span id="unitsDeployed">0/4</span>
+            </div>
+            <div class="status-item">
+                <span>System Status:</span>
+                <span>OPERATIONAL <div class="status-indicator deployed"></div></span>
+            </div>
+            <div class="status-item">
+                <span>Water Production:</span>
+                <span id="waterProduction">0 L/hr</span>
+            </div>
+            <div class="status-item">
+                <span>Power Status:</span>
+                <span>SOLAR ACTIVE <div class="status-indicator processing"></div></span>
+            </div>
+            <div class="status-item">
+                <span>Filter Condition:</span>
+                <span id="filterCondition">GOOD</span>
+            </div>
+            <div class="status-item">
+                <span>Maintenance:</span>
+                <span>SCHEDULED <div class="status-indicator standby"></div></span>
+            </div>
+        </div>
+        
+        <div class="water-quality-display">
+            <div style="color: #00ccff; font-weight: bold; margin-bottom: 10px;">WATER QUALITY METRICS</div>
+            <div style="font-size: 12px; margin-bottom: 5px;">
+                <span>Purity Level:</span>
+                <span id="purityLevel">98.5%</span>
+            </div>
+            <div class="quality-meter">
+                <div class="quality-fill excellent" id="purityBar" style="width: 98.5%;"></div>
+            </div>
+            <div style="font-size: 12px; margin-bottom: 5px;">
+                <span>pH Level:</span>
+                <span id="phLevel">7.2</span>
+            </div>
+            <div class="quality-meter">
+                <div class="quality-fill excellent" id="phBar" style="width: 85%;"></div>
+            </div>
+            <div style="font-size: 12px; margin-bottom: 5px;">
+                <span>Bacterial Count:</span>
+                <span id="bacterialCount">0.01 CFU/ml</span>
+            </div>
+            <div class="quality-meter">
+                <div class="quality-fill excellent" id="bacterialBar" style="width: 95%;"></div>
+            </div>
+        </div>
+        
+        <div class="village-list">
+            <div style="color: #ffff00; font-weight: bold; margin-bottom: 10px;">AFFECTED VILLAGES</div>
+            <div class="village-item">
+                <div class="village-name">Mamallapuram</div>
+                <div class="status-indicator deployed"></div>
+            </div>
+            <div class="village-item">
+                <div class="village-name">Cuddalore</div>
+                <div class="status-indicator deployed"></div>
+            </div>
+            <div class="village-item">
+                <div class="village-name">Nagapattinam</div>
+                <div class="status-indicator processing"></div>
+            </div>
+            <div class="village-item">
+                <div class="village-name">Kanyakumari</div>
+                <div class="status-indicator processing"></div>
+            </div>
+            <div class="village-item">
+                <div class="village-name">Rameswaram</div>
+                <div class="status-indicator standby"></div>
+            </div>
+            <div class="village-item">
+                <div class="village-name">Tuticorin</div>
+                <div class="status-indicator standby"></div>
+            </div>
+        </div>
+        
+        <div class="deployment-progress" id="deploymentProgress">
+            ✓ PURIFICATION UNIT DEPLOYED<br>
+            WATER PRODUCTION INITIATED
+        </div>
+    </div>
+    
+    <script>
+        let deployedUnits = 0;
+        let waterProduction = 0;
+        
+        function updateDeploymentStatus() {
+            if (deployedUnits < 4) {
+                deployedUnits++;
+                document.getElementById('unitsDeployed').textContent = `${deployedUnits}/4`;
+                
+                // Update water production
+                waterProduction += 250 + Math.random() * 100;
+                document.getElementById('waterProduction').textContent = Math.round(waterProduction) + ' L/hr';
+                
+                // Show deployment notification
+                showDeploymentProgress();
+            }
+        }
+        
+        function updateWaterQuality() {
+            // Update purity level
+            const purity = 95 + Math.random() * 4;
+            document.getElementById('purityLevel').textContent = purity.toFixed(1) + '%';
+            document.getElementById('purityBar').style.width = purity + '%';
+            
+            // Update pH level
+            const ph = 6.8 + Math.random() * 0.8;
+            document.getElementById('phLevel').textContent = ph.toFixed(1);
+            document.getElementById('phBar').style.width = ((ph - 6) / 2.5 * 100) + '%';
+            
+            // Update bacterial count
+            const bacterial = Math.random() * 0.05;
+            document.getElementById('bacterialCount').textContent = bacterial.toFixed(3) + ' CFU/ml';
+            document.getElementById('bacterialBar').style.width = (100 - bacterial * 2000) + '%';
+        }
+        
+        function updateFilterCondition() {
+            const conditions = ['EXCELLENT', 'GOOD', 'FAIR'];
+            const condition = conditions[Math.floor(Math.random() * conditions.length)];
+            document.getElementById('filterCondition').textContent = condition;
+        }
+        
+        function showDeploymentProgress() {
+            const progress = document.getElementById('deploymentProgress');
+            progress.style.display = 'block';
+            setTimeout(() => {
+                progress.style.display = 'none';
+            }, 2500);
+        }
+        
+        // Deploy units every 4 seconds
+        setInterval(updateDeploymentStatus, 4000);
+        
+        // Update water quality every 3 seconds
+        setInterval(updateWaterQuality, 3000);
+        
+        // Update filter condition every 10 seconds
+        setInterval(updateFilterCondition, 10000);
+        
+        // Initial deployment
+        setTimeout(updateDeploymentStatus, 1000);
+        updateWaterQuality();
+    </script>
+</body>
+</html>

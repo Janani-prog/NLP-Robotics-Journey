@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facial Recognition Cross-Reference - Chennai Shelters</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(180deg, #1a1a2e, #16213e);
+            font-family: 'Courier New', monospace;
+            color: #00ff00;
+            overflow: hidden;
+        }
+        .container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+        
+        .main-display {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ffff00;
+            font-size: 18px;
+            background: rgba(0,0,0,0.8);
+            padding: 15px;
+            border: 2px solid #ffff00;
+            border-radius: 5px;
+            text-align: center;
+        }
+        
+        .scanner-area {
+            position: absolute;
+            left: 20%;
+            top: 30%;
+            width: 300px;
+            height: 400px;
+            border: 3px solid #00ffff;
+            border-radius: 10px;
+            background: rgba(0,255,255,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .face-frame {
+            width: 150px;
+            height: 180px;
+            border: 2px solid #ff6600;
+            border-radius: 10px;
+            background: rgba(255,102,0,0.2);
+            position: relative;
+            margin-bottom: 20px;
+            animation: scanPulse 2s infinite ease-in-out;
+        }
+        
+        .scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #00ff00, transparent);
+            animation: scanMove 2s infinite linear;
+        }
+        
+        .recognition-points {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #ff0000;
+            border-radius: 50%;
+            animation: pointBlink 1s infinite ease-in-out;
+        }
+        .point1 { top: 30px; left: 40px; animation-delay: 0s; }
+        .point2 { top: 30px; right: 40px; animation-delay: 0.2s; }
+        .point3 { top: 80px; left: 70px; animation-delay: 0.4s; }
+        .point4 { bottom: 60px; left: 70px; animation-delay: 0.6s; }
+        
+        .database-panel {
+            position: absolute;
+            right: 10%;
+            top: 25%;
+            width: 350px;
+            height: 450px;
+            border: 2px solid #00ff00;
+            border-radius: 10px;
+            background: rgba(0,0,0,0.8);
+            overflow: hidden;
+        }
+        
+        .db-header {
+            background: #00ff00;
+            color: #000;
+            padding: 10px;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .survivor-list {
+            padding: 15px;
+            height: calc(100% - 40px);
+            overflow-y: auto;
+        }
+        
+        .survivor-entry {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 8px;
+            border: 1px solid #333;
+            border-radius: 5px;
+            background: rgba(0,50,0,0.3);
+            animation: entryFade 0.5s ease-in;
+        }
+        
+        .survivor-photo {
+            width: 40px;
+            height: 40px;
+            background: #666;
+            border-radius: 50%;
+            margin-right: 10px;
+            position: relative;
+        }
+        
+        .match-indicator {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 15px;
+            height: 15px;
+            background: #ff0000;
+            border-radius: 50%;
+            animation: matchBlink 1s infinite ease-in-out;
+        }
+        
+        .match-confirmed {
+            background: #00ff00 !important;
+        }
+        
+        .survivor-info {
+            flex: 1;
+            font-size: 12px;
+        }
+        
+        .shelter-locations {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            width: 300px;
+            background: rgba(0,0,0,0.8);
+            border: 1px solid #ffff00;
+            border-radius: 5px;
+            padding: 15px;
+        }
+        
+        .shelter-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+        
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            animation: statusBlink 2s infinite ease-in-out;
+        }
+        .scanning { background: #ffff00; }
+        .matched { background: #00ff00; }
+        .processing { background: #ff6600; }
+        
+        .match-notification {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,255,0,0.9);
+            color: #000;
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            display: none;
+            animation: notificationPop 0.5s ease-out;
+        }
+        
+        .progress-stats {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.8);
+            border: 1px solid #00ffff;
+            border-radius: 5px;
+            padding: 15px;
+            font-size: 12px;
+        }
+        
+        @keyframes scanPulse {
+            0%, 100% { border-color: #ff6600; box-shadow: 0 0 10px #ff6600; }
+            50% { border-color: #ffaa00; box-shadow: 0 0 20px #ffaa00; }
+        }
+        
+        @keyframes scanMove {
+            0% { top: 0; }
+            100% { top: calc(100% - 3px); }
+        }
+        
+        @keyframes pointBlink {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.3); }
+        }
+        
+        @keyframes entryFade {
+            0% { opacity: 0; transform: translateX(-20px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes matchBlink {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        
+        @keyframes statusBlink {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+        
+        @keyframes notificationPop {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-display">
+            FACIAL RECOGNITION CROSS-REFERENCE SYSTEM<br>
+            CHENNAI SHELTER NETWORK - MISSING PERSONS
+        </div>
+        
+        <div class="scanner-area">
+            <div class="face-frame">
+                <div class="scan-line"></div>
+                <div class="recognition-points point1"></div>
+                <div class="recognition-points point2"></div>
+                <div class="recognition-points point3"></div>
+                <div class="recognition-points point4"></div>
+            </div>
+            <div style="color: #00ffff; font-size: 14px; text-align: center;">
+                FACIAL RECOGNITION ACTIVE<br>
+                SCANNING: BIOMETRIC DATA
+            </div>
+        </div>
+        
+        <div class="database-panel">
+            <div class="db-header">SURVIVOR DATABASE - CHENNAI SHELTERS</div>
+            <div class="survivor-list" id="survivorList">
+                <!-- Survivor entries will be populated by JavaScript -->
+            </div>
+        </div>
+        
+        <div class="shelter-locations">
+            <div style="color: #ffff00; font-weight: bold; margin-bottom: 10px;">SHELTER LOCATIONS</div>
+            <div class="shelter-item">
+                <span>Marina Beach Shelter</span>
+                <div class="status-indicator scanning"></div>
+            </div>
+            <div class="shelter-item">
+                <span>Egmore Relief Center</span>
+                <div class="status-indicator processing"></div>
+            </div>
+            <div class="shelter-item">
+                <span>Adyar Community Hall</span>
+                <div class="status-indicator matched"></div>
+            </div>
+            <div class="shelter-item">
+                <span>T.Nagar Emergency Center</span>
+                <div class="status-indicator scanning"></div>
+            </div>
+            <div class="shelter-item">
+                <span>Mylapore Relief Camp</span>
+                <div class="status-indicator processing"></div>
+            </div>
+        </div>
+        
+        <div class="progress-stats">
+            <div style="color: #00ffff; font-weight: bold; margin-bottom: 8px;">PROCESSING STATS</div>
+            <div>Faces Scanned: <span id="facesScanned">0</span></div>
+            <div>Database Records: <span id="dbRecords">1,247</span></div>
+            <div>Matches Found: <span id="matchesFound">0</span></div>
+            <div>Confidence Level: <span id="confidence">0%</span></div>
+            <div>Processing Speed: <span id="speed">15.7 fps</span></div>
+        </div>
+        
+        <div class="match-notification" id="matchNotification">
+            ✓ MATCH CONFIRMED<br>
+            MISSING PERSON LOCATED
+        </div>
+    </div>
+    
+    <script>
+        const survivorNames = [
+            'Rajesh Kumar', 'Lakshmi Devi', 'Arjun Prasad', 'Meera Singh',
+            'Vikram Reddy', 'Priya Sharma', 'Karthik Raman', 'Divya Iyer',
+            'Suresh Babu', 'Kavitha Nair', 'Arun Krishnan', 'Sangeetha Raj'
+        ];
+        
+        const shelterNames = [
+            'Marina Beach', 'Egmore Center', 'Adyar Hall', 'T.Nagar Center',
+            'Mylapore Camp', 'Velachery Relief', 'Anna Nagar Center'
+        ];
+        
+        let facesScanned = 0;
+        let matchesFound = 0;
+        let survivorIndex = 0;
+        
+        function createSurvivorEntry(name, shelter, isMatch = false) {
+            return `
+                <div class="survivor-entry">
+                    <div class="survivor-photo">
+                        <div class="match-indicator ${isMatch ? 'match-confirmed' : ''}"></div>
+                    </div>
+                    <div class="survivor-info">
+                        <div style="color: #fff; font-weight: bold;">${name}</div>
+                        <div style="color: #aaa;">Shelter: ${shelter}</div>
+                        <div style="color: ${isMatch ? '#00ff00' : '#ff6600'};">
+                            ${isMatch ? 'MATCH CONFIRMED' : 'SCANNING...'}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function updateSurvivorList() {
+            const survivorList = document.getElementById('survivorList');
+            const name = survivorNames[survivorIndex % survivorNames.length];
+            const shelter = shelterNames[Math.floor(Math.random() * shelterNames.length)];
+            const isMatch = Math.random() < 0.3; // 30% chance of match
+            
+            survivorList.innerHTML += createSurvivorEntry(name, shelter, isMatch);
+            
+            if (isMatch) {
+                matchesFound++;
+                document.getElementById('matchesFound').textContent = matchesFound;
+                showMatchNotification();
+            }
+            
+            survivorIndex++;
+            
+            // Keep only last 8 entries visible
+            const entries = survivorList.querySelectorAll('.survivor-entry');
+            if (entries.length > 8) {
+                entries[0].remove();
+            }
+        }
+        
+        function updateStats() {
+            facesScanned++;
+            document.getElementById('facesScanned').textContent = facesScanned;
+            
+            const confidence = Math.min(85 + Math.random() * 10, 99.9);
+            document.getElementById('confidence').textContent = confidence.toFixed(1) + '%';
+            
+            const speed = (15 + Math.random() * 5).toFixed(1);
+            document.getElementById('speed').textContent = speed + ' fps';
+        }
+        
+        function showMatchNotification() {
+            const notification = document.getElementById('matchNotification');
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 2000);
+        }
+        
+        // Simulate facial recognition processing
+        setInterval(() => {
+            updateSurvivorList();
+            updateStats();
+        }, 2500);
+        
+        // Initialize with some entries
+        setTimeout(() => {
+            for (let i = 0; i < 4; i++) {
+                updateSurvivorList();
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Robotic Operations Command Center</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f4f7fa;
+      color: #222;
+    }
+    .container {
+      display: flex;
+      height: 100vh;
+    }
+    .sidebar {
+      width: 340px;
+      background: #232946;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding: 0 0 20px 0;
+      box-shadow: 2px 0 8px rgba(0,0,0,0.04);
+    }
+    .sidebar h2 {
+      margin: 24px 0 12px 32px;
+      font-size: 1.5em;
+      letter-spacing: 1px;
+    }
+    .command-list {
+      flex: 1;
+      overflow-y: auto;
+      margin: 0 16px 0 16px;
+      padding: 0;
+      list-style: none;
+    }
+    .command-list li {
+      background: #393e6a;
+      margin: 8px 0;
+      padding: 14px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+      font-size: 1em;
+    }
+    .command-list li.selected, .command-list li:hover {
+      background: #eebbc3;
+      color: #232946;
+    }
+    .custom-command {
+      margin: 20px 16px 0 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .custom-command input {
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #b8c1ec;
+      font-size: 1em;
+    }
+    .custom-command button {
+      background: #eebbc3;
+      color: #232946;
+      border: none;
+      border-radius: 6px;
+      padding: 10px;
+      font-size: 1em;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+    .custom-command button:hover {
+      background: #ffd6d6;
+    }
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      background: #f4f7fa;
+      padding: 0 0 0 0;
+    }
+    .live-feed-title {
+      margin: 32px 0 12px 0;
+      font-size: 2em;
+      color: #232946;
+      letter-spacing: 1px;
+    }
+    .live-feed {
+      width: 700px;
+      height: 480px;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 4px 32px rgba(35,41,70,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .command-desc {
+      margin: 24px 0 0 0;
+      font-size: 1.1em;
+      color: #393e6a;
+      min-height: 40px;
+      text-align: center;
+      max-width: 700px;
+    }
+    @media (max-width: 900px) {
+      .container { flex-direction: column; }
+      .sidebar { width: 100%; height: 320px; flex-direction: row; overflow-x: auto; }
+      .main { padding: 0; }
+      .live-feed { width: 98vw; height: 320px; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="sidebar">
+    <h2>Disaster Commands</h2>
+    <ul class="command-list" id="commandList"></ul>
+    <form class="custom-command" id="customCommandForm">
+      <input type="text" id="customCommandInput" placeholder="Enter custom command..." required />
+      <button type="submit">Simulate Custom Command</button>
+    </form>
+  </div>
+  <div class="main">
+    <div class="live-feed-title">Live Feed</div>
+    <div class="live-feed" id="liveFeed">
+      <div style="color:#b8c1ec;font-size:1.2em;">Select a command to begin simulation</div>
+    </div>
+    <div class="command-desc" id="commandDesc"></div>
+  </div>
+</div>
+<script>
+// Embedded commands from nlp_disaster.json (truncated for brevity, add more as needed)
+const commands = [
+    {"id": "disaster_001", "intent": "search_survivors", "english": "Use thermal sensors to locate survivors in the collapsed apartment near Gandhi Nagar.", "parameters": {"sensor_type": "thermal", "landmark": "Gandhi Nagar", "structure_type": "apartment"}},
+    {"id": "disaster_002", "intent": "deploy_supplies", "english": "Airdrop 50 survival kits to coordinates 13.0827°N, 80.2707°E with high priority.", "parameters": {"quantity": 50, "supply_type": "survival kits", "coordinates": "13.0827°N, 80.2707°E", "priority": "high"}},
+    {"id": "disaster_003", "intent": "hazard_warning", "english": "Issue chemical leak alert within 500m radius of the damaged factory.", "parameters": {"hazard_type": "chemical leak", "radius": "500m", "landmark": "factory"}},
+    {"id": "disaster_004", "intent": "clear_path", "english": "Remove debris blocking Route NH48 between kilometer markers 120 and 125.", "parameters": {"obstacle_type": "debris", "route": "NH48", "start_marker": 120, "end_marker": 125}},
+    {"id": "disaster_005", "intent": "medical_assistance", "english": "Set up temporary medical camp at the flood relief center in Cuddalore.", "parameters": {"facility_type": "medical camp", "disaster_type": "flood", "location": "Cuddalore relief center"}},
+    {"id": "disaster_006", "intent": "structural_assessment", "english": "Scan building at 25/7 Velachery Main Road for structural integrity using LiDAR.", "parameters": {"technology": "LiDAR", "address": "25/7 Velachery Main Road", "assessment_type": "structural integrity"}},
+    {"id": "disaster_007", "intent": "water_rescue", "english": "Deploy amphibious drones for water rescue operations in Marina Beach area.", "parameters": {"equipment": "amphibious drones", "operation": "water rescue", "location": "Marina Beach"}},
+    {"id": "disaster_008", "intent": "fire_containment", "english": "Create firebreak perimeter 200m around burning oil depot in Ennore.", "parameters": {"measure": "firebreak", "radius": "200m", "hazard": "burning oil depot", "location": "Ennore"}},
+    {"id": "disaster_009", "intent": "evacuation_route", "english": "Mark safe evacuation routes from Central Railway Station using LED beacons.", "parameters": {"technology": "LED beacons", "starting_point": "Central Railway Station", "purpose": "evacuation routes"}},
+    {"id": "disaster_010", "intent": "communication_restore", "english": "Establish emergency mesh network in cyclone-affected Nagapattinam district.", "parameters": {"technology": "mesh network", "disaster_type": "cyclone", "location": "Nagapattinam district"}},
+    {"id": "disaster_011", "intent": "chemical_neutralization", "english": "Disperse neutralizing agents for ammonia leak at 9.9252°N, 78.1198°E.", "parameters": {"chemical": "ammonia", "action": "neutralization", "coordinates": "9.9252°N, 78.1198°E"}},
+    {"id": "disaster_012", "intent": "power_restoration", "english": "Prioritize electricity restoration to Government General Hospital using mobile generators.", "parameters": {"facility": "Government General Hospital", "equipment": "mobile generators", "priority": "high"}},
+    {"id": "disaster_013", "intent": "missing_persons", "english": "Cross-reference facial recognition data with survivor lists at all Chennai shelters.", "parameters": {"technology": "facial recognition", "location": "all Chennai shelters", "purpose": "missing persons identification"}},
+    {"id": "disaster_014", "intent": "drone_surveillance", "english": "Initiate 24/7 aerial surveillance of breached dam in Mettur with thermal imaging.", "parameters": {"duration": "24/7", "technology": "thermal imaging", "location": "Mettur dam", "condition": "breached"}},
+    {"id": "disaster_015", "intent": "water_purification", "english": "Deploy portable water purification units to tsunami-affected coastal villages.", "parameters": {"equipment": "water purification units", "disaster_type": "tsunami", "location": "coastal villages"}},
+    {"id": "disaster_016", "intent": "bridge_inspection", "english": "Conduct ultrasonic testing on damaged Adyar bridge before allowing traffic.", "parameters": {"technology": "ultrasonic testing", "structure": "Adyar bridge", "condition": "damaged"}},
+    {"id": "disaster_017", "intent": "animal_rescue", "english": "Coordinate with forest department for wildlife rescue in flooded Mudumalai reserve.", "parameters": {"agency": "forest department", "operation": "wildlife rescue", "location": "Mudumalai reserve", "disaster_type": "flood"}},
+    {"id": "disaster_018", "intent": "radiation_monitoring", "english": "Monitor radiation levels every 30 minutes at Kalpakkam nuclear plant perimeter.", "parameters": {"interval": "30 minutes", "hazard": "radiation", "location": "Kalpakkam nuclear plant perimeter"}},
+    {"id": "disaster_019", "intent": "landshed_warning", "english": "Activate landslide early warning system for Nilgiris district hillslopes.", "parameters": {"system": "landslide early warning", "location": "Nilgiris district hillslopes"}},
+    {"id": "disaster_020", "intent": "data_relay", "english": "Establish satellite data relay for relief operations in cutoff Andaman islands.", "parameters": {"technology": "satellite data relay", "location": "Andaman islands", "condition": "cutoff"}},
+    {"id": "disaster_021", "intent": "gas_leak_control", "english": "Seal gas pipeline valves in T.Nagar area after detecting methane concentrations above 500ppm.", "parameters": {"hazard": "methane leak", "threshold": "500ppm", "location": "T.Nagar", "action": "seal valves"}},
+    {"id": "disaster_022", "intent": "evacuation_assistance", "english": "Guide visually impaired residents via audio instructions to nearest shelter at 12.9716°N, 77.5946°E.", "parameters": {"assistance_type": "audio guidance", "target_group": "visually impaired", "coordinates": "12.9716°N, 77.5946°E"}},
+    {"id": "disaster_023", "intent": "structural_shoring", "english": "Install temporary supports for leaning building on GST Road near Tambaram.", "parameters": {"intervention": "temporary supports", "structure_condition": "leaning", "location": "GST Road, Tambaram"}},
+    {"id": "disaster_024", "intent": "medical_telemetry", "english": "Transmit vital signs of 15 critical patients from Kilpauk Medical College to central command.", "parameters": {"data_type": "vital signs", "patient_count": 15, "facility": "Kilpauk Medical College", "priority": "critical"}},
+    {"id": "disaster_025", "intent": "contamination_zone", "english": "Mark 1km exclusion zone around radioactive spill site at Kalpakkam with automated beacons.", "parameters": {"hazard": "radioactive spill", "radius": "1km", "marking_method": "automated beacons", "location": "Kalpakkam"}},
+    {"id": "disaster_026", "intent": "waterway_clearance", "english": "Clear submerged vehicles from Adyar river near Kotturpuram bridge using amphibious excavators.", "parameters": {"obstacle": "submerged vehicles", "waterway": "Adyar river", "equipment": "amphibious excavators", "landmark": "Kotturpuram bridge"}},
+    {"id": "disaster_027", "intent": "epidemic_prevention", "english": "Disinfect temporary shelters in Cuddalore district after flood waters recede.", "parameters": {"action": "disinfection", "facilities": "temporary shelters", "disaster_type": "flood", "location": "Cuddalore district"}},
+    {"id": "disaster_028", "intent": "power_grid_repair", "english": "Replace damaged transformers in Besant Nagar substation to restore power to 5km radius.", "parameters": {"repair_type": "transformer replacement", "facility": "Besant Nagar substation", "impact_radius": "5km"}},
+    {"id": "disaster_029", "intent": "food_distribution", "english": "Coordinate drone deliveries of 2000 meal packets to marooned villages in Thanjavur district.", "parameters": {"delivery_method": "drone", "supplies": "meal packets", "quantity": 2000, "location": "Thanjavur district", "condition": "marooned"}},
+    {"id": "disaster_030", "intent": "bridge_collapse", "english": "Deploy sonar equipment to search for vehicles submerged under collapsed Hosur highway overpass.", "parameters": {"technology": "sonar", "incident": "bridge collapse", "location": "Hosur highway overpass", "target": "submerged vehicles"}},
+    {"id": "disaster_031", "intent": "railway_clearance", "english": "Clear derailed coaches from Chennai Central to Tambaram rail line within 6 hours.", "parameters": {"obstacle": "derailed coaches", "route": "Chennai Central-Tambaram", "timeframe": "6 hours"}},
+    {"id": "disaster_032", "intent": "mudslide_rescue", "english": "Use ground-penetrating radar to locate survivors in Ooty mudslide area.", "parameters": {"technology": "ground-penetrating radar", "disaster_type": "mudslide", "location": "Ooty"}},
+    {"id": "disaster_033", "intent": "communication_jammer", "english": "Activate emergency signal jammer at 11.0168°N, 76.9558°E to prevent detonation signals.", "parameters": {"device": "signal jammer", "purpose": "prevent detonation", "coordinates": "11.0168°N, 76.9558°E"}},
+    {"id": "disaster_034", "intent": "mobile_hospital", "english": "Set up robotic surgical unit at temporary field hospital in Vellore flood zone.", "parameters": {"facility": "robotic surgical unit", "hospital_type": "field hospital", "disaster_type": "flood", "location": "Vellore"}},
+    {"id": "disaster_035", "intent": "chemical_identification", "english": "Analyze unknown chemical spill at Ambattur Industrial Estate using spectrometers.", "parameters": {"technology": "spectrometers", "hazard": "unknown chemical", "location": "Ambattur Industrial Estate"}},
+    {"id": "disaster_036", "intent": "aerial_mapping", "english": "Generate 3D damage assessment maps of cyclone-hit Karaikal coast using drone swarm.", "parameters": {"output": "3D damage maps", "technology": "drone swarm", "disaster_type": "cyclone", "location": "Karaikal coast"}},
+    {"id": "disaster_037", "intent": "underground_search", "english": "Deploy snake robots to inspect collapsed metro tunnel near LIC building.", "parameters": {"robots": "snake robots", "environment": "collapsed tunnel", "landmark": "LIC building"}},
+    {"id": "disaster_038", "intent": "water_sampling", "english": "Collect and analyze water samples every 2 hours from Cooum river for contamination.", "parameters": {"target": "water quality", "location": "Cooum river", "frequency": "every 2 hours", "analysis": "contamination"}},
+    {"id": "disaster_039", "intent": "crowd_control", "english": "Deploy autonomous barriers to manage crowds at Anna Nagar relief material distribution center.", "parameters": {"technology": "autonomous barriers", "purpose": "crowd management", "location": "Anna Nagar relief center"}},
+    {"id": "disaster_040", "intent": "firefighting", "english": "Direct unmanned firefighting vehicles to chemical warehouse blaze in Manali.", "parameters": {"equipment": "unmanned firefighting vehicles", "hazard": "chemical fire", "location": "Manali"}},
+    {"id": "disaster_041", "intent": "debris_sorting", "english": "Use AI-powered robotic arms to separate recyclable materials from earthquake debris in Trichy.", "parameters": {"technology": "AI robotic arms", "task": "debris sorting", "disaster_type": "earthquake", "location": "Trichy"}},
+    {"id": "disaster_042", "intent": "radiation_decontamination", "english": "Begin robotic decontamination of 200m radius around leaked radiation source in Tarapur.", "parameters": {"process": "robotic decontamination", "hazard": "radiation leak", "radius": "200m", "location": "Tarapur"}},
+    {"id": "disaster_043", "intent": "missing_children", "english": "Match lost children database with facial recognition scans at all Chennai railway stations.", "parameters": {"technology": "facial recognition", "target": "missing children", "locations": "all Chennai railway stations"}},
+    {"id": "disaster_044", "intent": "sewer_inspection", "english": "Send waterproof drones to inspect damaged sewer lines in Mylapore area.", "parameters": {"equipment": "waterproof drones", "infrastructure": "sewer lines", "location": "Mylapore", "condition": "damaged"}},
+    {"id": "disaster_045", "intent": "tsunami_alert", "english": "Activate all coastal warning sirens from Mahabalipuram to Nagapattinam.", "parameters": {"alert_type": "tsunami warning", "system": "coastal sirens", "coverage": "Mahabalipuram to Nagapattinam"}},
+    {"id": "disaster_046", "intent": "livestock_rescue", "english": "Coordinate animal rescue teams for stranded cattle in Ramanathapuram flood plains.", "parameters": {"operation": "livestock rescue", "animals": "cattle", "location": "Ramanathapuram", "disaster_type": "flood"}},
+    {"id": "disaster_047", "intent": "power_line_repair", "english": "Deploy insulated robotic crews to repair high-voltage lines in Neyveli township.", "parameters": {"crew_type": "insulated robots", "repair_target": "high-voltage lines", "location": "Neyveli"}},
+    {"id": "disaster_048", "intent": "emergency_broadcast", "english": "Override local radio frequencies to broadcast evacuation instructions in Villupuram district.", "parameters": {"communication": "emergency broadcast", "content": "evacuation instructions", "location": "Villupuram district"}},
+    {"id": "disaster_049", "intent": "temporary_shelter", "english": "Assemble 50 prefabricated shelters in open ground near Madurai Meenakshi Temple.", "parameters": {"shelter_type": "prefabricated", "quantity": 50, "location": "near Meenakshi Temple, Madurai"}},
+    {"id": "disaster_050", "intent": "data_backup", "english": "Secure backup of hospital patient records from flood-threatened CMC Vellore servers.", "parameters": {"data_type": "patient records", "facility": "CMC Vellore", "threat": "flood", "action": "secure backup"}},
+    {"id": "disaster_051", "intent": "landslide_monitoring", "english": "Install real-time soil moisture sensors along Nilgiri Mountain roads to predict landslide risks.", "parameters": {"technology": "soil moisture sensors", "purpose": "landslide prediction", "location": "Nilgiri Mountain roads"}},
+    {"id": "disaster_052", "intent": "factory_fire", "english": "Deploy fire-resistant robots to extinguish lithium battery fire at electronics factory in Sriperumbudur.", "parameters": {"robot_type": "fire-resistant", "hazard": "lithium battery fire", "location": "Sriperumbudur electronics factory"}},
+    {"id": "disaster_053", "intent": "gas_pipeline_repair", "english": "Use magnetic crawler robots to repair ruptured gas pipeline near Ennore Port.", "parameters": {"robot_type": "magnetic crawler", "infrastructure": "gas pipeline", "location": "near Ennore Port"}},
+    {"id": "disaster_054", "intent": "coastal_erosion", "english": "Monitor erosion patterns along Marina Beach using autonomous underwater drones.", "parameters": {"technology": "autonomous underwater drones", "hazard": "coastal erosion", "location": "Marina Beach"}},
+    {"id": "disaster_055", "intent": "tunnel_collapse", "english": "Send snake-arm robots through rubble to locate trapped workers in Chennai Metro tunnel collapse.", "parameters": {"robot_type": "snake-arm", "incident": "tunnel collapse", "location": "Chennai Metro"}},
+    {"id": "disaster_056", "intent": "oil_spill", "english": "Deploy oil-absorbent drone skimmers to contain spill off Chennai coast near Thiruvanmiyur.", "parameters": {"equipment": "drone skimmers", "hazard": "oil spill", "location": "off Thiruvanmiyur coast"}},
+    {"id": "disaster_057", "intent": "dam_inspection", "english": "Conduct ultrasonic thickness testing on Mettur Dam spillway using climbing robots.", "parameters": {"robot_type": "climbing robots", "technology": "ultrasonic testing", "structure": "Mettur Dam spillway"}},
+    {"id": "disaster_058", "intent": "chemical_neutralization", "english": "Mix and disperse neutralizing agents for sulfuric acid leak at Ranipet tannery.", "parameters": {"chemical": "sulfuric acid", "action": "neutralization", "location": "Ranipet tannery"}},
+    {"id": "disaster_059", "intent": "bridge_inspection", "english": "Deploy aerial drones with LiDAR to assess damage to Pamban Bridge after cyclone impact.", "parameters": {"technology": "LiDAR drones", "structure": "Pamban Bridge", "disaster_type": "cyclone"}},
+    {"id": "disaster_060", "intent": "underground_fire", "english": "Lower fire-suppression robots into manholes to control methane fire in T.Nagar sewers.", "parameters": {"robot_type": "fire-suppression", "hazard": "methane fire", "location": "T.Nagar sewers"}},
+    {"id": "disaster_061", "intent": "tsunami_debris", "english": "Clear marine debris from Nagapattinam fishing harbor using amphibious excavators.", "parameters": {"equipment": "amphibious excavators", "debris_type": "marine", "location": "Nagapattinam fishing harbor"}},
+    {"id": "disaster_062", "intent": "radiation_mapping", "english": "Create real-time radiation heatmap of Kalpakkam nuclear complex using sensor drones.", "parameters": {"output": "radiation heatmap", "technology": "sensor drones", "location": "Kalpakkam nuclear complex"}},
+    {"id": "disaster_063", "intent": "tunnel_ventilation", "english": "Activate emergency ventilation in Chennai Port tunnel after smoke detection.", "parameters": {"system": "emergency ventilation", "trigger": "smoke detection", "location": "Chennai Port tunnel"}},
+    {"id": "disaster_064", "intent": "flood_barrier", "english": "Deploy automatic flood barriers along Adyar river at Saidapet vulnerable points.", "parameters": {"equipment": "automatic flood barriers", "location": "Adyar river, Saidapet"}},
+    {"id": "disaster_065", "intent": "industrial_accident", "english": "Evacuate 500m radius around chemical plant explosion in Manali industrial area.", "parameters": {"incident": "chemical plant explosion", "evacuation_radius": "500m", "location": "Manali industrial area"}},
+    {"id": "disaster_066", "intent": "power_grid_stabilization", "english": "Activate grid stabilization protocols for Chennai metro area during cyclone-induced outages.", "parameters": {"action": "grid stabilization", "threat": "cyclone-induced outages", "location": "Chennai metro area"}},
+    {"id": "disaster_067", "intent": "military_ammunition", "english": "Establish 2km exclusion zone around burning ammunition depot in Avadi.", "parameters": {"hazard": "burning ammunition depot", "exclusion_zone": "2km", "location": "Avadi"}},
+    {"id": "disaster_068", "intent": "water_treatment", "english": "Deploy mobile water treatment plants to flood-affected areas of Cuddalore.", "parameters": {"equipment": "mobile water treatment plants", "disaster_type": "flood", "location": "Cuddalore"}},
+    {"id": "disaster_069", "intent": "railway_track_repair", "english": "Use automated track-laying machines to restore Chennai-Villupuram rail line.", "parameters": {"equipment": "automated track-laying machines", "route": "Chennai-Villupuram"}},
+    {"id": "disaster_070", "intent": "telemedicine", "english": "Establish satellite-linked telemedicine units in cutoff Nilgiris villages.", "parameters": {"facility": "telemedicine units", "technology": "satellite-linked", "location": "Nilgiris villages", "condition": "cutoff"}},
+    {"id": "disaster_071", "intent": "forest_fire", "english": "Coordinate water-bombing drones to contain wildfire in Sathyamangalam Tiger Reserve.", "parameters": {"equipment": "water-bombing drones", "hazard": "wildfire", "location": "Sathyamangalam Tiger Reserve"}},
+    {"id": "disaster_072", "intent": "gas_leak_detection", "english": "Scan residential areas of Ambattur for LPG leaks using mobile gas detectors.", "parameters": {"equipment": "mobile gas detectors", "hazard": "LPG leak", "location": "Ambattur residential areas"}},
+    {"id": "disaster_073", "intent": "bridge_repair", "english": "Initiate emergency repair of damaged pillars on Napier Bridge using robotic concrete printers.", "parameters": {"technology": "robotic concrete printers", "structure": "Napier Bridge pillars", "priority": "emergency"}},
+    {"id": "disaster_074", "intent": "water_rescue", "english": "Deploy amphibious rescue robots for flooded areas of Pattukkottai town.", "parameters": {"robot_type": "amphibious rescue", "disaster_type": "flood", "location": "Pattukkottai"}},
+    {"id": "disaster_075", "intent": "epidemic_control", "english": "Dispatch UV-disinfection robots to containment zones in Madurai during dengue outbreak.", "parameters": {"robot_type": "UV-disinfection", "purpose": "epidemic control", "disease": "dengue", "location": "Madurai"}},
+    {"id": "disaster_076", "intent": "debris_removal", "english": "Clear earthquake debris from Rameswaram temple complex using robotic excavators.", "parameters": {"equipment": "robotic excavators", "debris_source": "earthquake", "location": "Rameswaram temple complex"}},
+    {"id": "disaster_077", "intent": "nuclear_emergency", "english": "Activate radiation-hardened robots for inspection at Kudankulam plant after seismic alert.", "parameters": {"robot_type": "radiation-hardened", "facility": "Kudankulam nuclear plant", "trigger": "seismic alert"}},
+    {"id": "disaster_078", "intent": "mine_rescue", "english": "Send explosion-proof crawler robots to search for trapped miners in Neyveli lignite mines.", "parameters": {"robot_type": "explosion-proof crawler", "incident": "mine collapse", "location": "Neyveli lignite mines"}},
+    {"id": "disaster_079", "intent": "hospital_backup", "english": "Switch to backup power and oxygen systems at GH Chennai using automated failover.", "parameters": {"systems": "power and oxygen backup", "facility": "GH Chennai", "technology": "automated failover"}},
+    {"id": "disaster_080", "intent": "tsunami_evacuation", "english": "Activate all coastal warning systems and direct drones to guide evacuation along ECR.", "parameters": {"systems": "coastal warning", "equipment": "guidance drones", "route": "East Coast Road (ECR)"}},
+    {"id": "disaster_081", "intent": "air_quality", "english": "Deploy mobile air quality monitoring stations across Chennai after industrial fire.", "parameters": {"equipment": "mobile air quality stations", "trigger": "industrial fire", "location": "Chennai"}},
+    {"id": "disaster_082", "intent": "train_derailment", "english": "Stabilize derailed coaches at Arakkonam junction using hydraulic lift systems.", "parameters": {"equipment": "hydraulic lift systems", "incident": "train derailment", "location": "Arakkonam junction"}},
+    {"id": "disaster_083", "intent": "water_supply", "english": "Restore drinking water supply to Tambaram by repairing broken pipelines with robotic welders.", "parameters": {"technology": "robotic welders", "utility": "water pipeline repair", "location": "Tambaram"}},
+    {"id": "disaster_084", "intent": "building_demolition", "english": "Prepare unstable high-rise in T.Nagar for controlled demolition using explosive drones.", "parameters": {"equipment": "explosive drones", "structure": "unstable high-rise", "location": "T.Nagar", "action": "controlled demolition"}},
+    {"id": "disaster_085", "intent": "animal_tracking", "english": "Monitor displaced wildlife in Mudumalai forest using GPS-enabled drone surveillance.", "parameters": {"technology": "GPS drone surveillance", "target": "displaced wildlife", "location": "Mudumalai forest"}},
+    {"id": "disaster_086", "intent": "port_closure", "english": "Secure Chennai Port cranes and activate storm moorings for ships ahead of cyclone landfall.", "parameters": {"facility": "Chennai Port", "equipment": "cranes and ships", "preparation": "cyclone landfall"}},
+    {"id": "disaster_087", "intent": "telecom_restoration", "english": "Deploy mobile cell towers to restore communication in cutoff Nagapattinam villages.", "parameters": {"equipment": "mobile cell towers", "service": "communication restoration", "location": "Nagapattinam villages", "condition": "cutoff"}},
+    {"id": "disaster_088", "intent": "school_safety", "english": "Inspect structural damage to 15 government schools in Coimbatore earthquake zone.", "parameters": {"facilities": "government schools", "assessment": "structural damage", "disaster_type": "earthquake", "location": "Coimbatore"}},
+    {"id": "disaster_089", "intent": "road_repair", "english": "Use 3D asphalt printers to repair damaged sections of GST Road between Chromepet and Tambaram.", "parameters": {"technology": "3D asphalt printers", "route": "GST Road", "section": "Chromepet to Tambaram"}},
+    {"id": "disaster_090", "intent": "evacuation_shelter", "english": "Set up 20 temporary shelters with sanitation facilities at Madurai Race Course grounds.", "parameters": {"shelters": 20, "facilities": "sanitation", "location": "Madurai Race Course"}},
+    {"id": "disaster_091", "intent": "gas_storage", "english": "Transfer LPG from damaged storage tanks in Korukkupet to secure facilities using robotic handlers.", "parameters": {"material": "LPG", "equipment": "robotic handlers", "action": "hazardous material transfer", "location": "Korukkupet"}},
+    {"id": "disaster_092", "intent": "sewage_overflow", "english": "Pump out flooded sewage systems in Mylapore using submersible robotic pumps.", "parameters": {"equipment": "submersible robotic pumps", "problem": "sewage overflow", "location": "Mylapore"}},
+    {"id": "disaster_093", "intent": "heritage_protection", "english": "Deploy moisture-absorbent drones to protect ancient murals in Thanjavur temple from flood damage.", "parameters": {"equipment": "moisture-absorbent drones", "target": "ancient murals", "location": "Thanjavur temple", "threat": "flood damage"}},
+    {"id": "disaster_094", "intent": "power_line_inspection", "english": "Inspect 230kV transmission lines between Neyveli and Chennai using autonomous climbing robots.", "parameters": {"robot_type": "autonomous climbing", "infrastructure": "230kV transmission lines", "route": "Neyveli to Chennai"}},
+    {"id": "disaster_095", "intent": "medical_evacuation", "english": "Prepare rooftop drone landing pads at GH Chennai for emergency medical evacuations.", "parameters": {"facility": "GH Chennai", "equipment": "drone landing pads", "purpose": "medical evacuation"}},
+    {"id": "disaster_096", "intent": "food_safety", "english": "Inspect flood-affected food warehouses in Trichy using contamination-detection robots.", "parameters": {"robot_type": "contamination-detection", "facilities": "food warehouses", "disaster_type": "flood", "location": "Trichy"}},
+    {"id": "disaster_097", "intent": "bridge_safety", "english": "Monitor vibration levels on new Poonamallee bypass bridge using IoT sensors.", "parameters": {"technology": "IoT sensors", "measurement": "vibration levels", "structure": "Poonamallee bypass bridge"}}
+];
+
+// UI rendering
+const commandList = document.getElementById('commandList');
+const liveFeed = document.getElementById('liveFeed');
+const commandDesc = document.getElementById('commandDesc');
+let selectedIdx = null;
+
+function renderCommandList() {
+  commandList.innerHTML = '';
+  commands.forEach((cmd, idx) => {
+    const li = document.createElement('li');
+    li.textContent = cmd.english;
+    li.onclick = () => selectCommand(idx);
+    if (selectedIdx === idx) li.classList.add('selected');
+    commandList.appendChild(li);
+  });
+}
+
+function selectCommand(idx) {
+  selectedIdx = idx;
+  renderCommandList();
+  const cmd = commands[idx];
+  commandDesc.textContent = cmd.english;
+  animateCommand(cmd);
+}
+
+// Animation frame handle for cleanup
+let currentAnimFrame = null;
+function clearAnimation() {
+  if (currentAnimFrame) {
+    cancelAnimationFrame(currentAnimFrame);
+    currentAnimFrame = null;
+  }
+}
+
+function animateCommand(cmd) {
+  // Clear previous
+  liveFeed.innerHTML = '';
+  clearAnimation();
+  // Choose animation based on intent/parameters
+  switch (cmd.intent) {
+    case 'search_survivors':
+      animateThermalSearch(cmd);
+      break;
+    case 'deploy_supplies':
+      animateAirdrop(cmd);
+      break;
+    case 'hazard_warning':
+      animateHazardWarning(cmd);
+      break;
+    case 'clear_path':
+      animateClearDebris(cmd);
+      break;
+    case 'medical_assistance':
+      animateMedicalCamp(cmd);
+      break;
+    case 'structural_assessment':
+      animateLidarScan(cmd);
+      break;
+    case 'water_rescue':
+      animateWaterRescue(cmd);
+      break;
+    case 'fire_containment':
+      animateFireContainment(cmd);
+      break;
+    case 'evacuation_route':
+      animateEvacuationRoute(cmd);
+      break;
+    case 'communication_restore':
+      animateMeshNetwork(cmd);
+      break;
+    case 'chemical_neutralization':
+      animateChemicalNeutralization(cmd);
+      break;
+    case 'power_restoration':
+      animatePowerRestoration(cmd);
+      break;
+    case 'missing_persons':
+      animateMissingPersons(cmd);
+      break;
+    case 'drone_surveillance':
+      animateDroneSurveillance(cmd);
+      break;
+    case 'water_purification':
+      animateWaterPurification(cmd);
+      break;
+    case 'bridge_inspection':
+      animateBridgeInspection(cmd);
+      break;
+    case 'animal_rescue':
+      animateAnimalRescue(cmd);
+      break;
+    case 'radiation_monitoring':
+      animateRadiationMonitoring(cmd);
+      break;
+    case 'landshed_warning':
+      animateLandshedWarning(cmd);
+      break;
+    case 'data_relay':
+      animateDataRelay(cmd);
+      break;
+    default:
+      animateGeneric(cmd.english);
+  }
+}
+
+// --- Finessed Animations for 1-20 ---
+function animateThermalSearch(cmd) {
+  liveFeed.innerHTML = `
+    <svg width="700" height="480" viewBox="0 0 700 480">
+      <defs>
+        <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#b8c1ec"/>
+          <stop offset="100%" stop-color="#232946"/>
+        </linearGradient>
+        <linearGradient id="buildingGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#e0e0e0"/>
+          <stop offset="100%" stop-color="#888"/>
+        </linearGradient>
+        <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#232946" flood-opacity="0.5"/>
+        </filter>
+      </defs>
+      <!-- Sky -->
+      <rect width="700" height="480" fill="url(#skyGrad)"/>
+      <!-- Collapsed building with realistic destruction -->
+      <g filter="url(#shadow)">
+        <rect x="100" y="340" width="220" height="60" fill="url(#buildingGrad)" rx="18"/>
+        <rect x="120" y="370" width="60" height="18" fill="#b8c1ec" rx="6"/>
+        <rect x="200" y="355" width="40" height="12" fill="#eebbc3" rx="4"/>
+        <rect x="170" y="390" width="30" height="10" fill="#888" rx="3"/>
+        <rect x="250" y="360" width="30" height="20" fill="#eebbc3" rx="4"/>
+        <ellipse cx="210" cy="400" rx="12" ry="6" fill="#393e6a"/>
+        <!-- Chaotic debris and cracks -->
+        <polygon points="120,400 140,410 130,430 110,420" fill="#b08d57"/>
+        <polygon points="180,420 200,430 190,450 170,440" fill="#a67c52"/>
+        <polygon points="260,410 280,420 270,440 250,430" fill="#b08d57"/>
+        <polygon points="110,350 130,355 120,370 100,365" fill="#a67c52"/>
+        <polygon points="220,370 240,375 230,390 210,385" fill="#b08d57"/>
+        <polygon points="150,360 170,365 160,380 140,375" fill="#a67c52"/>
+        <polygon points="270,350 290,355 280,370 260,365" fill="#b08d57"/>
+        <line x1="110" y1="350" x2="320" y2="390" stroke="#393e6a" stroke-width="2" stroke-dasharray="8 6"/>
+        <line x1="120" y1="370" x2="300" y2="400" stroke="#393e6a" stroke-width="1.5" stroke-dasharray="5 4"/>
+        <line x1="150" y1="360" x2="250" y2="410" stroke="#393e6a" stroke-width="1.2" stroke-dasharray="4 3"/>
+      </g>
+      <!-- Survivors: 5 normal SVG people, will be animated to run -->
+      <g id="survivor1" stroke="#fff" stroke-width="2" fill="orange">
+        <circle cx="160" cy="374" r="6"/>
+        <rect x="157" y="380" width="6" height="16" rx="2"/>
+        <line x1="160" y1="390" x2="153" y2="400" stroke-width="2.5"/>
+        <line x1="160" y1="390" x2="167" y2="400" stroke-width="2.5"/>
+        <line x1="160" y1="388" x2="155" y2="395" stroke-width="2"/>
+        <line x1="160" y1="388" x2="165" y2="395" stroke-width="2"/>
+      </g>
+      <g id="survivor2" stroke="#fff" stroke-width="2" fill="orange">
+        <circle cx="230" cy="394" r="5"/>
+        <rect x="227.5" y="399" width="5" height="13" rx="1.5"/>
+        <line x1="230" y1="406" x2="225" y2="414" stroke-width="2"/>
+        <line x1="230" y1="406" x2="235" y2="414" stroke-width="2"/>
+        <line x1="230" y1="404" x2="227" y2="410" stroke-width="1.5"/>
+        <line x1="230" y1="404" x2="233" y2="410" stroke-width="1.5"/>
+      </g>
+      <g id="survivor3" stroke="#fff" stroke-width="2" fill="orange">
+        <circle cx="120" cy="410" r="5"/>
+        <rect x="117.5" y="415" width="5" height="13" rx="1.5"/>
+        <line x1="120" y1="423" x2="115" y2="431" stroke-width="2"/>
+        <line x1="120" y1="423" x2="125" y2="431" stroke-width="2"/>
+        <line x1="120" y1="420" x2="117" y2="426" stroke-width="1.5"/>
+        <line x1="120" y1="420" x2="123" y2="426" stroke-width="1.5"/>
+      </g>
+      <g id="survivor4" stroke="#fff" stroke-width="2" fill="orange">
+        <circle cx="200" cy="410" r="5"/>
+        <rect x="197.5" y="415" width="5" height="13" rx="1.5"/>
+        <line x1="200" y1="423" x2="195" y2="431" stroke-width="2"/>
+        <line x1="200" y1="423" x2="205" y2="431" stroke-width="2"/>
+        <line x1="200" y1="420" x2="197" y2="426" stroke-width="1.5"/>
+        <line x1="200" y1="420" x2="203" y2="426" stroke-width="1.5"/>
+      </g>
+      <g id="survivor5" stroke="#fff" stroke-width="2" fill="orange">
+        <circle cx="270" cy="420" r="5"/>
+        <rect x="267.5" y="425" width="5" height="13" rx="1.5"/>
+        <line x1="270" y1="433" x2="265" y2="441" stroke-width="2"/>
+        <line x1="270" y1="433" x2="275" y2="441" stroke-width="2"/>
+        <line x1="270" y1="430" x2="267" y2="436" stroke-width="1.5"/>
+        <line x1="270" y1="430" x2="273" y2="436" stroke-width="1.5"/>
+      </g>
+      <!-- Drone with spinning propellers and thermal camera -->
+      <g id="drone">
+        <!-- Arms -->
+        <rect x="340" y="120" width="60" height="8" fill="#888" rx="4"/>
+        <rect x="370" y="90" width="8" height="60" fill="#888" rx="4"/>
+        <!-- Body -->
+        <ellipse cx="370" cy="140" rx="28" ry="16" fill="#232946"/>
+        <ellipse cx="370" cy="140" rx="18" ry="10" fill="#b8c1ec"/>
+        <!-- Camera -->
+        <rect x="362" y="150" width="16" height="12" fill="#eebbc3" rx="4"/>
+        <circle cx="370" cy="156" r="4" fill="#232946"/>
+        <!-- Propellers -->
+        <g id="prop1"><rect x="335" y="115" width="26" height="4" fill="#eebbc3" rx="2"/></g>
+        <g id="prop2"><rect x="370" y="85" width="4" height="26" fill="#eebbc3" rx="2"/></g>
+        <g id="prop3"><rect x="370" y="165" width="4" height="26" fill="#eebbc3" rx="2"/></g>
+        <g id="prop4"><rect x="395" y="115" width="26" height="4" fill="#eebbc3" rx="2"/></g>
+      </g>
+      <!-- Thermal scan beam -->
+      <rect id="scanbeam" x="370" y="170" width="8" height="220" fill="orange" opacity="0.18"/>
+      <text x="370" y="60" text-anchor="middle" fill="#fff" font-size="1.2em">Thermal drone scanning for survivors...</text>
+    </svg>
+  `;
+  // Animation logic
+  let t = 0, propAngle = 0;
+  // Survivor positions and velocities
+  let survivors = [
+    {el: null, x: 160, y: 374, vx: 1.2, vy: 0.7},
+    {el: null, x: 230, y: 394, vx: -1.1, vy: 0.6},
+    {el: null, x: 120, y: 410, vx: 1.3, vy: -0.8},
+    {el: null, x: 200, y: 410, vx: -1.0, vy: -0.7},
+    {el: null, x: 270, y: 420, vx: 1.1, vy: 0.5}
+  ];
+  const drone = liveFeed.querySelector('#drone');
+  const scanbeam = liveFeed.querySelector('#scanbeam');
+  const prop1 = liveFeed.querySelector('#prop1');
+  const prop2 = liveFeed.querySelector('#prop2');
+  const prop3 = liveFeed.querySelector('#prop3');
+  const prop4 = liveFeed.querySelector('#prop4');
+  // Assign survivor elements
+  for (let i = 0; i < 5; ++i) {
+    survivors[i].el = liveFeed.querySelector(`#survivor${i+1}`);
+  }
+  function animate() {
+    t += 0.018;
+    // Drone follows a looping (figure-eight) path
+    const centerX = 370, centerY = 140, radiusX = 120, radiusY = 40;
+    const droneX = centerX + Math.cos(t) * radiusX * Math.sin(t*1.2);
+    const droneY = centerY + Math.sin(t*2) * radiusY;
+    drone.setAttribute('transform', `translate(${droneX-centerX},${droneY-centerY})`);
+    // Scan beam sweeps left to right
+    scanbeam.setAttribute('x', 120 + 200 * (0.5 + 0.5 * Math.sin(t*0.7)));
+    // Spin propellers
+    propAngle += 0.3;
+    prop1.setAttribute('transform', `rotate(${propAngle*60},348,117)`);
+    prop2.setAttribute('transform', `rotate(${propAngle*60},372,87)`);
+    prop3.setAttribute('transform', `rotate(${propAngle*60},372,167)`);
+    prop4.setAttribute('transform', `rotate(${propAngle*60},397,117)`);
+    // Animate survivors running around
+    for (let i = 0; i < survivors.length; ++i) {
+      let s = survivors[i];
+      s.x += s.vx;
+      s.y += s.vy;
+      // Bounce off building/debris bounds
+      if (s.x < 110 || s.x > 310) s.vx *= -1;
+      if (s.y < 360 || s.y > 440) s.vy *= -1;
+      s.el.setAttribute('transform', `translate(${s.x - (i===0?160:i===1?230:i===2?120:i===3?200:270)},${s.y - (i===0?374:i===1?394:i===2?410:i===3?410:420)})`);
+    }
+    currentAnimFrame = requestAnimationFrame(animate);
+  }
+  animate();
+}
+
+function animateAirdrop(cmd) {
+  // Realistic drone airdrop with detailed drone, diagonal approach, wind sway, parachute, dust puff, and disaster background
+  liveFeed.innerHTML = `
+    <svg id="airdropSVG" width="700" height="480" viewBox="0 0 700 480">
+      <rect width="700" height="480" fill="#b8c1ec"/>
+      <!-- Disaster background -->
+      <g id="background">
+        <rect x="80" y="400" width="540" height="40" fill="#888"/>
+        <rect x="120" y="370" width="60" height="30" fill="#eebbc3" rx="8"/>
+        <rect x="520" y="370" width="60" height="30" fill="#eebbc3" rx="8"/>
+        <polygon points="200,440 220,410 260,420 250,440" fill="#393e6a"/>
+        <polygon points="500,440 520,410 560,420 550,440" fill="#393e6a"/>
+        <ellipse cx="180" cy="440" rx="10" ry="6" fill="#232946"/>
+        <ellipse cx="540" cy="440" rx="10" ry="6" fill="#232946"/>
+        <!-- People waiting -->
+        <g id="people">
+          <circle cx="180" cy="430" r="7" fill="#ff9800" stroke="#fff" stroke-width="2"/>
+          <rect x="176" y="437" width="8" height="14" rx="2" fill="#ff9800"/>
+          <circle cx="540" cy="430" r="7" fill="#ff9800" stroke="#fff" stroke-width="2"/>
+          <rect x="536" y="437" width="8" height="14" rx="2" fill="#ff9800"/>
+        </g>
+      </g>
+      <!-- Drone body -->
+      <g id="drone">
+        <ellipse cx="350" cy="110" rx="38" ry="16" fill="#232946"/>
+        <rect x="320" y="100" width="60" height="20" fill="#b8c1ec" rx="8"/>
+        <rect x="335" y="90" width="30" height="10" fill="#eebbc3" rx="4"/>
+        <!-- Camera -->
+        <circle cx="350" cy="120" r="6" fill="#393e6a"/>
+        <!-- Lights -->
+        <circle cx="330" cy="110" r="3" fill="#0ff"/>
+        <circle cx="370" cy="110" r="3" fill="#ff0"/>
+        <!-- Shadow -->
+        <ellipse id="droneShadow" cx="350" cy="170" rx="40" ry="8" fill="#232946" opacity="0.2"/>
+        <!-- Propellers -->
+        <g id="prop1"><rect x="312" y="95" width="24" height="4" fill="#888" rx="2"/></g>
+        <g id="prop2"><rect x="364" y="95" width="24" height="4" fill="#888" rx="2"/></g>
+        <g id="prop3"><rect x="345" y="80" width="4" height="24" fill="#888" rx="2"/></g>
+        <g id="prop4"><rect x="345" y="116" width="4" height="24" fill="#888" rx="2"/></g>
+      </g>
+      <!-- Package (initially attached) -->
+      <g id="packageGroup">
+        <line id="cable" x1="350" y1="130" x2="350" y2="170" stroke="#444" stroke-width="2"/>
+        <rect id="package" x="335" y="170" width="30" height="30" fill="#eebbc3" stroke="#232946" stroke-width="2" rx="6"/>
+      </g>
+      <!-- Parachute (hidden at first) -->
+      <g id="parachute" style="opacity:0;">
+        <ellipse cx="350" cy="170" rx="22" ry="10" fill="#fff" stroke="#eebbc3" stroke-width="2"/>
+        <line x1="328" y1="170" x2="340" y2="200" stroke="#eebbc3" stroke-width="2"/>
+        <line x1="372" y1="170" x2="360" y2="200" stroke="#eebbc3" stroke-width="2"/>
+      </g>
+      <!-- Dust puff -->
+      <ellipse id="dust" cx="350" cy="410" rx="0" ry="0" fill="#ffeb3b" opacity="0.4"/>
+    </svg>
+    <div style="position:absolute;top:30px;left:30px;color:#232946;font-size:1.1em;">Airdropping supplies...</div>
+  `;
+  // Animation logic
+  const svg = document.getElementById('airdropSVG');
+  const drone = svg.getElementById('drone');
+  const droneShadow = svg.getElementById('droneShadow');
+  const packageGroup = svg.getElementById('packageGroup');
+  const packageRect = svg.getElementById('package');
+  const cable = svg.getElementById('cable');
+  const parachute = svg.getElementById('parachute');
+  const prop1 = svg.getElementById('prop1');
+  const prop2 = svg.getElementById('prop2');
+  const prop3 = svg.getElementById('prop3');
+  const prop4 = svg.getElementById('prop4');
+  const dust = svg.getElementById('dust');
+
+  // Drone flies in diagonally
+  let droneX = -100;
+  let droneY = 60;
+  let phase = 0; // 0: fly in, 1: hover, 2: drop, 3: descend, 4: done
+  let packageY = 170;
+  let cableY2 = 170;
+  let parachuteY = 170;
+  let t = 0;
+  let propAngle = 0;
+  let sway = 0;
+  let dustR = 0;
+  let bounce = 0;
+  function animate() {
+    t++;
+    // Spin propellers
+    propAngle += 0.3;
+    [prop1, prop2, prop3, prop4].forEach((prop, i) => {
+      let cx = [324, 376, 347, 347][i];
+      let cy = [97, 97, 82, 118][i];
+      let angle = propAngle * (i % 2 === 0 ? 1 : -1);
+      prop.setAttribute('transform', `rotate(${angle*60},${cx},${cy})`);
+    });
+    if (phase === 0) {
+      // Fly in diagonally
+      droneX += 4;
+      droneY -= 1.2;
+      if (droneX >= 0) {
+        droneX = 0;
+        droneY = 0;
+        phase = 1;
+        setTimeout(() => { phase = 2; }, 800);
+      }
+      drone.setAttribute('transform', `translate(${droneX},${droneY})`);
+      droneShadow.setAttribute('cx', 350 + droneX);
+    } else if (phase === 1) {
+      // Hover
+      droneY = Math.sin(t/10)*4;
+      drone.setAttribute('transform', `translate(${droneX},${droneY})`);
+      droneShadow.setAttribute('cx', 350 + droneX);
+    } else if (phase === 2) {
+      // Drop package with wind sway
+      if (packageY < 350) {
+        packageY += 6;
+        cableY2 += 6;
+        sway = Math.sin(t/6)*10;
+        packageRect.setAttribute('y', packageY);
+        cable.setAttribute('y2', cableY2);
+        packageGroup.setAttribute('transform', `translate(${sway},0)`);
+      } else {
+        // Release parachute
+        packageY = 350;
+        cableY2 = 350;
+        packageRect.setAttribute('y', packageY);
+        cable.setAttribute('y2', cableY2);
+        packageGroup.style.opacity = 0;
+        parachute.style.opacity = 1;
+        phase = 3;
+      }
+    } else if (phase === 3) {
+      // Parachute descent with billow
+      if (parachuteY < 420) {
+        parachuteY += 3;
+        sway = Math.sin(t/8)*12;
+        parachute.setAttribute('transform', `translate(${sway},${parachuteY-170}) scale(${1+0.1*Math.abs(Math.sin(t/10))},1)`);
+      } else {
+        // Dust puff and bounce
+        phase = 4;
+        dustR = 0;
+        bounce = 18;
+      }
+    } else if (phase === 4) {
+      // Dust puff and package bounce
+      if (dustR < 30) {
+        dustR += 2.5;
+        dust.setAttribute('rx', dustR);
+        dust.setAttribute('ry', dustR/3);
+      }
+      if (bounce > 0) {
+        bounce -= 2;
+        parachute.setAttribute('transform', `translate(0,250) scale(1,1)`);
+        packageRect.setAttribute('y', 410-bounce);
+      } else {
+        packageRect.setAttribute('y', 410);
+      }
+    }
+    if (phase < 5) requestAnimationFrame(animate);
+  }
+  animate();
+}
+
+function animateHazardWarning(cmd) {
+  // Realistic chemical leak alert: industrial detail, vapor plume, beacon, responders
+  liveFeed.innerHTML = `
+    <svg width="700" height="480" viewBox="0 0 700 480">
+      <rect width="700" height="480" fill="#393e6a"/>
+      <!-- Industrial background -->
+      <g id="factory">
+        <rect x="250" y="320" width="200" height="80" fill="#888" stroke="#444" stroke-width="4" rx="18"/>
+        <rect x="270" y="350" width="40" height="30" fill="#b8c1ec" stroke="#444" stroke-width="2" rx="6"/>
+        <rect x="350" y="340" width="30" height="20" fill="#eebbc3" stroke="#444" stroke-width="2" rx="4"/>
+        <ellipse cx="350" cy="400" rx="12" ry="6" fill="#232946"/>
+        <!-- Pipes and tanks -->
+        <rect x="420" y="340" width="30" height="40" fill="#b08d57" stroke="#7a5c2e" stroke-width="2" rx="8"/>
+        <ellipse cx="435" cy="340" rx="15" ry="8" fill="#b08d57" stroke="#7a5c2e" stroke-width="2"/>
+        <rect x="440" y="360" width="40" height="12" fill="#888" stroke="#444" stroke-width="2" rx="4"/>
+        <rect x="480" y="360" width="10" height="30" fill="#b08d57" stroke="#7a5c2e" stroke-width="2" rx="3"/>
+        <!-- Hazard tape -->
+        <rect x="250" y="410" width="200" height="8" fill="#ff0"/>
+        <rect x="250" y="410" width="200" height="8" fill="url(#hazardStripes)"/>
+        <defs>
+          <pattern id="hazardStripes" width="12" height="8" patternUnits="userSpaceOnUse">
+            <rect x="0" y="0" width="6" height="8" fill="#232946"/>
+            <rect x="6" y="0" width="6" height="8" fill="#ff0"/>
+          </pattern>
+        </defs>
+        <!-- Warning sign -->
+        <polygon points="350,325 340,345 360,345" fill="#ff0" stroke="#232946" stroke-width="2"/>
+        <text x="350" y="342" text-anchor="middle" fill="#232946" font-size="1.1em" font-weight="bold">!</text>
+      </g>
+      <!-- Emergency vehicle -->
+      <g id="emergency">
+        <rect x="280" y="390" width="40" height="18" fill="#e63946" stroke="#fff" stroke-width="2" rx="5"/>
+        <rect x="315" y="395" width="10" height="8" fill="#fff" rx="2"/>
+        <circle cx="290" cy="400" r="4" fill="#fff"/>
+        <circle cx="310" cy="400" r="4" fill="#fff"/>
+      </g>
+      <!-- Vapor/gas plume -->
+      <g id="plume">
+        <ellipse id="plume1" cx="460" cy="360" rx="18" ry="8" fill="#0ff" opacity="0.5"/>
+        <ellipse id="plume2" cx="470" cy="350" rx="22" ry="10" fill="#0ff" opacity="0.3"/>
+        <ellipse id="plume3" cx="480" cy="340" rx="28" ry="12" fill="#0ff" opacity="0.18"/>
+      </g>
+      <!-- Rotating beacon with glow -->
+      <g id="beaconGroup">
+        <circle id="beacon" cx="350" cy="320" r="16" fill="#ff0" opacity="0.7"/>
+        <circle id="beaconGlow" cx="350" cy="320" r="24" fill="#ff0" opacity="0.18"/>
+        <rect id="beaconLight" x="350" y="304" width="4" height="20" fill="#ff0" opacity="0.7" rx="2"/>
+      </g>
+    </svg>
+    <div style="position:absolute;top:30px;left:30px;color:#fff;font-size:1.1em;">Chemical leak alert issued...</div>
+  `;
+  // Animate beacon and vapor plume
+  let op = 0.7, dir = 1, angle = 0, t = 0;
+  const beacon = liveFeed.querySelector('#beacon');
+  const beaconGlow = liveFeed.querySelector('#beaconGlow');
+  const beaconLight = liveFeed.querySelector('#beaconLight');
+  const plume1 = liveFeed.querySelector('#plume1');
+  const plume2 = liveFeed.querySelector('#plume2');
+  const plume3 = liveFeed.querySelector('#plume3');
+  function animate() {
+    t++;
+    // Beacon flash and rotate
+    op += dir * 0.03;
+    if (op > 1) dir = -1;
+    if (op < 0.5) dir = 1;
+    beacon.setAttribute('opacity', op);
+    beaconGlow.setAttribute('opacity', 0.18 + 0.12 * Math.abs(Math.sin(t/8)));
+    angle += 2.5;
+    beaconLight.setAttribute('transform', `rotate(${angle},350,320)`);
+    // Animate vapor/gas plume billowing
+    let p1 = 8 + 4*Math.sin(t/12);
+    let p2 = 10 + 6*Math.cos(t/18);
+    let p3 = 12 + 8*Math.sin(t/20);
+    plume1.setAttribute('ry', p1);
+    plume2.setAttribute('ry', p2);
+    plume3.setAttribute('ry', p3);
+    plume1.setAttribute('opacity', 0.5 + 0.1*Math.sin(t/10));
+    plume2.setAttribute('opacity', 0.3 + 0.1*Math.cos(t/14));
+    plume3.setAttribute('opacity', 0.18 + 0.08*Math.sin(t/16));
+    requestAnimationFrame(animate);
+  }
+  animate();
+}
+
+function animateClearDebris(cmd) {
+  // Realistic wheeled robot with articulated arm, animated debris, and road background
+  liveFeed.innerHTML = `
+    <svg id="clearPathSVG" width="700" height="480" viewBox="0 0 700 480">
+      <!-- Road background -->
+      <rect width="700" height="480" fill="#b8c1ec"/>
+      <rect x="0" y="400" width="700" height="60" fill="#888"/>
+      <rect x="0" y="420" width="700" height="40" fill="#555"/>
+      <rect x="0" y="440" width="700" height="20" fill="#7ec850"/>
+      <!-- Lane markings -->
+      <rect x="50" y="430" width="80" height="6" fill="#fff" rx="2"/>
+      <rect x="200" y="430" width="80" height="6" fill="#fff" rx="2"/>
+      <rect x="350" y="430" width="80" height="6" fill="#fff" rx="2"/>
+      <rect x="500" y="430" width="80" height="6" fill="#fff" rx="2"/>
+      <!-- Debris -->
+      <g id="debrisGroup">
+        <rect id="debris1" x="340" y="410" width="36" height="18" fill="#b08d57" stroke="#7a5c2e" stroke-width="2" rx="4"/>
+        <rect id="debris2" x="380" y="420" width="24" height="12" fill="#b08d57" stroke="#7a5c2e" stroke-width="2" rx="3"/>
+        <ellipse id="debris3" cx="370" cy="440" rx="10" ry="6" fill="#a67c52" stroke="#7a5c2e" stroke-width="2"/>
+      </g>
+      <!-- Robot -->
+      <g id="robot">
+        <!-- Body -->
+        <rect x="180" y="370" width="80" height="40" fill="#232946" rx="12"/>
+        <!-- Wheels -->
+        <ellipse cx="200" cy="415" rx="14" ry="10" fill="#393e6a"/>
+        <ellipse cx="240" cy="415" rx="14" ry="10" fill="#393e6a"/>
+        <ellipse cx="280" cy="415" rx="14" ry="10" fill="#393e6a"/>
+        <!-- Arm base -->
+        <rect id="armBase" x="250" y="370" width="16" height="24" fill="#eebbc3" rx="4"/>
+        <!-- Arm segment 1 -->
+        <rect id="arm1" x="260" y="350" width="10" height="30" fill="#b8c1ec" rx="4"/>
+        <!-- Arm segment 2 -->
+        <rect id="arm2" x="265" y="330" width="8" height="24" fill="#eebbc3" rx="3"/>
+        <!-- Gripper -->
+        <rect id="gripper" x="265" y="320" width="8" height="12" fill="#232946" rx="2"/>
+        <!-- Camera -->
+        <circle cx="220" cy="390" r="6" fill="#b8c1ec"/>
+      </g>
+    </svg>
+    <div style="position:absolute;top:30px;left:30px;color:#232946;font-size:1.1em;">Robot clearing debris...</div>
+  `;
+  // Animation logic
+  const svg = document.getElementById('clearPathSVG');
+  const robot = svg.getElementById('robot');
+  const arm1 = svg.getElementById('arm1');
+  const arm2 = svg.getElementById('arm2');
+  const gripper = svg.getElementById('gripper');
+  const debris1 = svg.getElementById('debris1');
+  const debris2 = svg.getElementById('debris2');
+  const debris3 = svg.getElementById('debris3');
+
+  // Animation state
+  let robotX = 0;
+  let phase = 0; // 0: move in, 1: extend arm, 2: push debris, 3: retract arm, 4: done
+  let t = 0;
+  let arm1Angle = 0;
+  let arm2Angle = 0;
+  let gripperY = 0;
+  let debrisX = 0;
+  let debris2X = 0;
+  let debris3X = 0;
+  let animFrame;
+
+  function animate() {
+    t++;
+    if (phase === 0) {
+      // Move robot forward
+      if (robotX < 120) {
+        robotX += 2.5;
+        robot.setAttribute('transform', `translate(${robotX},0)`);
+      } else {
+        phase = 1;
+      }
+    } else if (phase === 1) {
+      // Extend arm
+      if (arm1Angle > -30) {
+        arm1Angle -= 2;
+        arm1.setAttribute('transform', `rotate(${arm1Angle},265,380)`);
+      } else if (arm2Angle > -40) {
+        arm2Angle -= 2;
+        arm2.setAttribute('transform', `rotate(${arm2Angle},269,350)`);
+      } else if (gripperY > -20) {
+        gripperY -= 2;
+        gripper.setAttribute('transform', `translate(0,${gripperY})`);
+      } else {
+        phase = 2;
+      }
+    } else if (phase === 2) {
+      // Push debris
+      if (debrisX < 80) {
+        debrisX += 2.5;
+        debris1.setAttribute('x', 340 + debrisX);
+      }
+      if (debris2X < 60) {
+        debris2X += 2.2;
+        debris2.setAttribute('x', 380 + debris2X);
+      }
+      if (debris3X < 40) {
+        debris3X += 1.8;
+        debris3.setAttribute('cx', 370 + debris3X);
+      }
+      if (debrisX >= 80 && debris2X >= 60 && debris3X >= 40) {
+        phase = 3;
+      }
+    } else if (phase === 3) {
+      // Retract arm
+      if (gripperY < 0) {
+        gripperY += 2;
+        gripper.setAttribute('transform', `translate(0,${gripperY})`);
+      } else if (arm2Angle < 0) {
+        arm2Angle += 2;
+        arm2.setAttribute('transform', `rotate(${arm2Angle},269,350)`);
+      } else if (arm1Angle < 0) {
+        arm1Angle += 2;
+        arm1.setAttribute('transform', `rotate(${arm1Angle},265,380)`);
+      } else {
+        phase = 4;
+      }
+    }
+    if (phase < 4) {
+      animFrame = requestAnimationFrame(animate);
+    }
+  }
+  animate();
+}
+
+function animateMedicalCamp(cmd) {
+  // Tent and medical cross
+  liveFeed.innerHTML = `
+    <svg width="700" height="480" viewBox="0 0 700 480">
+      <rect width="700" height="480" fill="#eebbc3"/>
+      <polygon points="300,380 350,300 400,380" fill="#b8c1ec" stroke="#232946" stroke-width="4"/>
+      <rect x="335" y="340" width="30" height="30" fill="#fff" rx="6"/>
+      <rect x="347" y="350" width="6" height="18" fill="#e63946"/>
+      <rect x="341" y="356" width="18" height="6" fill="#e63946"/>
+    </svg>
+    <div style="position:absolute;top:30px;left:30px;color:#232946;font-size:1.1em;">Setting up medical camp...</div>
+  `;
+}
+
+function animateLidarScan(cmd) {
+  // Building and scanning laser
+  liveFeed.innerHTML = `
+    <svg width="700" height="480" viewBox="0 0 700 480">
+      <rect width="700" height="480" fill="#b8c1ec"/>
+      <rect x="300" y="220" width="100" height="160" fill="#888" stroke="#232946" stroke-width="4" rx="12"/>
+      <rect x="340" y="340" width="20" height="40" fill="#eebbc3" rx="4"/>
+      <rect id="laser" x="350" y="200" width="2" height="40" fill="#0ff"/>
+    </svg>
+    <div style="position:absolute;top:30px;left:30px;color:#232946;font-size:1.1em;">LiDAR scanning building...</div>
+  `;
+  // Animate laser
+  let y = 0, dir = 1;
+  const laser = liveFeed.querySelector('#laser');
+  setInterval(() => {
+    y += dir * 2;
+    if (y > 120 || y < 0) dir *= -1;
+    laser.setAttribute('y', 200 + y);
+  }, 30);
+}
+
+function animateWaterRescue(cmd) {
+  // Amphibious drone on water
+  liveFeed.innerHTML = `
+    <svg width="700" height="480" viewBox="0 0 700 480">
+      <rect width="700" height="480" fill="#b8c1ec"/>
+      <ellipse cx="350" cy="400" rx="200" ry="40" fill="#0ff" opacity="0.3"/>
+      <g id="drone">
+        <ellipse cx="350" cy="370" rx="40" ry="16" fill="#eebbc3"/>
+        <rect x="330" y="350" width="40" height="20" fill="#232946" rx="6"/>
+        <circle cx="340" cy="370" r="6" fill="#393e6a"/>
+        <circle cx="360" cy="370" r="6" fill="#393e6a"/>
+      </g>
+    </svg>
+    <div style="position:absolute;top:30px;left:30px;color:#232946;font-size:1.1em;">Amphibious drone performing water rescue...</div>
+  `;
+  // Animate drone bobbing
+  let y = 0, dir = 1;
+  const drone = liveFeed.querySelector('#drone');
+  setInterval(() => {
+    y += dir * 1.5;
+    if (y > 10 || y < 0) dir *= -1;
+    drone.setAttribute('transform', `translate(0,${y})`);
+  }, 40);
+}
+
+function animateFireContainment(cmd) {
+  // Firebreak around burning depot
+  liveFeed.innerHTML = `
+    <svg width="700" height="480" viewBox="0 0 700 480">
+      <rect width="700" height="480" fill="#232946"/>
+      <ellipse cx="350" cy="380" rx="120" ry="40" fill="#e63946" opacity="0.5"/>
+      <ellipse cx="350" cy="380" rx="200" ry="60" fill="#ff0" opacity="0.2"/>
+      <rect x="300" y="320" width="100" height="60" fill="#888" stroke="#444" stroke-width="4" rx="18"/>
+      <rect x="340" y="340" width="20" height="20" fill="#eebbc3" rx="4"/>
+    </svg>
+    <div style="position:absolute;top:30px;left:30px;color:#fff;font-size:1.1em;">Creating firebreak perimeter...</div>
+  `;
+}
+
+function animateEvacuationRoute(cmd) {
+  // LED beacons marking route
+  liveFeed.innerHTML = `
+    <svg width="700" height="480" viewBox="0 0 700 480">
+      <rect width="700" height="480" fill="#b8c1ec"/>
+      <rect x="100" y="400" width="500" height="20" fill="#888" rx="10"/>
+      <circle id="beacon" cx="120" cy="410" r="10" fill="#ff0"/>
+      <circle id="beacon2" cx="200" cy="410" r="10" fill="#ff0"/>
+      <circle id="beacon3" cx="280" cy="410" r="10" fill="#ff0"/>
+      <circle id="beacon4" cx="360" cy="410" r="10" fill="#ff0"/>
+      <circle id="beacon5" cx="440" cy="410" r="10" fill="#ff0"/>
+      <circle id="beacon6" cx="520" cy="410" r="10" fill="#ff0"/>
+    </svg>
+    <div style="position:absolute;top:30px;left:30px;color:#232946;font-size:1.1em;">Marking evacuation route...</div>
+  `;
+  // Animate beacons
+  let op = 1, dir = -1;
+  const beacons = [1,2,3,4,5,6].map(i => liveFeed.querySelector(`#beacon${i||''}`));
+  setInterval(() => {
+    op += dir * 0.05;
+    if (op < 0.3) dir = 1;
+    if (op > 1) dir = -1;
+    beacons.forEach((b,i) => b && b.setAttribute('opacity', Math.max(0.3, op - i*0.1)));
+  }, 60);
+}
+
+function animateMeshNetwork(cmd) {
+  // Mesh network nodes
+  liveFeed.innerHTML = `
+    <svg width="700" height="480" viewBox="0 0 700 480">
+      <rect width="700" height="480" fill="#232946"/>
+      <circle cx="200" cy="240" r="30" fill="#eebbc3"/>
+      <circle cx="500" cy="240" r="30" fill="#eebbc3"/>
+      <circle cx="350" cy="120" r="30" fill="#eebbc3"/>
+      <circle cx="350" cy="360" r="30" fill="#eebbc3"/>
+      <line x1="200" y1="240" x2="350" y2="120" stroke="#b8c1ec" stroke-width="4"/>
+      <line x1="200" y1="240" x2="350" y2="360" stroke="#b8c1ec" stroke-width="4"/>
+      <line x1="500" y1="240" x2="350" y2="120" stroke="#b8c1ec" stroke-width="4"/>
+      <line x1="500" y1="240" x2="350" y2="360" stroke="#b8c1ec" stroke-width="4"/>
+      <line x1="200" y1="240" x2="500" y2="240" stroke="#eebbc3" stroke-width="6"/>
+    </svg>
+    <div style="position:absolute;top:30px;left:30px;color:#fff;font-size:1.1em;">Establishing mesh network...</div>
+  `;
+}
+
+function animateChemicalNeutralization(cmd) {
+  liveFeed.innerHTML = `
+    <svg width="700" height="480" viewBox="0 0 700 480">
+      <rect width="700" height="480" fill="#393e6a"/>
+      <!-- Industrial background -->
+      <rect x="180" y="340" width="340" height="80" fill="#888" stroke="#444" stroke-width="4" rx="18"/>
+      <rect x="220" y="370" width="60" height="30" fill="#b8c1ec" stroke="#444" stroke-width="2" rx="6"/>
+      <rect x="420" y="370" width="60" height="30" fill="#b8c1ec" stroke="#444" stroke-width="2" rx="6"/>
+      <!-- Leaking tank -->
+      <ellipse id="tank" cx="350" cy="370" rx="38" ry="22" fill="#eebbc3" stroke="#232946" stroke-width="4"/>
+      <rect x="312" y="350" width="76" height="20" fill="#eebbc3" stroke="#232946" stroke-width="2" rx="8"/>
+      <!-- Hazard sign -->
+      <polygon points="350,345 340,365 360,365" fill="#ff0" stroke="#232946" stroke-width="2"/>
+      <text x="350" y="362" text-anchor="middle" fill="#232946" font-size="1.1em" font-weight="bold">!</text>
+      <!-- Leak source: pipe -->
+      <rect id="pipe" x="385" y="370" width="30" height="10" fill="#888" stroke="#232946" stroke-width="2" rx="4"/>
+      <!-- Chemical liquid/vapor -->
+      <g id="leak">
+        <ellipse id="liquid" cx="415" cy="380" rx="12" ry="6" fill="#0ff" opacity="0.7"/>
+        <ellipse id="liquid2" cx="420" cy="390" rx="16" ry="8" fill="#0ff" opacity="0.5"/>
+        <ellipse id="liquid3" cx="425" cy="400" rx="20" ry="10" fill="#0ff" opacity="0.3"/>
+      </g>
+      <!-- Spreading chemical cloud -->
+      <g id="cloud">
+        <ellipse cx="440" cy="410" rx="40" ry="18" fill="#eebbc3" opacity="0.7"/>
+        <ellipse cx="470" cy="420" rx="60" ry="24" fill="#eebbc3" opacity="0.5"/>
+        <ellipse cx="500" cy="430" rx="80" ry="30" fill="#eebbc3" opacity="0.3"/>
+      </g>
+      <text x="350" y="60" text-anchor="middle" fill="#fff" font-size="1.2em">Neutralizing chemical leak...</text>
+    </svg>
+  `;
+  // Animate leak and cloud
+  let leakY = 0, cloudOp = 0.7, cloudSpread = 0, t = 0;
+  const leak = liveFeed.querySelector('#leak');
+  const liquid = liveFeed.querySelector('#liquid');
+  const liquid2 = liveFeed.querySelector('#liquid2');
+  const liquid3 = liveFeed.querySelector('#liquid3');
+  const cloud = liveFeed.querySelector('#cloud');
+  function animate() {
+    t += 1;
+    // Animate liquid/vapor pulsing and spreading
+    let pulse = 1 + 0.08 * Math.sin(t/8);
+    liquid.setAttribute('rx', 12 * pulse);
+    liquid2.setAttribute('rx', 16 * pulse);
+    liquid3.setAttribute('rx', 20 * pulse);
+    leakY += 0.7;
+    if (leakY < 30) {
+      leak.setAttribute('transform', `translate(0,${leakY})`);
+    }
+    // Animate cloud spreading and dissipating
+    if (cloudSpread < 60) cloudSpread += 0.7;
+    cloud.setAttribute('transform', `translate(${cloudSpread},0) scale(${1+cloudSpread/120},1)`);
+    if (cloudOp > 0) {
+      cloudOp -= 0.003;
+      cloud.setAttribute('opacity', cloudOp);
+    }
+    if (cloudOp > 0.05) {
+      requestAnimationFrame(animate);
+    }
+  }
+  animate();
+}
+
+function animatePowerRestoration(cmd) {
+  liveFeed.innerHTML = `
+    <svg width="700" height="480" viewBox="0 0 700 480">
+      <rect width="700" height="480" fill="#232946"/>
+      <rect x="200" y="320" width="300" height="100" fill="#b8c1ec" rx="18"/>
+      <rect x="220" y="340" width="80" height="40" fill="#eebbc3" rx="8"/>
+      <rect x="400" y="340" width="80" height="40" fill="#eebbc3" rx="8"/>
+      <rect id="gen" x="320" y="360" width="60" height="40" fill="#393e6a" rx="10"/>
+      <rect id="cable" x="380" y="380" width="40" height="6" fill="#ff0" rx="3"/>
+      <circle id="light" cx="500" cy="360" r="12" fill="#888"/>
+      <text x="350" y="310" text-anchor="middle" fill="#fff" font-size="1.2em">Restoring power...</text>
+    </svg>
+  `;
+  // Animate cable and light
+  let cableW = 40, lightOp = 0;
+  const cable = liveFeed.querySelector('#cable');
+  const light = liveFeed.querySelector('#light');
+  function animate() {
+    if (cableW < 100) {
+      cableW += 2;
+      cable.setAttribute('width', cableW);
+      requestAnimationFrame(animate);
+    } else if (lightOp < 1) {
+      lightOp += 0.03;
+      light.setAttribute('fill', `rgba(255,255,0,${lightOp})`);
+      requestAnimationFrame(animate);
+    }
+  }
+  animate();
+}
+
+function animateMissingPersons(cmd) {
+  liveFeed.innerHTML = `
+    <svg width="700" height="480" viewBox="0 0 700 480">
+      <rect width="700" height="480" fill="#b8c1ec"/>
+      <rect x="200" y="320" width="300" height="100" fill="#fff" rx="18"/>
+      <g id="faces">
+        <circle cx="250" cy="370" r="18" fill="#eebbc3"/>
+        <circle cx="350" cy="370" r="18" fill="#eebbc3"/>
+        <circle cx="450" cy="370" r="18" fill="#eebbc3"/>
+        <rect x="240" y="390" width="120" height="10" fill="#b8c1ec" rx="4"/>
+      </g>
+      <rect id="scan" x="200" y="320" width="300" height="10" fill="#0ff" opacity="0.5"/>
+      <text x="350" y="310" text-anchor="middle" fill="#232946" font-size="1.2em">Facial recognition scan...</text>
+    </svg>
+  `;
+  // Animate scan bar
+  let scanY = 320;
+  const scan = liveFeed.querySelector('#scan');
+  function animate() {
+    if (scanY < 410) {
+      scanY += 2;
+      scan.setAttribute('y', scanY);
+      requestAnimationFrame(animate);
+    }
+  }
+  animate();
+}
+
+function animateDroneSurveillance(cmd) {
+  liveFeed.innerHTML = `
+    <svg width="700" height="480" viewBox="0 0 700 480">
+      <rect width="700" height="480" fill="#232946"/>
+      <rect x="100" y="400" width="500" height="40" fill="#b8c1ec"/>
+      <ellipse cx="350" cy="420" rx="200" ry="20" fill="#0ff" opacity="0.2"/>
+      <g id="drone">
+        <ellipse cx="350" cy="120" rx="38" ry="16" fill="#393e6a"/>
+        <rect x="320" y="110" width="60" height="20" fill="#b8c1ec" rx="8"/>
+        <rect x="335" y="100" width="30" height="10" fill="#eebbc3" rx="4"/>
+        <circle cx="350" cy="130" r="8" fill="#eebbc3"/>
+        <ellipse id="thermal" cx="350" cy="180" rx="60" ry="18" fill="url(#thermalGradient)" opacity="0.7"/>
+      </g>
+      <defs>
+        <linearGradient id="thermalGradient" x1="290" y1="180" x2="410" y2="180" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#ff0"/>
+          <stop offset="0.5" stop-color="#f00"/>
+          <stop offset="1" stop-color="#0ff"/>
+        </linearGradient>
+      </defs>
+      <text x="350" y="60" text-anchor="middle" fill="#fff" font-size="1.2em">Aerial surveillance in progress...</text>
+    </svg>
+  `;
+  // Animate drone up and down
+  let y = 0, dir = 1;
+  const drone = liveFeed.querySelector('#drone');
+  function animate() {
+    y += dir * 1.5;
+    if (y > 30 || y < 0) dir *= -1;
+    drone.setAttribute('transform', `translate(0,${y})`);
+    requestAnimationFrame(animate);
+  }
+  animate();
+}
+
+function animateWaterPurification(cmd) {
+  liveFeed.innerHTML = `
+    <svg width="700" height="480" viewBox="0 0 700 480">
+      <rect width="700" height="480" fill="#b8c1ec"/>
+      <ellipse cx="350" cy="420" rx="200" ry="20" fill="#0ff" opacity="0.2"/>
+      <rect x="300" y="340" width="100" height="60" fill="#fff" stroke="#232946" stroke-width="3" rx="12"/>
+      <rect id="dirty" x="320" y="360" width="20" height="20" fill="#eebbc3" rx="4"/>
+      <rect id="clean" x="360" y="360" width="20" height="20" fill="#7ec850" rx="4" opacity="0.2"/>
+      <text x="350" y="330" text-anchor="middle" fill="#232946" font-size="1.1em">Water purification in progress...</text>
+    </svg>
+  `;
+  // Animate dirty water turning clean
+  let cleanOp = 0.2;
+  const clean = liveFeed.querySelector('#clean');
+  function animate() {
+    if (cleanOp < 1) {
+      cleanOp += 0.02;
+      clean.setAttribute('opacity', cleanOp);
+      requestAnimationFrame(animate);
+    }
+  }
+  animate();
+}
+
+function animateBridgeInspection(cmd) {
+  liveFeed.innerHTML = `
+    <svg width="700" height="480" viewBox="0 0 700 480">
+      <rect width="700" height="480" fill="#b8c1ec"/>
+      <rect x="200" y="320" width="300" height="30" fill="#888" rx="8"/>
+      <g id="drone">
+        <ellipse cx="250" cy="300" rx="18" ry="8" fill="#232946"/>
+        <rect x="232" y="290" width="36" height="16" fill="#b8c1ec" rx="6"/>
+        <rect x="242" y="280" width="16" height="8" fill="#eebbc3" rx="3"/>
+      </g>
+      <rect id="scan" x="220" y="320" width="20" height="30" fill="#0ff" opacity="0.5"/>
+      <text x="350" y="270" text-anchor="middle" fill="#232946" font-size="1.1em">Bridge inspection with sensors...</text>
+    </svg>
+  `;
+  // Animate scan bar moving across bridge
+  let scanX = 220;
+  const scan = liveFeed.querySelector('#scan');
+  function animate() {
+    if (scanX < 480) {
+      scanX += 2;
+      scan.setAttribute('x', scanX);
+      requestAnimationFrame(animate);
+    }
+  }
+  animate();
+}
+
+function animateAnimalRescue(cmd) {
+  liveFeed.innerHTML = `
+    <svg width="700" height="480" viewBox="0 0 700 480">
+      <rect width="700" height="480" fill="#7ec850"/>
+      <ellipse cx="350" cy="420" rx="200" ry="20" fill="#b8c1ec" opacity="0.2"/>
+      <g id="animal">
+        <ellipse cx="300" cy="400" rx="18" ry="10" fill="#eebbc3"/>
+        <ellipse cx="400" cy="400" rx="18" ry="10" fill="#eebbc3"/>
+      </g>
+      <g id="rescuer">
+        <rect x="340" y="370" width="20" height="30" fill="#232946" rx="6"/>
+        <circle cx="350" cy="370" r="10" fill="#b8c1ec"/>
+      </g>
+      <text x="350" y="360" text-anchor="middle" fill="#232946" font-size="1.1em">Animal rescue in progress...</text>
+    </svg>
+  `;
+  // Animate animals moving to rescuer
+  let ax = 0;
+  const animal = liveFeed.querySelector('#animal');
+  function animate() {
+    if (ax < 40) {
+      ax += 1.2;
+      animal.setAttribute('transform', `translate(${ax},0)`);
+      requestAnimationFrame(animate);
+    }
+  }
+  animate();
+}
+
+function animateRadiationMonitoring(cmd) {
+  liveFeed.innerHTML = `
+    <svg width="700" height="480" viewBox="0 0 700 480">
+      <rect width="700" height="480" fill="#232946"/>
+      <rect x="300" y="340" width="100" height="60" fill="#b8c1ec" rx="12"/>
+      <circle id="meter" cx="350" cy="370" r="20" fill="#fff" stroke="#eebbc3" stroke-width="4"/>
+      <rect x="340" y="390" width="20" height="10" fill="#eebbc3" rx="3"/>
+      <text x="350" y="330" text-anchor="middle" fill="#fff" font-size="1.1em">Radiation monitoring...</text>
+    </svg>
+  `;
+  // Animate meter needle
+  let angle = -60;
+  const meter = liveFeed.querySelector('#meter');
+  let needle = document.createElementNS('http://www.w3.org/2000/svg','line');
+  needle.setAttribute('x1','350');
+  needle.setAttribute('y1','370');
+  needle.setAttribute('x2','350');
+  needle.setAttribute('y2','355');
+  needle.setAttribute('stroke','#e63946');
+  needle.setAttribute('stroke-width','3');
+  meter.parentNode.appendChild(needle);
+  function animate() {
+    if (angle < 60) {
+      angle += 2;
+      let rad = (angle-90)*Math.PI/180;
+      let x2 = 350 + 15*Math.cos(rad);
+      let y2 = 370 + 15*Math.sin(rad);
+      needle.setAttribute('x2',x2);
+      needle.setAttribute('y2',y2);
+      requestAnimationFrame(animate);
+    }
+  }
+  animate();
+}
+
+function animateLandshedWarning(cmd) {
+  liveFeed.innerHTML = `
+    <svg width="700" height="480" viewBox="0 0 700 480">
+      <rect width="700" height="480" fill="#b8c1ec"/>
+      <polygon points="200,400 350,200 500,400" fill="#7ec850" stroke="#232946" stroke-width="4"/>
+      <rect x="320" y="320" width="60" height="40" fill="#eebbc3" rx="10"/>
+      <circle id="sensor" cx="350" cy="320" r="10" fill="#ff0"/>
+      <text x="350" y="190" text-anchor="middle" fill="#232946" font-size="1.1em">Landslide warning system active</text>
+    </svg>
+  `;
+  // Animate sensor blinking
+  let op = 1, dir = -1;
+  const sensor = liveFeed.querySelector('#sensor');
+  function animate() {
+    op += dir * 0.05;
+    if (op < 0.3) dir = 1;
+    if (op > 1) dir = -1;
+    sensor.setAttribute('opacity', op);
+    requestAnimationFrame(animate);
+  }
+  animate();
+}
+
+function animateDataRelay(cmd) {
+  liveFeed.innerHTML = `
+    <svg width="700" height="480" viewBox="0 0 700 480">
+      <rect width="700" height="480" fill="#232946"/>
+      <ellipse cx="350" cy="420" rx="200" ry="20" fill="#b8c1ec" opacity="0.2"/>
+      <g id="dish">
+        <ellipse cx="350" cy="320" rx="40" ry="16" fill="#eebbc3"/>
+        <rect x="340" y="300" width="20" height="30" fill="#b8c1ec" rx="6"/>
+      </g>
+      <g id="signal">
+        <path d="M370 320 Q400 250 500 100" stroke="#0ff" stroke-width="4" fill="none"/>
+        <circle cx="500" cy="100" r="10" fill="#0ff"/>
+      </g>
+      <text x="350" y="290" text-anchor="middle" fill="#fff" font-size="1.1em">Satellite data relay in progress...</text>
+    </svg>
+  `;
+  // Animate signal pulse
+  let op = 0.2, dir = 1;
+  const signal = liveFeed.querySelector('#signal');
+  function animate() {
+    op += dir * 0.03;
+    if (op > 1) dir = -1;
+    if (op < 0.2) dir = 1;
+    signal.setAttribute('opacity', op);
+    requestAnimationFrame(animate);
+  }
+  animate();
+}
+
+function animateGeneric(text) {
+  // Generic robot animation for custom commands
+  liveFeed.innerHTML = `
+    <svg width="700" height="480" viewBox="0 0 700 480">
+      <rect width="700" height="480" fill="#b8c1ec"/>
+      <g id="robot">
+        <rect x="320" y="320" width="60" height="60" fill="#232946" rx="16"/>
+        <rect x="340" y="300" width="20" height="30" fill="#eebbc3" rx="6"/>
+        <circle cx="340" cy="380" r="10" fill="#393e6a"/>
+        <circle cx="380" cy="380" r="10" fill="#393e6a"/>
+        <rect x="350" y="340" width="10" height="30" fill="#eebbc3" rx="3"/>
+      </g>
+    </svg>
+    <div style="position:absolute;top:30px;left:30px;width:90%;color:#232946;font-size:1.1em;text-align:center;">${text}</div>
+  `;
+  // Animate robot bobbing
+  let y = 0, dir = 1;
+  const robot = liveFeed.querySelector('#robot');
+  setInterval(() => {
+    y += dir * 1.5;
+    if (y > 10 || y < 0) dir *= -1;
+    robot.setAttribute('transform', `translate(0,${y})`);
+  }, 40);
+}
+
+// Custom command form
+const customForm = document.getElementById('customCommandForm');
+const customInput = document.getElementById('customCommandInput');
+customForm.onsubmit = (e) => {
+  e.preventDefault();
+  const text = customInput.value.trim();
+  if (!text) return;
+  selectedIdx = null;
+  renderCommandList();
+  commandDesc.textContent = text;
+  animateGeneric(text);
+  customInput.value = '';
+};
+
+renderCommandList();
+</script>
+</body>
+</html> 

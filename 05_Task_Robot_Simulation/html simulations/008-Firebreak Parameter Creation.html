@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebreak Perimeter - Ennore Oil Depot</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(180deg, #2c1810, #4a2c1a);
+            font-family: 'Courier New', monospace;
+            color: #fff;
+            overflow: hidden;
+        }
+        .container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+        
+        .oil-depot {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background: #333;
+            bottom: 40%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 50%;
+            border: 3px solid #555;
+        }
+        
+        .fire {
+            position: absolute;
+            width: 100px;
+            height: 60px;
+            background: radial-gradient(circle, #ff6600, #ff0000, #990000);
+            bottom: 48%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            animation: fireFlicker 0.5s infinite alternate;
+        }
+        
+        .fire::before {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 40px;
+            background: radial-gradient(circle, #ffff00, #ff6600);
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            animation: fireFlicker 0.3s infinite alternate;
+        }
+        
+        .smoke {
+            position: absolute;
+            width: 50px;
+            height: 100px;
+            background: linear-gradient(0deg, rgba(80,80,80,0.8), rgba(120,120,120,0.6), rgba(160,160,160,0.3));
+            bottom: 60%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 50%;
+            animation: smokeRise 3s infinite ease-out;
+        }
+        
+        .firebreak-zone {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            border: 3px dashed #00ff00;
+            border-radius: 50%;
+            bottom: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: firebreakProgress 8s ease-out forwards;
+        }
+        
+        .firebreak-zone::before {
+            content: '200m FIREBREAK PERIMETER';
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #00ff00;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .bulldozer {
+            position: absolute;
+            width: 40px;
+            height: 20px;
+            background: #ffff00;
+            bottom: 30%;
+            left: 30%;
+            animation: bulldozerMove 10s infinite linear;
+            border-radius: 5px;
+        }
+        
+        .bulldozer::before {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 10px;
+            background: #333;
+            left: -10px;
+            top: 5px;
+            border-radius: 2px;
+        }
+        
+        .cleared-area {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #8B4513;
+            border-radius: 50%;
+            animation: clearArea 1s ease-out forwards;
+        }
+        
+        .fire-truck {
+            position: absolute;
+            width: 50px;
+            height: 25px;
+            background: #ff0000;
+            bottom: 25%;
+            left: 70%;
+            animation: truckPatrol 12s infinite ease-in-out;
+            border-radius: 5px;
+        }
+        
+        .fire-truck::before {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 5px;
+            background: #990000;
+            top: -8px;
+            left: 10px;
+            border-radius: 2px;
+        }
+        
+        .water-spray {
+            position: absolute;
+            width: 3px;
+            height: 50px;
+            background: linear-gradient(0deg, transparent, #4682b4);
+            left: 75%;
+            bottom: 30%;
+            animation: waterSpray 2s infinite ease-out;
+        }
+        
+        .hud {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: #fff;
+            font-size: 14px;
+            background: rgba(0,0,0,0.8);
+            padding: 15px;
+            border: 1px solid #fff;
+        }
+        
+        .operation-status {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: #ff6600;
+            font-size: 14px;
+            background: rgba(0,0,0,0.8);
+            padding: 15px;
+            border: 1px solid #ff6600;
+        }
+        
+        .progress-bar {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 20px;
+            background: #333;
+            border: 2px solid #00ff00;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff6600, #ffff00, #00ff00);
+            width: 0%;
+            animation: fillProgress 8s ease-out forwards;
+        }
+        
+        @keyframes fireFlicker {
+            0% { transform: translateX(-50%) scale(1); }
+            100% { transform: translateX(-50%) scale(1.1) rotate(2deg); }
+        }
+        
+        @keyframes smokeRise {
+            0% { transform: translateX(-50%) translateY(0px) scale(1); opacity: 0.8; }
+            100% { transform: translateX(-50%) translateY(-100px) scale(2); opacity: 0; }
+        }
+        
+        @keyframes firebreakProgress {
+            0% { width: 100px; height: 100px; opacity: 0.3; }
+            100% { width: 400px; height: 400px; opacity: 1; }
+        }
+        
+        @keyframes bulldozerMove {
+            0% { left: 30%; transform: rotate(0deg); }
+            25% { left: 70%; transform: rotate(90deg); }
+            50% { left: 70%; bottom: 60%; transform: rotate(180deg); }
+            75% { left: 30%; bottom: 60%; transform: rotate(270deg); }
+            100% { left: 30%; bottom: 30%; transform: rotate(360deg); }
+        }
+        
+        @keyframes truckPatrol {
+            0% { left: 70%; }
+            50% { left: 20%; }
+            100% { left: 70%; }
+        }
+        
+        @keyframes waterSpray {
+            0% { height: 0px; opacity: 0; }
+            50% { height: 50px; opacity: 1; }
+            100% { height: 30px; opacity: 0.5; }
+        }
+        
+        @keyframes fillProgress {
+            0% { width: 0%; }
+            100% { width: 85%; }
+        }
+        
+        @keyframes clearArea {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="oil-depot"></div>
+        <div class="fire"></div>
+        <div class="smoke"></div>
+        
+        <div class="firebreak-zone"></div>
+        
+        <div class="bulldozer"></div>
+        <div class="fire-truck"></div>
+        <div class="water-spray"></div>
+        
+        <div class="hud">
+            <div>FIREBREAK OPERATION ACTIVE</div>
+            <div>Location: Ennore Oil Depot</div>
+            <div>Perimeter: 200m radius</div>
+            <div>Safety Critical: YES</div>
+            <div>Wind Direction: NE</div>
+            <div>Wind Speed: 15 km/h</div>
+            <div>Temperature: 45°C</div>
+        </div>
+        
+        <div class="operation-status">
+            <div>CONTAINMENT STATUS</div>
+            <div>Bulldozers: 1 Active</div>
+            <div>Fire Trucks: 1 Deployed</div>
+            <div>Firebreak Progress: <span id="progress">0%</span></div>
+            <div>Estimated Completion: 3.5 hrs</div>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress-fill"></div>
+        </div>
+        <div style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); color: #fff; font-size: 12px;">
+            FIREBREAK PERIMETER CREATION - 85% COMPLETE
+        </div>
+    </div>
+    
+    <script>
+        let progress = 0;
+        
+        function updateProgress() {
+            progress += 2;
+            document.getElementById('progress').textContent = Math.min(progress, 85) + '%';
+            
+            if (progress < 85) {
+                setTimeout(updateProgress, 200);
+            }
+        }
+        
+        function createSmoke() {
+            const smoke = document.createElement('div');
+            smoke.className = 'smoke';
+            smoke.style.left = (48 + Math.random() * 4) + '%';
+            smoke.style.animationDelay = Math.random() * 2 + 's';
+            
+            document.querySelector('.container').appendChild(smoke);
+            
+            setTimeout(() => {
+                if (smoke.parentNode) {
+                    smoke.parentNode.removeChild(smoke);
+                }
+            }, 3000);
+        }
+        
+        function createClearedArea() {
+            const area = document.createElement('div');
+            area.className = 'cleared-area';
+            area.style.left = (25 + Math.random() * 50) + '%';
+            area.style.bottom = (25 + Math.random() * 50) + '%';
+            
+            document.querySelector('.container').appendChild(area);
+        }
+        
+        updateProgress();
+        setInterval(createSmoke, 1000);
+        setInterval(createClearedArea, 2000);
+    </script>
+</body>
+</html>

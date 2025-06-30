@@ -1,137 +1,137 @@
 [
-  {
-    "id": "disaster_001",
-    "intent": "search_survivors",
-    "english": "Use thermal sensors to locate survivors in the collapsed apartment near Gandhi Nagar.",
-    "tamil": "காந்தி நகரில் உள்ள இடிந்த கட்டிடத்தில் வெப்ப கதிரியக்க சென்சார்களைப் பயன்படுத்தி உயிரோடு இருப்பவர்களை கண்டறியவும்.",
-    "parameters": {
-      "sensor_type": "thermal",
-      "landmark": "Gandhi Nagar",
-      "structure_type": "apartment"
+    {
+      "id": "disaster_001",
+      "intent": "search_survivors",
+      "english": "Use thermal sensors to locate survivors in the collapsed apartment near Gandhi Nagar.",
+      "tamil": "காந்தி நகரில் உள்ள இடிந்த கட்டிடத்தில் வெப்ப கதிரியக்க சென்சார்களைப் பயன்படுத்தி உயிரோடு இருப்பவர்களை கண்டறியவும்.",
+      "parameters": {
+        "sensor_type": "thermal",
+        "landmark": "Gandhi Nagar",
+        "structure_type": "apartment"
+      },
+      "safety_critical": true,
+      "confirmation_required": true
     },
-    "safety_critical": true,
-    "confirmation_required": true
-  },
-  {
-    "id": "disaster_002",
-    "intent": "deploy_supplies",
-    "english": "Airdrop 50 survival kits to coordinates 13.0827°N, 80.2707°E with high priority.",
-    "tamil": "13.0827°N, 80.2707°E ஆயங்களுக்கு 50 உயிர்காப்பு கிடங்களை உயர் முன்னுரிமையுடன் விமானம் மூலம் வீசவும்.",
-    "parameters": {
-      "quantity": 50,
-      "supply_type": "survival kits",
-      "coordinates": "13.0827°N, 80.2707°E",
-      "priority": "high"
+    {
+      "id": "disaster_002",
+      "intent": "deploy_supplies",
+      "english": "Airdrop 50 survival kits to coordinates 13.0827°N, 80.2707°E with high priority.",
+      "tamil": "13.0827°N, 80.2707°E ஆயங்களுக்கு 50 உயிர்காப்பு கிடங்களை உயர் முன்னுரிமையுடன் விமானம் மூலம் வீசவும்.",
+      "parameters": {
+        "quantity": 50,
+        "supply_type": "survival kits",
+        "coordinates": "13.0827°N, 80.2707°E",
+        "priority": "high"
+      },
+      "safety_critical": false,
+      "confirmation_required": false
     },
-    "safety_critical": false,
-    "confirmation_required": false
-  },
-  {
-    "id": "disaster_003",
-    "intent": "hazard_warning",
-    "english": "Issue chemical leak alert within 500m radius of the damaged factory.",
-    "tamil": "சேதமடைந்த தொழிற்சாலையின் 500 மீட்டர் ஆரத்தில் இரசாயன கசிவு எச்சரிக்கையை வெளியிடவும்.",
-    "parameters": {
-      "hazard_type": "chemical leak",
-      "radius": "500m",
-      "landmark": "factory"
+    {
+      "id": "disaster_003",
+      "intent": "hazard_warning",
+      "english": "Issue chemical leak alert within 500m radius of the damaged factory.",
+      "tamil": "சேதமடைந்த தொழிற்சாலையின் 500 மீட்டர் ஆரத்தில் இரசாயன கசிவு எச்சரிக்கையை வெளியிடவும்.",
+      "parameters": {
+        "hazard_type": "chemical leak",
+        "radius": "500m",
+        "landmark": "factory"
+      },
+      "safety_critical": true,
+      "confirmation_required": true
     },
-    "safety_critical": true,
-    "confirmation_required": true
-  },
-  {
-    "id": "disaster_004",
-    "intent": "clear_path",
-    "english": "Remove debris blocking Route NH48 between kilometer markers 120 and 125.",
-    "tamil": "120 முதல் 125 கிலோமீட்டர் குறிப்பான்களுக்கு இடையே உள்ள NH48 சாலையில் உள்ள குப்பைகளை அகற்றவும்.",
-    "parameters": {
-      "obstacle_type": "debris",
-      "route": "NH48",
-      "start_marker": 120,
-      "end_marker": 125
+    {
+      "id": "disaster_004",
+      "intent": "clear_path",
+      "english": "Remove debris blocking Route NH48 between kilometer markers 120 and 125.",
+      "tamil": "120 முதல் 125 கிலோமீட்டர் குறிப்பான்களுக்கு இடையே உள்ள NH48 சாலையில் உள்ள குப்பைகளை அகற்றவும்.",
+      "parameters": {
+        "obstacle_type": "debris",
+        "route": "NH48",
+        "start_marker": 120,
+        "end_marker": 125
+      },
+      "safety_critical": true,
+      "confirmation_required": false
     },
-    "safety_critical": true,
-    "confirmation_required": false
-  },
-  {
-    "id": "disaster_005",
-    "intent": "medical_assistance",
-    "english": "Set up temporary medical camp at the flood relief center in Cuddalore.",
-    "tamil": "கடலூர் வெள்ள நிவாரண மையத்தில் தற்காலிக மருத்துவ முகாமை அமைக்கவும்.",
-    "parameters": {
-      "facility_type": "medical camp",
-      "disaster_type": "flood",
-      "location": "Cuddalore relief center"
+    {
+      "id": "disaster_005",
+      "intent": "medical_assistance",
+      "english": "Set up temporary medical camp at the flood relief center in Cuddalore.",
+      "tamil": "கடலூர் வெள்ள நிவாரண மையத்தில் தற்காலிக மருத்துவ முகாமை அமைக்கவும்.",
+      "parameters": {
+        "facility_type": "medical camp",
+        "disaster_type": "flood",
+        "location": "Cuddalore relief center"
+      },
+      "safety_critical": false,
+      "confirmation_required": true
     },
-    "safety_critical": false,
-    "confirmation_required": true
-  },
-  {
-    "id": "disaster_006",
-    "intent": "structural_assessment",
-    "english": "Scan building at 25/7 Velachery Main Road for structural integrity using LiDAR.",
-    "tamil": "25/7 வேளச்சேரி மெயின் ரோடில் உள்ள கட்டிடத்தை லிடார் மூலம் கட்டமைப்பு ஒருங்கிணைப்புக்காக ஸ்கேன் செய்யவும்.",
-    "parameters": {
-      "technology": "LiDAR",
-      "address": "25/7 Velachery Main Road",
-      "assessment_type": "structural integrity"
+    {
+      "id": "disaster_006",
+      "intent": "structural_assessment",
+      "english": "Scan building at 25/7 Velachery Main Road for structural integrity using LiDAR.",
+      "tamil": "25/7 வேளச்சேரி மெயின் ரோடில் உள்ள கட்டிடத்தை லிடார் மூலம் கட்டமைப்பு ஒருங்கிணைப்புக்காக ஸ்கேன் செய்யவும்.",
+      "parameters": {
+        "technology": "LiDAR",
+        "address": "25/7 Velachery Main Road",
+        "assessment_type": "structural integrity"
+      },
+      "safety_critical": true,
+      "confirmation_required": true
     },
-    "safety_critical": true,
-    "confirmation_required": true
-  },
-  {
-    "id": "disaster_007",
-    "intent": "water_rescue",
-    "english": "Deploy amphibious drones for water rescue operations in Marina Beach area.",
-    "tamil": "மரீனா கடற்கரை பகுதியில் நீர் மீட்பு செயல்பாடுகளுக்கு நீர்நில விமானங்களை அனுப்பவும்.",
-    "parameters": {
-      "equipment": "amphibious drones",
-      "operation": "water rescue",
-      "location": "Marina Beach"
+    {
+      "id": "disaster_007",
+      "intent": "water_rescue",
+      "english": "Deploy amphibious drones for water rescue operations in Marina Beach area.",
+      "tamil": "மரீனா கடற்கரை பகுதியில் நீர் மீட்பு செயல்பாடுகளுக்கு நீர்நில விமானங்களை அனுப்பவும்.",
+      "parameters": {
+        "equipment": "amphibious drones",
+        "operation": "water rescue",
+        "location": "Marina Beach"
+      },
+      "safety_critical": true,
+      "confirmation_required": false
     },
-    "safety_critical": true,
-    "confirmation_required": false
-  },
-  {
-    "id": "disaster_008",
-    "intent": "fire_containment",
-    "english": "Create firebreak perimeter 200m around burning oil depot in Ennore.",
-    "tamil": "எண்ணூரில் எரிந்து கொண்டிருக்கும் எண்ணெய் கிடங்கிற்கு 200 மீட்டர் சுற்றளவில் தீ தடுப்பு வலயத்தை உருவாக்கவும்.",
-    "parameters": {
-      "measure": "firebreak",
-      "radius": "200m",
-      "hazard": "burning oil depot",
-      "location": "Ennore"
+    {
+      "id": "disaster_008",
+      "intent": "fire_containment",
+      "english": "Create firebreak perimeter 200m around burning oil depot in Ennore.",
+      "tamil": "எண்ணூரில் எரிந்து கொண்டிருக்கும் எண்ணெய் கிடங்கிற்கு 200 மீட்டர் சுற்றளவில் தீ தடுப்பு வலயத்தை உருவாக்கவும்.",
+      "parameters": {
+        "measure": "firebreak",
+        "radius": "200m",
+        "hazard": "burning oil depot",
+        "location": "Ennore"
+      },
+      "safety_critical": true,
+      "confirmation_required": true
     },
-    "safety_critical": true,
-    "confirmation_required": true
-  },
-  {
-    "id": "disaster_009",
-    "intent": "evacuation_route",
-    "english": "Mark safe evacuation routes from Central Railway Station using LED beacons.",
-    "tamil": "எல்.ஈ.டி பீக்கன்களைப் பயன்படுத்தி சென்ட்ரல் ரயில் நிலையத்திலிருந்து பாதுகாப்பான வெளியேற்றம் செய்யும் வழிகளைக் குறிக்கவும்.",
-    "parameters": {
-      "technology": "LED beacons",
-      "starting_point": "Central Railway Station",
-      "purpose": "evacuation routes"
+    {
+      "id": "disaster_009",
+      "intent": "evacuation_route",
+      "english": "Mark safe evacuation routes from Central Railway Station using LED beacons.",
+      "tamil": "எல்.ஈ.டி பீக்கன்களைப் பயன்படுத்தி சென்ட்ரல் ரயில் நிலையத்திலிருந்து பாதுகாப்பான வெளியேற்றம் செய்யும் வழிகளைக் குறிக்கவும்.",
+      "parameters": {
+        "technology": "LED beacons",
+        "starting_point": "Central Railway Station",
+        "purpose": "evacuation routes"
+      },
+      "safety_critical": true,
+      "confirmation_required": false
     },
-    "safety_critical": true,
-    "confirmation_required": false
-  },
-  {
-    "id": "disaster_010",
-    "intent": "communication_restore",
-    "english": "Establish emergency mesh network in cyclone-affected Nagapattinam district.",
-    "tamil": "சூறாவளி பாதிப்புக்குள்ளான நாகப்பட்டினம் மாவட்டத்தில் அவசர ஜால பிணையத்தை நிறுவவும்.",
-    "parameters": {
-      "technology": "mesh network",
-      "disaster_type": "cyclone",
-      "location": "Nagapattinam district"
+    {
+      "id": "disaster_010",
+      "intent": "communication_restore",
+      "english": "Establish emergency mesh network in cyclone-affected Nagapattinam district.",
+      "tamil": "சூறாவளி பாதிப்புக்குள்ளான நாகப்பட்டினம் மாவட்டத்தில் அவசர ஜால பிணையத்தை நிறுவவும்.",
+      "parameters": {
+        "technology": "mesh network",
+        "disaster_type": "cyclone",
+        "location": "Nagapattinam district"
+      },
+      "safety_critical": false,
+      "confirmation_required": true
     },
-    "safety_critical": false,
-    "confirmation_required": true
-  },
   {
     "id": "disaster_011",
     "intent": "chemical_neutralization",

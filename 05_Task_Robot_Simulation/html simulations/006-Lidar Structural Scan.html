@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LiDAR Structural Scan - 25/7 Velachery Main Road</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(180deg, #1a1a2e, #16213e);
+            font-family: 'Courier New', monospace;
+            color: #00ffff;
+            overflow: hidden;
+        }
+        .container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+        
+        .building {
+            position: absolute;
+            width: 200px;
+            height: 300px;
+            background: #444;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 2px solid #666;
+        }
+        
+        .building::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 30px;
+            background: #555;
+            top: -30px;
+            border: 2px solid #666;
+        }
+        
+        .scan-beam {
+            position: absolute;
+            width: 2px;
+            height: 100vh;
+            background: linear-gradient(0deg, transparent, #00ff00, transparent);
+            left: 10%;
+            animation: scanSweep 4s infinite ease-in-out;
+            opacity: 0.8;
+        }
+        
+        .scan-point {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #00ff00;
+            border-radius: 50%;
+            animation: scanPoint 0.3s infinite;
+        }
+        
+        .damage-indicator {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #ff4444;
+            border-radius: 50%;
+            animation: pulse 1s infinite;
+        }
+        
+        .drone {
+            position: absolute;
+            width: 40px;
+            height: 20px;
+            background: #333;
+            top: 20%;
+            left: 10%;
+            animation: droneMove 8s infinite ease-in-out;
+            border-radius: 5px;
+        }
+        
+        .drone::before {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: #555;
+            top: -10px;
+            left: 5px;
+            border-radius: 50%;
+            animation: propeller 0.1s infinite;
+        }
+        
+        .drone::after {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: #555;
+            top: -10px;
+            right: 5px;
+            border-radius: 50%;
+            animation: propeller 0.1s infinite reverse;
+        }
+        
+        .hud {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: #00ffff;
+            font-size: 14px;
+            background: rgba(0,0,0,0.8);
+            padding: 15px;
+            border: 1px solid #00ffff;
+        }
+        
+        .scan-data {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: #00ff00;
+            font-size: 14px;
+            background: rgba(0,0,0,0.8);
+            padding: 15px;
+            border: 1px solid #00ff00;
+        }
+        
+        .integrity-bar {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 20px;
+            background: #333;
+            border: 2px solid #00ffff;
+        }
+        
+        .integrity-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff4444, #ffff44, #44ff44);
+            width: 0%;
+            animation: fillIntegrity 6s ease-out forwards;
+        }
+        
+        @keyframes scanSweep {
+            0% { left: 10%; }
+            50% { left: 90%; }
+            100% { left: 10%; }
+        }
+        
+        @keyframes scanPoint {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+        
+        @keyframes droneMove {
+            0% { left: 10%; }
+            25% { left: 80%; }
+            50% { left: 80%; top: 60%; }
+            75% { left: 10%; top: 60%; }
+            100% { left: 10%; top: 20%; }
+        }
+        
+        @keyframes propeller {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+        
+        @keyframes fillIntegrity {
+            0% { width: 0%; }
+            100% { width: 78%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="drone"></div>
+        <div class="scan-beam"></div>
+        
+        <div class="building">
+            <div class="damage-indicator" style="top: 60px; left: 30px;"></div>
+            <div class="damage-indicator" style="top: 150px; right: 20px;"></div>
+        </div>
+        
+        <div class="hud">
+            <div>LiDAR SCAN ACTIVE</div>
+            <div>Location: 25/7 Velachery Main Road</div>
+            <div>Scan Type: Structural Integrity</div>
+            <div>Resolution: 1mm precision</div>
+            <div>Status: SCANNING</div>
+            <div>Safety Critical: YES</div>
+        </div>
+        
+        <div class="scan-data">
+            <div>SCAN PROGRESS</div>
+            <div id="progress">0%</div>
+            <div>Points Captured: <span id="points">0</span></div>
+            <div>Anomalies Detected: 2</div>
+            <div>Confidence: HIGH</div>
+        </div>
+        
+        <div class="integrity-bar">
+            <div class="integrity-fill"></div>
+        </div>
+        <div style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); color: #fff; font-size: 12px;">
+            STRUCTURAL INTEGRITY: 78% - CAUTION REQUIRED
+        </div>
+    </div>
+    
+    <script>
+        let progress = 0;
+        let points = 0;
+        
+        function updateScanData() {
+            progress += 2;
+            points += Math.floor(Math.random() * 50) + 20;
+            
+            document.getElementById('progress').textContent = Math.min(progress, 100) + '%';
+            document.getElementById('points').textContent = points.toLocaleString();
+            
+            if (progress < 100) {
+                setTimeout(updateScanData, 200);
+            }
+        }
+        
+        function createScanPoints() {
+            const point = document.createElement('div');
+            point.className = 'scan-point';
+            point.style.left = (30 + Math.random() * 40) + '%';
+            point.style.top = (30 + Math.random() * 40) + '%';
+            
+            document.querySelector('.container').appendChild(point);
+            
+            setTimeout(() => {
+                if (point.parentNode) {
+                    point.parentNode.removeChild(point);
+                }
+            }, 300);
+        }
+        
+        updateScanData();
+        setInterval(createScanPoints, 100);
+    </script>
+</body>
+</html>
