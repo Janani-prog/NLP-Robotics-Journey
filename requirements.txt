@@ -3,3 +3,8 @@ numpy==1.26.4          # Supports Python 3.12
 matplotlib==3.8.4      # Supports Python 3.12
 Pillow==10.3.0         # Latest
 ultralytics==8.1.25    # Newer version likely compatible with Python 3.12
+pybullet==3.2.5        # For robot arm simulation
+pybullet_data==3.2.5   # For robot arm simulation (URDFs)
+folium==0.16.0         # For interactive map visualization
+pandas==2.2.2          # For data handling in map visualization
+datasets==2.18.0       # Hugging Face datasets (for robot instructions)
