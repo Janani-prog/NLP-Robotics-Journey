@@ -5,6 +5,7 @@ numpy==1.26.4
 pandas==2.2.2
 sentence-transformers==2.7.0
 torch==2.2.2
+rapidfuzz==3.6.1
 
 # After installing, run this command in your terminal to get the spacy model:
 # python -m spacy download en_core_web_sm 

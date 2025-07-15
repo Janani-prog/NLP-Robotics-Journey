@@ -7,4 +7,14 @@ pybullet==3.2.5        # For robot arm simulation
 pybullet_data==3.2.5   # For robot arm simulation (URDFs)
 folium==0.16.0         # For interactive map visualization
 pandas==2.2.2          # For data handling in map visualization
+Flask==3.0.3           # For web apps (NLP simulations)
+scikit-learn==1.4.2    # For intent classification
+spacy==3.7.4           # For NLP entity extraction
+sentence-transformers==2.7.0 # For semantic search
+rapidfuzz==3.6.1       # For fuzzy matching (bilingual)
+torch==2.2.2           # Backend for sentence-transformers
+
 datasets==2.18.0       # Hugging Face datasets (for robot instructions)
+
+# After installing, run this command to get the spaCy model:
+# python -m spacy download en_core_web_sm
