@@ -136,6 +136,16 @@
     <div class="command-desc" id="commandDesc"></div>
   </div>
 </div>
+
+<!-- Add this just inside <div class="container"> -->
+<div style="width:100%;padding:16px;background:#eebbc3;">
+  <form id="nlpCommandForm" style="display:flex;gap:8px;max-width:700px;margin:auto;">
+    <input type="text" id="nlpCommandInput" placeholder="Type a disaster command (e.g. 'Airdrop 100 food packets to 12.34N, 56.78E')" style="flex:1;padding:10px;font-size:1em;border-radius:6px;border:1px solid #b8c1ec;" required>
+    <button type="submit" style="padding:10px 18px;font-size:1em;border-radius:6px;background:#232946;color:#fff;border:none;cursor:pointer;">Simulate</button>
+  </form>
+  <div id="nlpCommandError" style="color:#e63946;text-align:center;margin-top:8px;display:none;"></div>
+</div>
+
 <script>
 // Embedded commands from nlp_disaster.json (truncated for brevity, add more as needed)
 const commands = [
@@ -158,84 +168,7 @@ const commands = [
     {"id": "disaster_017", "intent": "animal_rescue", "english": "Coordinate with forest department for wildlife rescue in flooded Mudumalai reserve.", "parameters": {"agency": "forest department", "operation": "wildlife rescue", "location": "Mudumalai reserve", "disaster_type": "flood"}},
     {"id": "disaster_018", "intent": "radiation_monitoring", "english": "Monitor radiation levels every 30 minutes at Kalpakkam nuclear plant perimeter.", "parameters": {"interval": "30 minutes", "hazard": "radiation", "location": "Kalpakkam nuclear plant perimeter"}},
     {"id": "disaster_019", "intent": "landshed_warning", "english": "Activate landslide early warning system for Nilgiris district hillslopes.", "parameters": {"system": "landslide early warning", "location": "Nilgiris district hillslopes"}},
-    {"id": "disaster_020", "intent": "data_relay", "english": "Establish satellite data relay for relief operations in cutoff Andaman islands.", "parameters": {"technology": "satellite data relay", "location": "Andaman islands", "condition": "cutoff"}},
-    {"id": "disaster_021", "intent": "gas_leak_control", "english": "Seal gas pipeline valves in T.Nagar area after detecting methane concentrations above 500ppm.", "parameters": {"hazard": "methane leak", "threshold": "500ppm", "location": "T.Nagar", "action": "seal valves"}},
-    {"id": "disaster_022", "intent": "evacuation_assistance", "english": "Guide visually impaired residents via audio instructions to nearest shelter at 12.9716°N, 77.5946°E.", "parameters": {"assistance_type": "audio guidance", "target_group": "visually impaired", "coordinates": "12.9716°N, 77.5946°E"}},
-    {"id": "disaster_023", "intent": "structural_shoring", "english": "Install temporary supports for leaning building on GST Road near Tambaram.", "parameters": {"intervention": "temporary supports", "structure_condition": "leaning", "location": "GST Road, Tambaram"}},
-    {"id": "disaster_024", "intent": "medical_telemetry", "english": "Transmit vital signs of 15 critical patients from Kilpauk Medical College to central command.", "parameters": {"data_type": "vital signs", "patient_count": 15, "facility": "Kilpauk Medical College", "priority": "critical"}},
-    {"id": "disaster_025", "intent": "contamination_zone", "english": "Mark 1km exclusion zone around radioactive spill site at Kalpakkam with automated beacons.", "parameters": {"hazard": "radioactive spill", "radius": "1km", "marking_method": "automated beacons", "location": "Kalpakkam"}},
-    {"id": "disaster_026", "intent": "waterway_clearance", "english": "Clear submerged vehicles from Adyar river near Kotturpuram bridge using amphibious excavators.", "parameters": {"obstacle": "submerged vehicles", "waterway": "Adyar river", "equipment": "amphibious excavators", "landmark": "Kotturpuram bridge"}},
-    {"id": "disaster_027", "intent": "epidemic_prevention", "english": "Disinfect temporary shelters in Cuddalore district after flood waters recede.", "parameters": {"action": "disinfection", "facilities": "temporary shelters", "disaster_type": "flood", "location": "Cuddalore district"}},
-    {"id": "disaster_028", "intent": "power_grid_repair", "english": "Replace damaged transformers in Besant Nagar substation to restore power to 5km radius.", "parameters": {"repair_type": "transformer replacement", "facility": "Besant Nagar substation", "impact_radius": "5km"}},
-    {"id": "disaster_029", "intent": "food_distribution", "english": "Coordinate drone deliveries of 2000 meal packets to marooned villages in Thanjavur district.", "parameters": {"delivery_method": "drone", "supplies": "meal packets", "quantity": 2000, "location": "Thanjavur district", "condition": "marooned"}},
-    {"id": "disaster_030", "intent": "bridge_collapse", "english": "Deploy sonar equipment to search for vehicles submerged under collapsed Hosur highway overpass.", "parameters": {"technology": "sonar", "incident": "bridge collapse", "location": "Hosur highway overpass", "target": "submerged vehicles"}},
-    {"id": "disaster_031", "intent": "railway_clearance", "english": "Clear derailed coaches from Chennai Central to Tambaram rail line within 6 hours.", "parameters": {"obstacle": "derailed coaches", "route": "Chennai Central-Tambaram", "timeframe": "6 hours"}},
-    {"id": "disaster_032", "intent": "mudslide_rescue", "english": "Use ground-penetrating radar to locate survivors in Ooty mudslide area.", "parameters": {"technology": "ground-penetrating radar", "disaster_type": "mudslide", "location": "Ooty"}},
-    {"id": "disaster_033", "intent": "communication_jammer", "english": "Activate emergency signal jammer at 11.0168°N, 76.9558°E to prevent detonation signals.", "parameters": {"device": "signal jammer", "purpose": "prevent detonation", "coordinates": "11.0168°N, 76.9558°E"}},
-    {"id": "disaster_034", "intent": "mobile_hospital", "english": "Set up robotic surgical unit at temporary field hospital in Vellore flood zone.", "parameters": {"facility": "robotic surgical unit", "hospital_type": "field hospital", "disaster_type": "flood", "location": "Vellore"}},
-    {"id": "disaster_035", "intent": "chemical_identification", "english": "Analyze unknown chemical spill at Ambattur Industrial Estate using spectrometers.", "parameters": {"technology": "spectrometers", "hazard": "unknown chemical", "location": "Ambattur Industrial Estate"}},
-    {"id": "disaster_036", "intent": "aerial_mapping", "english": "Generate 3D damage assessment maps of cyclone-hit Karaikal coast using drone swarm.", "parameters": {"output": "3D damage maps", "technology": "drone swarm", "disaster_type": "cyclone", "location": "Karaikal coast"}},
-    {"id": "disaster_037", "intent": "underground_search", "english": "Deploy snake robots to inspect collapsed metro tunnel near LIC building.", "parameters": {"robots": "snake robots", "environment": "collapsed tunnel", "landmark": "LIC building"}},
-    {"id": "disaster_038", "intent": "water_sampling", "english": "Collect and analyze water samples every 2 hours from Cooum river for contamination.", "parameters": {"target": "water quality", "location": "Cooum river", "frequency": "every 2 hours", "analysis": "contamination"}},
-    {"id": "disaster_039", "intent": "crowd_control", "english": "Deploy autonomous barriers to manage crowds at Anna Nagar relief material distribution center.", "parameters": {"technology": "autonomous barriers", "purpose": "crowd management", "location": "Anna Nagar relief center"}},
-    {"id": "disaster_040", "intent": "firefighting", "english": "Direct unmanned firefighting vehicles to chemical warehouse blaze in Manali.", "parameters": {"equipment": "unmanned firefighting vehicles", "hazard": "chemical fire", "location": "Manali"}},
-    {"id": "disaster_041", "intent": "debris_sorting", "english": "Use AI-powered robotic arms to separate recyclable materials from earthquake debris in Trichy.", "parameters": {"technology": "AI robotic arms", "task": "debris sorting", "disaster_type": "earthquake", "location": "Trichy"}},
-    {"id": "disaster_042", "intent": "radiation_decontamination", "english": "Begin robotic decontamination of 200m radius around leaked radiation source in Tarapur.", "parameters": {"process": "robotic decontamination", "hazard": "radiation leak", "radius": "200m", "location": "Tarapur"}},
-    {"id": "disaster_043", "intent": "missing_children", "english": "Match lost children database with facial recognition scans at all Chennai railway stations.", "parameters": {"technology": "facial recognition", "target": "missing children", "locations": "all Chennai railway stations"}},
-    {"id": "disaster_044", "intent": "sewer_inspection", "english": "Send waterproof drones to inspect damaged sewer lines in Mylapore area.", "parameters": {"equipment": "waterproof drones", "infrastructure": "sewer lines", "location": "Mylapore", "condition": "damaged"}},
-    {"id": "disaster_045", "intent": "tsunami_alert", "english": "Activate all coastal warning sirens from Mahabalipuram to Nagapattinam.", "parameters": {"alert_type": "tsunami warning", "system": "coastal sirens", "coverage": "Mahabalipuram to Nagapattinam"}},
-    {"id": "disaster_046", "intent": "livestock_rescue", "english": "Coordinate animal rescue teams for stranded cattle in Ramanathapuram flood plains.", "parameters": {"operation": "livestock rescue", "animals": "cattle", "location": "Ramanathapuram", "disaster_type": "flood"}},
-    {"id": "disaster_047", "intent": "power_line_repair", "english": "Deploy insulated robotic crews to repair high-voltage lines in Neyveli township.", "parameters": {"crew_type": "insulated robots", "repair_target": "high-voltage lines", "location": "Neyveli"}},
-    {"id": "disaster_048", "intent": "emergency_broadcast", "english": "Override local radio frequencies to broadcast evacuation instructions in Villupuram district.", "parameters": {"communication": "emergency broadcast", "content": "evacuation instructions", "location": "Villupuram district"}},
-    {"id": "disaster_049", "intent": "temporary_shelter", "english": "Assemble 50 prefabricated shelters in open ground near Madurai Meenakshi Temple.", "parameters": {"shelter_type": "prefabricated", "quantity": 50, "location": "near Meenakshi Temple, Madurai"}},
-    {"id": "disaster_050", "intent": "data_backup", "english": "Secure backup of hospital patient records from flood-threatened CMC Vellore servers.", "parameters": {"data_type": "patient records", "facility": "CMC Vellore", "threat": "flood", "action": "secure backup"}},
-    {"id": "disaster_051", "intent": "landslide_monitoring", "english": "Install real-time soil moisture sensors along Nilgiri Mountain roads to predict landslide risks.", "parameters": {"technology": "soil moisture sensors", "purpose": "landslide prediction", "location": "Nilgiri Mountain roads"}},
-    {"id": "disaster_052", "intent": "factory_fire", "english": "Deploy fire-resistant robots to extinguish lithium battery fire at electronics factory in Sriperumbudur.", "parameters": {"robot_type": "fire-resistant", "hazard": "lithium battery fire", "location": "Sriperumbudur electronics factory"}},
-    {"id": "disaster_053", "intent": "gas_pipeline_repair", "english": "Use magnetic crawler robots to repair ruptured gas pipeline near Ennore Port.", "parameters": {"robot_type": "magnetic crawler", "infrastructure": "gas pipeline", "location": "near Ennore Port"}},
-    {"id": "disaster_054", "intent": "coastal_erosion", "english": "Monitor erosion patterns along Marina Beach using autonomous underwater drones.", "parameters": {"technology": "autonomous underwater drones", "hazard": "coastal erosion", "location": "Marina Beach"}},
-    {"id": "disaster_055", "intent": "tunnel_collapse", "english": "Send snake-arm robots through rubble to locate trapped workers in Chennai Metro tunnel collapse.", "parameters": {"robot_type": "snake-arm", "incident": "tunnel collapse", "location": "Chennai Metro"}},
-    {"id": "disaster_056", "intent": "oil_spill", "english": "Deploy oil-absorbent drone skimmers to contain spill off Chennai coast near Thiruvanmiyur.", "parameters": {"equipment": "drone skimmers", "hazard": "oil spill", "location": "off Thiruvanmiyur coast"}},
-    {"id": "disaster_057", "intent": "dam_inspection", "english": "Conduct ultrasonic thickness testing on Mettur Dam spillway using climbing robots.", "parameters": {"robot_type": "climbing robots", "technology": "ultrasonic testing", "structure": "Mettur Dam spillway"}},
-    {"id": "disaster_058", "intent": "chemical_neutralization", "english": "Mix and disperse neutralizing agents for sulfuric acid leak at Ranipet tannery.", "parameters": {"chemical": "sulfuric acid", "action": "neutralization", "location": "Ranipet tannery"}},
-    {"id": "disaster_059", "intent": "bridge_inspection", "english": "Deploy aerial drones with LiDAR to assess damage to Pamban Bridge after cyclone impact.", "parameters": {"technology": "LiDAR drones", "structure": "Pamban Bridge", "disaster_type": "cyclone"}},
-    {"id": "disaster_060", "intent": "underground_fire", "english": "Lower fire-suppression robots into manholes to control methane fire in T.Nagar sewers.", "parameters": {"robot_type": "fire-suppression", "hazard": "methane fire", "location": "T.Nagar sewers"}},
-    {"id": "disaster_061", "intent": "tsunami_debris", "english": "Clear marine debris from Nagapattinam fishing harbor using amphibious excavators.", "parameters": {"equipment": "amphibious excavators", "debris_type": "marine", "location": "Nagapattinam fishing harbor"}},
-    {"id": "disaster_062", "intent": "radiation_mapping", "english": "Create real-time radiation heatmap of Kalpakkam nuclear complex using sensor drones.", "parameters": {"output": "radiation heatmap", "technology": "sensor drones", "location": "Kalpakkam nuclear complex"}},
-    {"id": "disaster_063", "intent": "tunnel_ventilation", "english": "Activate emergency ventilation in Chennai Port tunnel after smoke detection.", "parameters": {"system": "emergency ventilation", "trigger": "smoke detection", "location": "Chennai Port tunnel"}},
-    {"id": "disaster_064", "intent": "flood_barrier", "english": "Deploy automatic flood barriers along Adyar river at Saidapet vulnerable points.", "parameters": {"equipment": "automatic flood barriers", "location": "Adyar river, Saidapet"}},
-    {"id": "disaster_065", "intent": "industrial_accident", "english": "Evacuate 500m radius around chemical plant explosion in Manali industrial area.", "parameters": {"incident": "chemical plant explosion", "evacuation_radius": "500m", "location": "Manali industrial area"}},
-    {"id": "disaster_066", "intent": "power_grid_stabilization", "english": "Activate grid stabilization protocols for Chennai metro area during cyclone-induced outages.", "parameters": {"action": "grid stabilization", "threat": "cyclone-induced outages", "location": "Chennai metro area"}},
-    {"id": "disaster_067", "intent": "military_ammunition", "english": "Establish 2km exclusion zone around burning ammunition depot in Avadi.", "parameters": {"hazard": "burning ammunition depot", "exclusion_zone": "2km", "location": "Avadi"}},
-    {"id": "disaster_068", "intent": "water_treatment", "english": "Deploy mobile water treatment plants to flood-affected areas of Cuddalore.", "parameters": {"equipment": "mobile water treatment plants", "disaster_type": "flood", "location": "Cuddalore"}},
-    {"id": "disaster_069", "intent": "railway_track_repair", "english": "Use automated track-laying machines to restore Chennai-Villupuram rail line.", "parameters": {"equipment": "automated track-laying machines", "route": "Chennai-Villupuram"}},
-    {"id": "disaster_070", "intent": "telemedicine", "english": "Establish satellite-linked telemedicine units in cutoff Nilgiris villages.", "parameters": {"facility": "telemedicine units", "technology": "satellite-linked", "location": "Nilgiris villages", "condition": "cutoff"}},
-    {"id": "disaster_071", "intent": "forest_fire", "english": "Coordinate water-bombing drones to contain wildfire in Sathyamangalam Tiger Reserve.", "parameters": {"equipment": "water-bombing drones", "hazard": "wildfire", "location": "Sathyamangalam Tiger Reserve"}},
-    {"id": "disaster_072", "intent": "gas_leak_detection", "english": "Scan residential areas of Ambattur for LPG leaks using mobile gas detectors.", "parameters": {"equipment": "mobile gas detectors", "hazard": "LPG leak", "location": "Ambattur residential areas"}},
-    {"id": "disaster_073", "intent": "bridge_repair", "english": "Initiate emergency repair of damaged pillars on Napier Bridge using robotic concrete printers.", "parameters": {"technology": "robotic concrete printers", "structure": "Napier Bridge pillars", "priority": "emergency"}},
-    {"id": "disaster_074", "intent": "water_rescue", "english": "Deploy amphibious rescue robots for flooded areas of Pattukkottai town.", "parameters": {"robot_type": "amphibious rescue", "disaster_type": "flood", "location": "Pattukkottai"}},
-    {"id": "disaster_075", "intent": "epidemic_control", "english": "Dispatch UV-disinfection robots to containment zones in Madurai during dengue outbreak.", "parameters": {"robot_type": "UV-disinfection", "purpose": "epidemic control", "disease": "dengue", "location": "Madurai"}},
-    {"id": "disaster_076", "intent": "debris_removal", "english": "Clear earthquake debris from Rameswaram temple complex using robotic excavators.", "parameters": {"equipment": "robotic excavators", "debris_source": "earthquake", "location": "Rameswaram temple complex"}},
-    {"id": "disaster_077", "intent": "nuclear_emergency", "english": "Activate radiation-hardened robots for inspection at Kudankulam plant after seismic alert.", "parameters": {"robot_type": "radiation-hardened", "facility": "Kudankulam nuclear plant", "trigger": "seismic alert"}},
-    {"id": "disaster_078", "intent": "mine_rescue", "english": "Send explosion-proof crawler robots to search for trapped miners in Neyveli lignite mines.", "parameters": {"robot_type": "explosion-proof crawler", "incident": "mine collapse", "location": "Neyveli lignite mines"}},
-    {"id": "disaster_079", "intent": "hospital_backup", "english": "Switch to backup power and oxygen systems at GH Chennai using automated failover.", "parameters": {"systems": "power and oxygen backup", "facility": "GH Chennai", "technology": "automated failover"}},
-    {"id": "disaster_080", "intent": "tsunami_evacuation", "english": "Activate all coastal warning systems and direct drones to guide evacuation along ECR.", "parameters": {"systems": "coastal warning", "equipment": "guidance drones", "route": "East Coast Road (ECR)"}},
-    {"id": "disaster_081", "intent": "air_quality", "english": "Deploy mobile air quality monitoring stations across Chennai after industrial fire.", "parameters": {"equipment": "mobile air quality stations", "trigger": "industrial fire", "location": "Chennai"}},
-    {"id": "disaster_082", "intent": "train_derailment", "english": "Stabilize derailed coaches at Arakkonam junction using hydraulic lift systems.", "parameters": {"equipment": "hydraulic lift systems", "incident": "train derailment", "location": "Arakkonam junction"}},
-    {"id": "disaster_083", "intent": "water_supply", "english": "Restore drinking water supply to Tambaram by repairing broken pipelines with robotic welders.", "parameters": {"technology": "robotic welders", "utility": "water pipeline repair", "location": "Tambaram"}},
-    {"id": "disaster_084", "intent": "building_demolition", "english": "Prepare unstable high-rise in T.Nagar for controlled demolition using explosive drones.", "parameters": {"equipment": "explosive drones", "structure": "unstable high-rise", "location": "T.Nagar", "action": "controlled demolition"}},
-    {"id": "disaster_085", "intent": "animal_tracking", "english": "Monitor displaced wildlife in Mudumalai forest using GPS-enabled drone surveillance.", "parameters": {"technology": "GPS drone surveillance", "target": "displaced wildlife", "location": "Mudumalai forest"}},
-    {"id": "disaster_086", "intent": "port_closure", "english": "Secure Chennai Port cranes and activate storm moorings for ships ahead of cyclone landfall.", "parameters": {"facility": "Chennai Port", "equipment": "cranes and ships", "preparation": "cyclone landfall"}},
-    {"id": "disaster_087", "intent": "telecom_restoration", "english": "Deploy mobile cell towers to restore communication in cutoff Nagapattinam villages.", "parameters": {"equipment": "mobile cell towers", "service": "communication restoration", "location": "Nagapattinam villages", "condition": "cutoff"}},
-    {"id": "disaster_088", "intent": "school_safety", "english": "Inspect structural damage to 15 government schools in Coimbatore earthquake zone.", "parameters": {"facilities": "government schools", "assessment": "structural damage", "disaster_type": "earthquake", "location": "Coimbatore"}},
-    {"id": "disaster_089", "intent": "road_repair", "english": "Use 3D asphalt printers to repair damaged sections of GST Road between Chromepet and Tambaram.", "parameters": {"technology": "3D asphalt printers", "route": "GST Road", "section": "Chromepet to Tambaram"}},
-    {"id": "disaster_090", "intent": "evacuation_shelter", "english": "Set up 20 temporary shelters with sanitation facilities at Madurai Race Course grounds.", "parameters": {"shelters": 20, "facilities": "sanitation", "location": "Madurai Race Course"}},
-    {"id": "disaster_091", "intent": "gas_storage", "english": "Transfer LPG from damaged storage tanks in Korukkupet to secure facilities using robotic handlers.", "parameters": {"material": "LPG", "equipment": "robotic handlers", "action": "hazardous material transfer", "location": "Korukkupet"}},
-    {"id": "disaster_092", "intent": "sewage_overflow", "english": "Pump out flooded sewage systems in Mylapore using submersible robotic pumps.", "parameters": {"equipment": "submersible robotic pumps", "problem": "sewage overflow", "location": "Mylapore"}},
-    {"id": "disaster_093", "intent": "heritage_protection", "english": "Deploy moisture-absorbent drones to protect ancient murals in Thanjavur temple from flood damage.", "parameters": {"equipment": "moisture-absorbent drones", "target": "ancient murals", "location": "Thanjavur temple", "threat": "flood damage"}},
-    {"id": "disaster_094", "intent": "power_line_inspection", "english": "Inspect 230kV transmission lines between Neyveli and Chennai using autonomous climbing robots.", "parameters": {"robot_type": "autonomous climbing", "infrastructure": "230kV transmission lines", "route": "Neyveli to Chennai"}},
-    {"id": "disaster_095", "intent": "medical_evacuation", "english": "Prepare rooftop drone landing pads at GH Chennai for emergency medical evacuations.", "parameters": {"facility": "GH Chennai", "equipment": "drone landing pads", "purpose": "medical evacuation"}},
-    {"id": "disaster_096", "intent": "food_safety", "english": "Inspect flood-affected food warehouses in Trichy using contamination-detection robots.", "parameters": {"robot_type": "contamination-detection", "facilities": "food warehouses", "disaster_type": "flood", "location": "Trichy"}},
-    {"id": "disaster_097", "intent": "bridge_safety", "english": "Monitor vibration levels on new Poonamallee bypass bridge using IoT sensors.", "parameters": {"technology": "IoT sensors", "measurement": "vibration levels", "structure": "Poonamallee bypass bridge"}}
+    {"id": "disaster_020", "intent": "data_relay", "english": "Establish satellite data relay for relief operations in cutoff Andaman islands.", "parameters": {"technology": "satellite data relay", "location": "Andaman islands", "condition": "cutoff"}}
 ];
 
 // UI rendering
@@ -740,10 +673,10 @@ function animateHazardWarning(cmd) {
 }
 
 function animateClearDebris(cmd) {
-  // Realistic wheeled robot with articulated arm, animated debris, and road background
+  // Enhanced: Realistic debris shapes, sequential clearing, disposal, and clean road at end
   liveFeed.innerHTML = `
     <svg id="clearPathSVG" width="700" height="480" viewBox="0 0 700 480">
-      <!-- Road background -->
+      <!-- Road background with lane markings -->
       <rect width="700" height="480" fill="#b8c1ec"/>
       <rect x="0" y="400" width="700" height="60" fill="#888"/>
       <rect x="0" y="420" width="700" height="40" fill="#555"/>
@@ -753,31 +686,43 @@ function animateClearDebris(cmd) {
       <rect x="200" y="430" width="80" height="6" fill="#fff" rx="2"/>
       <rect x="350" y="430" width="80" height="6" fill="#fff" rx="2"/>
       <rect x="500" y="430" width="80" height="6" fill="#fff" rx="2"/>
-      <!-- Debris -->
+      <!-- Debris: realistic shapes/colors -->
       <g id="debrisGroup">
-        <rect id="debris1" x="340" y="410" width="36" height="18" fill="#b08d57" stroke="#7a5c2e" stroke-width="2" rx="4"/>
-        <rect id="debris2" x="380" y="420" width="24" height="12" fill="#b08d57" stroke="#7a5c2e" stroke-width="2" rx="3"/>
-        <ellipse id="debris3" cx="370" cy="440" rx="10" ry="6" fill="#a67c52" stroke="#7a5c2e" stroke-width="2"/>
+        <polygon id="rock1" points="370,420 388,426 380,434 362,428" fill="#a89c8d" stroke="#7a5c2e" stroke-width="2"/>
+        <ellipse id="rock2" cx="410" cy="440" rx="10" ry="7" fill="#b08d57" stroke="#7a5c2e" stroke-width="2"/>
+        <rect id="concrete1" x="340" y="410" width="32" height="14" fill="#e0e0e0" stroke="#888" stroke-width="2" rx="4"/>
+        <polygon id="branch1" points="385,420 395,422 390,430 380,428" fill="#6b4f1d" stroke="#4e3a1e" stroke-width="2"/>
+        <ellipse id="trash1" cx="395" cy="418" rx="7" ry="4" fill="#eebbc3" stroke="#b8c1ec" stroke-width="1.5"/>
       </g>
-      <!-- Robot -->
+      <!-- Disposal area (roadside) -->
+      <rect id="disposal" x="600" y="410" width="60" height="20" fill="#b8c1ec" stroke="#232946" stroke-width="2" rx="8"/>
+      <text x="630" y="425" text-anchor="middle" fill="#232946" font-size="0.8em">Disposal</text>
+      <!-- Robotic loader/excavator -->
       <g id="robot">
-        <!-- Body -->
         <rect x="180" y="370" width="80" height="40" fill="#232946" rx="12"/>
-        <!-- Wheels -->
         <ellipse cx="200" cy="415" rx="14" ry="10" fill="#393e6a"/>
         <ellipse cx="240" cy="415" rx="14" ry="10" fill="#393e6a"/>
         <ellipse cx="280" cy="415" rx="14" ry="10" fill="#393e6a"/>
-        <!-- Arm base -->
         <rect id="armBase" x="250" y="370" width="16" height="24" fill="#eebbc3" rx="4"/>
-        <!-- Arm segment 1 -->
         <rect id="arm1" x="260" y="350" width="10" height="30" fill="#b8c1ec" rx="4"/>
-        <!-- Arm segment 2 -->
         <rect id="arm2" x="265" y="330" width="8" height="24" fill="#eebbc3" rx="3"/>
-        <!-- Gripper -->
-        <rect id="gripper" x="265" y="320" width="8" height="12" fill="#232946" rx="2"/>
-        <!-- Camera -->
+        <rect id="bucket" x="265" y="320" width="18" height="12" fill="#b08d57" rx="4"/>
         <circle cx="220" cy="390" r="6" fill="#b8c1ec"/>
       </g>
+      <!-- Dust cloud -->
+      <ellipse id="dust" cx="370" cy="420" rx="0" ry="0" fill="#e0c9a6" opacity="0.4"/>
+      <g id="cleanOverlay" style="opacity:0;">
+        <rect x="0" y="400" width="700" height="60" fill="#b8c1ec"/>
+        <rect x="0" y="420" width="700" height="40" fill="#b8c1ec"/>
+        <rect x="0" y="440" width="700" height="20" fill="#7ec850"/>
+        <rect x="50" y="430" width="80" height="6" fill="#fff" rx="2"/>
+        <rect x="200" y="430" width="80" height="6" fill="#fff" rx="2"/>
+        <rect x="350" y="430" width="80" height="6" fill="#fff" rx="2"/>
+        <rect x="500" y="430" width="80" height="6" fill="#fff" rx="2"/>
+        <text x="350" y="440" text-anchor="middle" fill="#232946" font-size="1.2em">Road Cleared!</text>
+      </g>
+      <text x="350" y="60" text-anchor="middle" fill="#232946" font-size="1.2em">Clearing debris from road...</text>
+      <text x="350" y="470" text-anchor="middle" fill="#393e6a" font-size="0.9em">Route NH48</text>
     </svg>
     <div style="position:absolute;top:30px;left:30px;color:#232946;font-size:1.1em;">Robot clearing debris...</div>
   `;
@@ -786,23 +731,32 @@ function animateClearDebris(cmd) {
   const robot = svg.getElementById('robot');
   const arm1 = svg.getElementById('arm1');
   const arm2 = svg.getElementById('arm2');
-  const gripper = svg.getElementById('gripper');
-  const debris1 = svg.getElementById('debris1');
-  const debris2 = svg.getElementById('debris2');
-  const debris3 = svg.getElementById('debris3');
-
-  // Animation state
+  const bucket = svg.getElementById('bucket');
+  const debris = [
+    svg.getElementById('rock1'),
+    svg.getElementById('rock2'),
+    svg.getElementById('concrete1'),
+    svg.getElementById('branch1'),
+    svg.getElementById('trash1')
+  ];
+  const debrisPos = [
+    {x:0, y:0, dx:0, dy:0, picked:false, disposed:false},
+    {x:0, y:0, dx:0, dy:0, picked:false, disposed:false},
+    {x:0, y:0, dx:0, dy:0, picked:false, disposed:false},
+    {x:0, y:0, dx:0, dy:0, picked:false, disposed:false},
+    {x:0, y:0, dx:0, dy:0, picked:false, disposed:false}
+  ];
+  const dust = svg.getElementById('dust');
+  const cleanOverlay = svg.getElementById('cleanOverlay');
   let robotX = 0;
-  let phase = 0; // 0: move in, 1: extend arm, 2: push debris, 3: retract arm, 4: done
+  let phase = 0; // 0: move in, 1: clear debris, 2: show clean
   let t = 0;
   let arm1Angle = 0;
   let arm2Angle = 0;
-  let gripperY = 0;
-  let debrisX = 0;
-  let debris2X = 0;
-  let debris3X = 0;
+  let bucketY = 0;
+  let dustR = 0;
+  let debrisIdx = 0;
   let animFrame;
-
   function animate() {
     t++;
     if (phase === 0) {
@@ -814,52 +768,61 @@ function animateClearDebris(cmd) {
         phase = 1;
       }
     } else if (phase === 1) {
-      // Extend arm
-      if (arm1Angle > -30) {
-        arm1Angle -= 2;
-        arm1.setAttribute('transform', `rotate(${arm1Angle},265,380)`);
-      } else if (arm2Angle > -40) {
-        arm2Angle -= 2;
-        arm2.setAttribute('transform', `rotate(${arm2Angle},269,350)`);
-      } else if (gripperY > -20) {
-        gripperY -= 2;
-        gripper.setAttribute('transform', `translate(0,${gripperY})`);
+      // Sequentially pick and dispose debris
+      if (debrisIdx < debris.length) {
+        let d = debrisPos[debrisIdx];
+        // Extend arm to debris
+        if (arm1Angle > -30) {
+          arm1Angle -= 2;
+          arm1.setAttribute('transform', `rotate(${arm1Angle},265,380)`);
+        } else if (arm2Angle > -40) {
+          arm2Angle -= 2;
+          arm2.setAttribute('transform', `rotate(${arm2Angle},269,350)`);
+        } else if (bucketY > -20) {
+          bucketY -= 2;
+          bucket.setAttribute('transform', `translate(0,${bucketY})`);
+        } else if (!d.picked) {
+          // Pick debris (move up)
+          if (d.dy > -40) {
+            d.dy -= 2.5;
+            debris[debrisIdx].setAttribute('transform', `translate(${d.dx},${d.dy})`);
+          } else {
+            d.picked = true;
+          }
+        } else if (!d.disposed) {
+          // Move debris to disposal area
+          if (d.dx < 230) {
+            d.dx += 6;
+            debris[debrisIdx].setAttribute('transform', `translate(${d.dx},${d.dy})`);
+            // Animate dust
+            if (dustR < 30) dustR += 2.5;
+            dust.setAttribute('rx', dustR);
+            dust.setAttribute('ry', dustR/3);
+          } else {
+            d.disposed = true;
+            debris[debrisIdx].setAttribute('opacity', 0.3);
+            // Reset arm for next debris
+            arm1Angle = 0; arm2Angle = 0; bucketY = 0; dustR = 0;
+            arm1.setAttribute('transform', `rotate(${arm1Angle},265,380)`);
+            arm2.setAttribute('transform', `rotate(${arm2Angle},269,350)`);
+            bucket.setAttribute('transform', `translate(0,${bucketY})`);
+            debrisIdx++;
+          }
+        }
       } else {
+        // All debris cleared
         phase = 2;
       }
     } else if (phase === 2) {
-      // Push debris
-      if (debrisX < 80) {
-        debrisX += 2.5;
-        debris1.setAttribute('x', 340 + debrisX);
-      }
-      if (debris2X < 60) {
-        debris2X += 2.2;
-        debris2.setAttribute('x', 380 + debris2X);
-      }
-      if (debris3X < 40) {
-        debris3X += 1.8;
-        debris3.setAttribute('cx', 370 + debris3X);
-      }
-      if (debrisX >= 80 && debris2X >= 60 && debris3X >= 40) {
-        phase = 3;
-      }
-    } else if (phase === 3) {
-      // Retract arm
-      if (gripperY < 0) {
-        gripperY += 2;
-        gripper.setAttribute('transform', `translate(0,${gripperY})`);
-      } else if (arm2Angle < 0) {
-        arm2Angle += 2;
-        arm2.setAttribute('transform', `rotate(${arm2Angle},269,350)`);
-      } else if (arm1Angle < 0) {
-        arm1Angle += 2;
-        arm1.setAttribute('transform', `rotate(${arm1Angle},265,380)`);
-      } else {
-        phase = 4;
+      // Show clean road overlay
+      let op = parseFloat(cleanOverlay.style.opacity);
+      if (op < 1) {
+        cleanOverlay.style.opacity = (op + 0.04).toFixed(2);
+        requestAnimationFrame(animate);
+        return;
       }
     }
-    if (phase < 4) {
+    if (phase < 3) {
       animFrame = requestAnimationFrame(animate);
     }
   }
@@ -867,122 +830,1012 @@ function animateClearDebris(cmd) {
 }
 
 function animateMedicalCamp(cmd) {
-  // Tent and medical cross
   liveFeed.innerHTML = `
     <svg width="700" height="480" viewBox="0 0 700 480">
+      <!-- Muddy/wet ground with puddles -->
       <rect width="700" height="480" fill="#eebbc3"/>
-      <polygon points="300,380 350,300 400,380" fill="#b8c1ec" stroke="#232946" stroke-width="4"/>
+      <ellipse cx="350" cy="440" rx="320" ry="30" fill="#b8c1ec" opacity="0.25"/>
+      <ellipse cx="200" cy="420" rx="60" ry="12" fill="#b8c1ec" opacity="0.18"/>
+      <ellipse cx="500" cy="430" rx="80" ry="16" fill="#b8c1ec" opacity="0.18"/>
+      <!-- Main medical tent -->
+      <polygon points="300,380 350,290 400,380" fill="#b8c1ec" stroke="#232946" stroke-width="4"/>
       <rect x="335" y="340" width="30" height="30" fill="#fff" rx="6"/>
       <rect x="347" y="350" width="6" height="18" fill="#e63946"/>
       <rect x="341" y="356" width="18" height="6" fill="#e63946"/>
+      <!-- Smaller tents -->
+      <polygon points="230,400 255,355 280,400" fill="#b8c1ec" stroke="#232946" stroke-width="2"/>
+      <polygon points="420,400 445,355 470,400" fill="#b8c1ec" stroke="#232946" stroke-width="2"/>
+      <!-- Relief Center sign -->
+      <rect x="270" y="270" width="160" height="32" fill="#fff" stroke="#232946" stroke-width="2" rx="8"/>
+      <text x="350" y="292" text-anchor="middle" fill="#232946" font-size="1.1em" font-weight="bold">RELIEF CENTER</text>
+      <!-- Medical staff -->
+      <g id="staff">
+        <circle cx="320" cy="390" r="10" fill="#fff" stroke="#232946" stroke-width="2"/>
+        <rect x="315" y="390" width="10" height="22" fill="#e63946" rx="3"/>
+        <rect x="318" y="395" width="4" height="10" fill="#fff"/>
+        <!-- Armband -->
+        <rect x="323" y="400" width="4" height="4" fill="#e63946"/>
+      </g>
+      <!-- Patient on cot -->
+      <g id="patient">
+        <rect x="370" y="400" width="30" height="8" fill="#fff" rx="3"/>
+        <ellipse cx="385" cy="400" rx="7" ry="5" fill="#b8c1ec"/>
+        <ellipse cx="395" cy="400" rx="4" ry="3" fill="#eebbc3"/>
+      </g>
+      <!-- Medical supply crate -->
+      <g id="crate">
+        <rect x="280" y="410" width="18" height="14" fill="#fff" stroke="#232946" stroke-width="2" rx="3"/>
+        <rect x="287" y="415" width="4" height="10" fill="#e63946"/>
+        <rect x="283" y="419" width="10" height="4" fill="#e63946"/>
+      </g>
+      <!-- Ambulance -->
+      <g id="ambulance">
+        <rect x="480" y="410" width="38" height="16" fill="#fff" stroke="#232946" stroke-width="2" rx="4"/>
+        <rect x="510" y="410" width="8" height="10" fill="#b8c1ec" rx="2"/>
+        <circle cx="490" cy="426" r="5" fill="#232946"/>
+        <circle cx="510" cy="426" r="5" fill="#232946"/>
+        <rect x="495" y="415" width="6" height="2" fill="#e63946"/>
+        <rect x="497" y="417" width="2" height="6" fill="#e63946"/>
+      </g>
+      <!-- Trees in background -->
+      <g id="trees">
+        <rect x="120" y="350" width="12" height="40" fill="#6b4f1d"/>
+        <ellipse cx="126" cy="350" rx="22" ry="18" fill="#3fa34d"/>
+        <rect x="600" y="370" width="10" height="30" fill="#6b4f1d"/>
+        <ellipse cx="605" cy="370" rx="18" ry="14" fill="#3fa34d"/>
+      </g>
+      <text x="350" y="60" text-anchor="middle" fill="#232946" font-size="1.2em">Medical camp at Cuddalore flood relief center</text>
     </svg>
     <div style="position:absolute;top:30px;left:30px;color:#232946;font-size:1.1em;">Setting up medical camp...</div>
   `;
+  // Animate staff moving and crate being delivered
+  const svg = liveFeed.querySelector('svg');
+  const staff = svg.getElementById('staff');
+  const crate = svg.getElementById('crate');
+  let sx = 0, cx = 0, t = 0;
+  function animate() {
+    t++;
+    // Staff moves left and right
+    sx = 10 * Math.sin(t/30);
+    staff.setAttribute('transform', `translate(${sx},0)`);
+    // Crate slides in from left
+    if (cx < 40) cx += 1.2;
+    crate.setAttribute('transform', `translate(${-cx},0)`);
+    requestAnimationFrame(animate);
+  }
+  animate();
 }
 
 function animateLidarScan(cmd) {
-  // Building and scanning laser
+  // Realistic: building on main road, LiDAR drone scanning facade, road context
   liveFeed.innerHTML = `
     <svg width="700" height="480" viewBox="0 0 700 480">
+      <!-- Sky -->
       <rect width="700" height="480" fill="#b8c1ec"/>
-      <rect x="300" y="220" width="100" height="160" fill="#888" stroke="#232946" stroke-width="4" rx="12"/>
-      <rect x="340" y="340" width="20" height="40" fill="#eebbc3" rx="4"/>
-      <rect id="laser" x="350" y="200" width="2" height="40" fill="#0ff"/>
+      <!-- Main road with lane markings -->
+      <rect x="0" y="400" width="700" height="60" fill="#888"/>
+      <rect x="0" y="420" width="700" height="40" fill="#555"/>
+      <rect x="0" y="440" width="700" height="20" fill="#7ec850"/>
+      <rect x="100" y="430" width="120" height="6" fill="#fff" rx="2"/>
+      <rect x="250" y="430" width="120" height="6" fill="#fff" rx="2"/>
+      <rect x="400" y="430" width="120" height="6" fill="#fff" rx="2"/>
+      <!-- Sidewalk and trees -->
+      <rect x="0" y="390" width="700" height="20" fill="#eebbc3"/>
+      <ellipse cx="80" cy="390" rx="18" ry="12" fill="#3fa34d"/>
+      <ellipse cx="620" cy="390" rx="18" ry="12" fill="#3fa34d"/>
+      <!-- Building -->
+      <g id="building">
+        <rect x="270" y="180" width="160" height="210" fill="#e0e0e0" stroke="#232946" stroke-width="4" rx="16"/>
+        <rect x="290" y="200" width="40" height="40" fill="#b8c1ec" stroke="#393e6a" stroke-width="2" rx="6"/>
+        <rect x="370" y="200" width="40" height="40" fill="#b8c1ec" stroke="#393e6a" stroke-width="2" rx="6"/>
+        <rect x="290" y="260" width="40" height="40" fill="#fff" stroke="#393e6a" stroke-width="2" rx="6"/>
+        <rect x="370" y="260" width="40" height="40" fill="#fff" stroke="#393e6a" stroke-width="2" rx="6"/>
+        <rect x="320" y="320" width="60" height="50" fill="#b8c1ec" stroke="#393e6a" stroke-width="2" rx="10"/>
+        <text x="350" y="370" text-anchor="middle" fill="#232946" font-size="0.9em">25/7 Velachery Main Road</text>
+      </g>
+      <!-- LiDAR drone -->
+      <g id="drone">
+        <ellipse cx="200" cy="120" rx="28" ry="12" fill="#232946"/>
+        <rect x="180" y="110" width="40" height="16" fill="#b8c1ec" rx="6"/>
+        <rect x="192" y="100" width="16" height="8" fill="#eebbc3" rx="3"/>
+        <circle cx="200" cy="130" r="6" fill="#393e6a"/>
+        <!-- Propellers -->
+        <g id="prop1"><rect x="170" y="115" width="18" height="3" fill="#888" rx="1.5"/></g>
+        <g id="prop2"><rect x="210" y="95" width="3" height="18" fill="#888" rx="1.5"/></g>
+        <g id="prop3"><rect x="210" y="135" width="3" height="18" fill="#888" rx="1.5"/></g>
+        <g id="prop4"><rect x="230" y="115" width="18" height="3" fill="#888" rx="1.5"/></g>
+      </g>
+      <!-- LiDAR scan beam -->
+      <rect id="laser" x="350" y="200" width="6" height="190" fill="#0ff" opacity="0.18"/>
+      <text x="350" y="60" text-anchor="middle" fill="#232946" font-size="1.2em">LiDAR scanning building for structural integrity...</text>
     </svg>
-    <div style="position:absolute;top:30px;left:30px;color:#232946;font-size:1.1em;">LiDAR scanning building...</div>
+    <div style="position:absolute;top:30px;left:30px;color:#232946;font-size:1.1em;">LiDAR drone scanning building...</div>
   `;
-  // Animate laser
-  let y = 0, dir = 1;
-  const laser = liveFeed.querySelector('#laser');
-  setInterval(() => {
-    y += dir * 2;
-    if (y > 120 || y < 0) dir *= -1;
-    laser.setAttribute('y', 200 + y);
-  }, 30);
+  // Animate drone flying and laser sweeping
+  const svg = liveFeed.querySelector('svg');
+  const drone = svg.getElementById('drone');
+  const laser = svg.getElementById('laser');
+  const prop1 = svg.getElementById('prop1');
+  const prop2 = svg.getElementById('prop2');
+  const prop3 = svg.getElementById('prop3');
+  const prop4 = svg.getElementById('prop4');
+  let t = 0, propAngle = 0, scanX = 290, scanDir = 1;
+  function animate() {
+    t++;
+    // Drone flies in a loop around the building
+    let cx = 350 + 90 * Math.cos(t/80), cy = 220 + 60 * Math.sin(t/80);
+    drone.setAttribute('transform', `translate(${cx-200},${cy-120})`);
+    // Spin propellers
+    propAngle += 0.3;
+    prop1.setAttribute('transform', `rotate(${propAngle*60},179,116.5)`);
+    prop2.setAttribute('transform', `rotate(${propAngle*60},211.5,96)`);
+    prop3.setAttribute('transform', `rotate(${propAngle*60},211.5,136)`);
+    prop4.setAttribute('transform', `rotate(${propAngle*60},231,116.5)`);
+    // Laser sweeps left to right across building facade
+    scanX += scanDir * 2.5;
+    if (scanX > 410) scanDir = -1;
+    if (scanX < 290) scanDir = 1;
+    laser.setAttribute('x', scanX);
+    requestAnimationFrame(animate);
+  }
+  animate();
 }
 
 function animateWaterRescue(cmd) {
-  // Amphibious drone on water
+  // Enhanced Marina Beach water rescue with professional amphibious drones, lifeguard coordination, and realistic rescue operations
   liveFeed.innerHTML = `
     <svg width="700" height="480" viewBox="0 0 700 480">
+      <!-- Sky with clouds -->
       <rect width="700" height="480" fill="#b8c1ec"/>
-      <ellipse cx="350" cy="400" rx="200" ry="40" fill="#0ff" opacity="0.3"/>
-      <g id="drone">
-        <ellipse cx="350" cy="370" rx="40" ry="16" fill="#eebbc3"/>
-        <rect x="330" y="350" width="40" height="20" fill="#232946" rx="6"/>
-        <circle cx="340" cy="370" r="6" fill="#393e6a"/>
-        <circle cx="360" cy="370" r="6" fill="#393e6a"/>
+      <ellipse cx="150" cy="80" rx="60" ry="25" fill="#fff" opacity="0.7"/>
+      <ellipse cx="550" cy="60" rx="80" ry="30" fill="#fff" opacity="0.6"/>
+      <ellipse cx="400" cy="100" rx="40" ry="18" fill="#fff" opacity="0.5"/>
+      
+      <!-- Ocean with realistic waves and depth -->
+      <rect x="0" y="260" width="700" height="160" fill="#4fc3f7"/>
+      <rect x="0" y="300" width="700" height="120" fill="#29b6f6"/>
+      <rect x="0" y="340" width="700" height="80" fill="#0288d1"/>
+      
+      <!-- Animated ocean waves -->
+      <ellipse id="wave1" cx="120" cy="320" rx="60" ry="16" fill="#fff" opacity="0.18"/>
+      <ellipse id="wave2" cx="400" cy="340" rx="90" ry="22" fill="#fff" opacity="0.13"/>
+      <ellipse id="wave3" cx="600" cy="300" rx="50" ry="12" fill="#fff" opacity="0.15"/>
+      <ellipse id="wave4" cx="250" cy="330" rx="70" ry="18" fill="#fff" opacity="0.12"/>
+      <ellipse id="wave5" cx="480" cy="310" rx="55" ry="14" fill="#fff" opacity="0.16"/>
+      
+      <!-- Beach with realistic sand texture -->
+      <rect x="0" y="420" width="700" height="60" fill="#ffe0b2"/>
+      <ellipse cx="200" cy="440" rx="80" ry="18" fill="#ffd180" opacity="0.7"/>
+      <ellipse cx="500" cy="450" rx="100" ry="22" fill="#ffd180" opacity="0.6"/>
+      <ellipse cx="350" cy="445" rx="60" ry="15" fill="#ffcc80" opacity="0.5"/>
+      
+      <!-- Lifeguard station -->
+      <g id="lifeguardStation">
+        <rect x="50" y="380" width="40" height="30" fill="#e63946" stroke="#232946" stroke-width="2" rx="6"/>
+        <rect x="55" y="385" width="30" height="20" fill="#fff" rx="3"/>
+        <rect x="60" y="390" width="20" height="10" fill="#e63946" rx="2"/>
+        <rect x="65" y="395" width="10" height="5" fill="#fff" rx="1"/>
+        <text x="70" y="375" text-anchor="middle" fill="#232946" font-size="0.7em" font-weight="bold">LIFEGUARD</text>
       </g>
+      
+      <!-- Rescue boat on shore -->
+      <g id="rescueBoat">
+        <ellipse cx="120" cy="410" rx="25" ry="8" fill="#ff9800" stroke="#232946" stroke-width="2"/>
+        <rect x="100" y="405" width="40" height="6" fill="#ff9800" stroke="#232946" stroke-width="1" rx="2"/>
+        <rect x="105" y="400" width="30" height="8" fill="#fff" stroke="#232946" stroke-width="1" rx="2"/>
+        <text x="120" y="398" text-anchor="middle" fill="#232946" font-size="0.6em">RESCUE</text>
+      </g>
+      
+      <!-- Palm trees and beach vegetation -->
+      <g>
+        <rect x="80" y="400" width="8" height="40" fill="#8d6748"/>
+        <ellipse cx="84" cy="400" rx="18" ry="8" fill="#3fa34d"/>
+        <ellipse cx="84" cy="395" rx="14" ry="6" fill="#3fa34d"/>
+        <ellipse cx="84" cy="390" rx="10" ry="4" fill="#3fa34d"/>
+      </g>
+      <g>
+        <rect x="620" y="410" width="7" height="30" fill="#8d6748"/>
+        <ellipse cx="624" cy="410" rx="14" ry="6" fill="#3fa34d"/>
+        <ellipse cx="624" cy="405" rx="10" ry="4" fill="#3fa34d"/>
+        <ellipse cx="624" cy="400" rx="6" ry="3" fill="#3fa34d"/>
+      </g>
+      
+      <!-- Beach umbrellas and tourists -->
+      <g>
+        <rect x="320" y="430" width="4" height="20" fill="#b8c1ec"/>
+        <ellipse cx="322" cy="430" rx="18" ry="7" fill="#eebbc3"/>
+        <circle cx="322" cy="440" r="3" fill="#ffe0b2"/>
+      </g>
+      <g>
+        <rect x="450" y="435" width="3" height="15" fill="#eebbc3"/>
+        <ellipse cx="451.5" cy="435" rx="12" ry="5" fill="#b8c1ec"/>
+        <circle cx="451.5" cy="442" r="2.5" fill="#ffe0b2"/>
+      </g>
+      
+      <!-- Chennai skyline with more detail -->
+      <g opacity="0.18">
+        <rect x="540" y="220" width="40" height="40" fill="#232946"/>
+        <rect x="590" y="210" width="30" height="50" fill="#393e6a"/>
+        <rect x="630" y="230" width="20" height="30" fill="#232946"/>
+        <rect x="570" y="240" width="18" height="20" fill="#393e6a"/>
+        <rect x="580" y="200" width="15" height="30" fill="#232946"/>
+        <rect x="610" y="190" width="12" height="25" fill="#393e6a"/>
+      </g>
+      
+      <!-- Victims in water with life jackets and distress signals -->
+      <g id="victim1">
+        <ellipse cx="180" cy="320" rx="10" ry="6" fill="#ffe0b2"/>
+        <rect x="175" y="326" width="10" height="16" fill="#e63946" rx="3"/>
+        <ellipse cx="180" cy="344" rx="6" ry="4" fill="#ffe0b2"/>
+        <!-- Life jacket -->
+        <ellipse cx="180" cy="330" rx="12" ry="8" fill="#ff9800" opacity="0.8"/>
+        <text x="180" y="335" text-anchor="middle" fill="#fff" font-size="0.6em" font-weight="bold">LIFE</text>
+        <!-- Distress signal -->
+        <circle cx="190" cy="315" r="3" fill="#ff0" opacity="0.8"/>
+        <circle cx="190" cy="315" r="6" fill="#ff0" opacity="0.4"/>
+      </g>
+      
+      <g id="victim2">
+        <ellipse cx="520" cy="310" rx="9" ry="5" fill="#ffe0b2"/>
+        <rect x="515" y="315" width="8" height="13" fill="#e63946" rx="2"/>
+        <ellipse cx="520" cy="330" rx="5" ry="3" fill="#ffe0b2"/>
+        <!-- Life jacket -->
+        <ellipse cx="520" cy="320" rx="10" ry="6" fill="#ff9800" opacity="0.8"/>
+        <text x="520" y="325" text-anchor="middle" fill="#fff" font-size="0.5em" font-weight="bold">LIFE</text>
+        <!-- Distress signal -->
+        <circle cx="530" cy="305" r="2.5" fill="#ff0" opacity="0.8"/>
+        <circle cx="530" cy="305" r="5" fill="#ff0" opacity="0.4"/>
+      </g>
+      
+      <!-- Professional amphibious rescue drones with detailed design -->
+      <g id="drone1">
+        <!-- Main body -->
+        <ellipse cx="100" cy="100" rx="22" ry="10" fill="#232946" stroke="#393e6a" stroke-width="2"/>
+        <rect x="85" y="92" width="30" height="12" fill="#b8c1ec" rx="4"/>
+        <!-- Camera and sensors -->
+        <circle cx="100" cy="110" r="5" fill="#393e6a"/>
+        <circle cx="100" cy="110" r="3" fill="#eebbc3"/>
+        <rect x="95" y="105" width="10" height="8" fill="#232946" rx="2"/>
+        <!-- Propellers -->
+        <g id="prop1_1"><rect x="78" y="95" width="28" height="4" fill="#888" rx="2"/></g>
+        <g id="prop1_2"><rect x="94" y="78" width="4" height="28" fill="#888" rx="2"/></g>
+        <g id="prop1_3"><rect x="94" y="110" width="4" height="28" fill="#888" rx="2"/></g>
+        <g id="prop1_4"><rect x="110" y="95" width="28" height="4" fill="#888" rx="2"/></g>
+        <!-- Rescue equipment -->
+        <rect x="98" y="115" width="4" height="15" fill="#e63946" rx="1"/>
+        <circle cx="100" cy="130" r="3" fill="#ff0"/>
+        <!-- Emergency lights -->
+        <circle cx="90" cy="100" r="2" fill="#0ff"/>
+        <circle cx="110" cy="100" r="2" fill="#ff0"/>
+      </g>
+      
+      <g id="drone2">
+        <!-- Main body -->
+        <ellipse cx="600" cy="120" rx="22" ry="10" fill="#232946" stroke="#393e6a" stroke-width="2"/>
+        <rect x="585" y="112" width="30" height="12" fill="#b8c1ec" rx="4"/>
+        <!-- Camera and sensors -->
+        <circle cx="600" cy="130" r="5" fill="#393e6a"/>
+        <circle cx="600" cy="130" r="3" fill="#eebbc3"/>
+        <rect x="595" y="125" width="10" height="8" fill="#232946" rx="2"/>
+        <!-- Propellers -->
+        <g id="prop2_1"><rect x="578" y="115" width="28" height="4" fill="#888" rx="2"/></g>
+        <g id="prop2_2"><rect x="594" y="98" width="4" height="28" fill="#888" rx="2"/></g>
+        <g id="prop2_3"><rect x="594" y="130" width="4" height="28" fill="#888" rx="2"/></g>
+        <g id="prop2_4"><rect x="610" y="115" width="28" height="4" fill="#888" rx="2"/></g>
+        <!-- Rescue equipment -->
+        <rect x="598" y="135" width="4" height="15" fill="#e63946" rx="1"/>
+        <circle cx="600" cy="150" r="3" fill="#ff0"/>
+        <!-- Emergency lights -->
+        <circle cx="590" cy="120" r="2" fill="#0ff"/>
+        <circle cx="610" cy="120" r="2" fill="#ff0"/>
+      </g>
+      
+      <!-- Rescue lines with realistic appearance -->
+      <line id="line1" x1="100" y1="110" x2="180" y2="320" stroke="#e63946" stroke-width="4" opacity="0.0" stroke-dasharray="8 4"/>
+      <line id="line2" x1="600" y1="130" x2="520" y2="310" stroke="#e63946" stroke-width="4" opacity="0.0" stroke-dasharray="8 4"/>
+      
+      <!-- Rescue coordination center indicator -->
+      <g id="coordinationCenter">
+        <rect x="580" y="380" width="80" height="25" fill="#fff" stroke="#232946" stroke-width="2" rx="6"/>
+        <text x="620" y="395" text-anchor="middle" fill="#232946" font-size="0.7em" font-weight="bold">RESCUE COORD</text>
+        <circle cx="590" cy="392" r="3" fill="#0ff"/>
+        <circle cx="650" cy="392" r="3" fill="#ff0"/>
+      </g>
+      
+      <!-- Status indicators -->
+      <text x="350" y="60" text-anchor="middle" fill="#232946" font-size="1.2em" font-weight="bold">Amphibious Rescue Drones - Marina Beach Emergency Response</text>
+      <text x="350" y="80" text-anchor="middle" fill="#393e6a" font-size="0.9em">Coordinated water rescue operations in progress</text>
     </svg>
-    <div style="position:absolute;top:30px;left:30px;color:#232946;font-size:1.1em;">Amphibious drone performing water rescue...</div>
+    <div style="position:absolute;top:30px;left:30px;color:#232946;font-size:1.1em;background:rgba(255,255,255,0.8);padding:8px;border-radius:6px;">🚁 Amphibious drones deploying for water rescue...</div>
   `;
-  // Animate drone bobbing
-  let y = 0, dir = 1;
-  const drone = liveFeed.querySelector('#drone');
-  setInterval(() => {
-    y += dir * 1.5;
-    if (y > 10 || y < 0) dir *= -1;
-    drone.setAttribute('transform', `translate(0,${y})`);
-  }, 40);
+  
+  // Enhanced animation with realistic rescue operations
+  const svg = liveFeed.querySelector('svg');
+  const drone1 = svg.getElementById('drone1');
+  const drone2 = svg.getElementById('drone2');
+  const victim1 = svg.getElementById('victim1');
+  const victim2 = svg.getElementById('victim2');
+  const line1 = svg.getElementById('line1');
+  const line2 = svg.getElementById('line2');
+  const wave1 = svg.getElementById('wave1');
+  const wave2 = svg.getElementById('wave2');
+  const wave3 = svg.getElementById('wave3');
+  const wave4 = svg.getElementById('wave4');
+  const wave5 = svg.getElementById('wave5');
+  
+  let t = 0, propAngle1 = 0, propAngle2 = 0;
+  
+  function animate() {
+    t++;
+    
+    // Animate ocean waves
+    let wavePulse = 1 + 0.05 * Math.sin(t/15);
+    wave1.setAttribute('rx', 60 * wavePulse);
+    wave1.setAttribute('opacity', 0.18 + 0.08 * Math.abs(Math.sin(t/12)));
+    wave2.setAttribute('rx', 90 * (1 + 0.03 * Math.cos(t/18)));
+    wave2.setAttribute('opacity', 0.13 + 0.06 * Math.abs(Math.cos(t/14)));
+    wave3.setAttribute('rx', 50 * (1 + 0.04 * Math.sin(t/16)));
+    wave3.setAttribute('opacity', 0.15 + 0.07 * Math.abs(Math.sin(t/10)));
+    wave4.setAttribute('rx', 70 * (1 + 0.06 * Math.cos(t/20)));
+    wave4.setAttribute('opacity', 0.12 + 0.05 * Math.abs(Math.cos(t/13)));
+    wave5.setAttribute('rx', 55 * (1 + 0.04 * Math.sin(t/17)));
+    wave5.setAttribute('opacity', 0.16 + 0.06 * Math.abs(Math.sin(t/11)));
+    
+    // Spin propellers continuously
+    propAngle1 += 0.4;
+    propAngle2 += 0.4;
+    
+    // Drone 1 propellers
+    document.getElementById('prop1_1').setAttribute('transform', `rotate(${propAngle1*60},92,97)`);
+    document.getElementById('prop1_2').setAttribute('transform', `rotate(${propAngle1*60},96,92)`);
+    document.getElementById('prop1_3').setAttribute('transform', `rotate(${propAngle1*60},96,124)`);
+    document.getElementById('prop1_4').setAttribute('transform', `rotate(${propAngle1*60},124,97)`);
+    
+    // Drone 2 propellers
+    document.getElementById('prop2_1').setAttribute('transform', `rotate(${propAngle2*60},592,117)`);
+    document.getElementById('prop2_2').setAttribute('transform', `rotate(${propAngle2*60},596,112)`);
+    document.getElementById('prop2_3').setAttribute('transform', `rotate(${propAngle2*60},596,144)`);
+    document.getElementById('prop2_4').setAttribute('transform', `rotate(${propAngle2*60},624,117)`);
+    
+    // Phase 1: Drones approach from different directions
+    if (t < 40) {
+      // Drone 1 approaches from left
+      let d1x = -50 + t * 3;
+      let d1y = 50 + t * 1.5;
+      drone1.setAttribute('transform', `translate(${d1x},${d1y})`);
+      
+      // Drone 2 approaches from right
+      let d2x = 750 - t * 3;
+      let d2y = 80 + t * 1.2;
+      drone2.setAttribute('transform', `translate(${d2x},${d2y})`);
+    }
+    // Phase 2: Drones hover and assess situation
+    else if (t < 80) {
+      let hover1 = Math.sin(t/8) * 3;
+      let hover2 = Math.cos(t/10) * 2;
+      drone1.setAttribute('transform', `translate(70,${110+hover1})`);
+      drone2.setAttribute('transform', `translate(630,${140+hover2})`);
+    }
+    // Phase 3: Deploy rescue lines
+    else if (t < 120) {
+      let lineOpacity = (t - 80) / 40;
+      line1.setAttribute('opacity', lineOpacity);
+      line2.setAttribute('opacity', lineOpacity);
+      
+      // Victims show relief (move slightly)
+      let relief1 = Math.sin(t/6) * 2;
+      let relief2 = Math.cos(t/7) * 2;
+      victim1.setAttribute('transform', `translate(${relief1},${relief1})`);
+      victim2.setAttribute('transform', `translate(${relief2},${relief2})`);
+    }
+    // Phase 4: Rescue operation - victims move toward drones
+    else if (t < 180) {
+      let rescueProgress = (t - 120) / 60;
+      
+      // Victim 1 moves toward drone 1
+      let v1x = 180 + (170 - 180) * rescueProgress;
+      let v1y = 320 + (320 - 320) * rescueProgress;
+      victim1.setAttribute('transform', `translate(${v1x-180},${v1y-320})`);
+      
+      // Victim 2 moves toward drone 2
+      let v2x = 520 + (530 - 520) * rescueProgress;
+      let v2y = 310 + (310 - 310) * rescueProgress;
+      victim2.setAttribute('transform', `translate(${v2x-520},${v2y-310})`);
+      
+      // Update rescue lines
+      line1.setAttribute('x2', v1x);
+      line1.setAttribute('y2', v1y);
+      line2.setAttribute('x2', v2x);
+      line2.setAttribute('y2', v2y);
+    }
+    // Phase 5: Return to shore with victims
+    else if (t < 240) {
+      let returnProgress = (t - 180) / 60;
+      
+      // Drone 1 returns to shore with victim 1
+      let d1x = 170 + (120 - 170) * returnProgress;
+      let d1y = 320 + (410 - 320) * returnProgress;
+      drone1.setAttribute('transform', `translate(${d1x-100},${d1y-100})`);
+      victim1.setAttribute('transform', `translate(${d1x-180+10},${d1y-320-7})`);
+      
+      // Drone 2 returns to shore with victim 2
+      let d2x = 530 + (580 - 530) * returnProgress;
+      let d2y = 310 + (410 - 310) * returnProgress;
+      drone2.setAttribute('transform', `translate(${d2x-600},${d2y-120})`);
+      victim2.setAttribute('transform', `translate(${d2x-520-10},${d2y-310-7})`);
+      
+      // Update rescue lines
+      line1.setAttribute('x1', d1x);
+      line1.setAttribute('y1', d1y);
+      line2.setAttribute('x1', d2x);
+      line2.setAttribute('y1', d2y);
+    }
+    // Phase 6: Mission complete - show success indicators
+    else if (t < 300) {
+      // Drones land on shore
+      drone1.setAttribute('transform', `translate(20,310)`);
+      drone2.setAttribute('transform', `translate(-20,290)`);
+      
+      // Victims safely on shore
+      victim1.setAttribute('transform', `translate(30,303)`);
+      victim2.setAttribute('transform', `translate(-30,283)`);
+      
+      // Fade out rescue lines
+      let fadeOut = 1 - ((t - 240) / 60);
+      line1.setAttribute('opacity', fadeOut);
+      line2.setAttribute('opacity', fadeOut);
+      
+      // Show success indicators
+      if (t === 241) {
+        const successMsg = document.createElement('div');
+        successMsg.style.cssText = 'position:absolute;top:120px;left:50%;transform:translateX(-50%);color:#4caf50;font-size:1.3em;font-weight:bold;background:rgba(255,255,255,0.9);padding:12px;border-radius:8px;border:3px solid #4caf50;';
+        successMsg.textContent = '✅ RESCUE MISSION SUCCESSFUL - Both victims safely rescued!';
+        liveFeed.appendChild(successMsg);
+      }
+    }
+    
+    if (t < 300) {
+    requestAnimationFrame(animate);
+    }
+  }
+  animate();
 }
 
 function animateFireContainment(cmd) {
-  // Firebreak around burning depot
+  // Enhanced firebreak creation around burning oil depot in Ennore with realistic industrial fire scenario
   liveFeed.innerHTML = `
     <svg width="700" height="480" viewBox="0 0 700 480">
-      <rect width="700" height="480" fill="#232946"/>
-      <ellipse cx="350" cy="380" rx="120" ry="40" fill="#e63946" opacity="0.5"/>
-      <ellipse cx="350" cy="380" rx="200" ry="60" fill="#ff0" opacity="0.2"/>
-      <rect x="300" y="320" width="100" height="60" fill="#888" stroke="#444" stroke-width="4" rx="18"/>
-      <rect x="340" y="340" width="20" height="20" fill="#eebbc3" rx="4"/>
+      <!-- Industrial sky with smoke -->
+      <rect width="700" height="480" fill="#2c3e50"/>
+      <ellipse cx="200" cy="80" rx="100" ry="40" fill="#95a5a6" opacity="0.6"/>
+      <ellipse cx="500" cy="60" rx="120" ry="50" fill="#7f8c8d" opacity="0.7"/>
+      <ellipse cx="350" cy="100" rx="80" ry="30" fill="#95a5a6" opacity="0.5"/>
+      
+      <!-- Industrial ground -->
+      <rect x="0" y="380" width="700" height="100" fill="#34495e"/>
+      <rect x="0" y="400" width="700" height="80" fill="#2c3e50"/>
+      
+      <!-- Ennore industrial area background -->
+      <g id="industrialBackground" opacity="0.3">
+        <rect x="50" y="350" width="40" height="30" fill="#7f8c8d" rx="4"/>
+        <rect x="120" y="340" width="35" height="40" fill="#95a5a6" rx="4"/>
+        <rect x="180" y="345" width="45" height="35" fill="#7f8c8d" rx="4"/>
+        <rect x="250" y="350" width="30" height="30" fill="#95a5a6" rx="3"/>
+        <rect x="500" y="345" width="50" height="35" fill="#7f8c8d" rx="4"/>
+        <rect x="570" y="350" width="40" height="30" fill="#95a5a6" rx="3"/>
+        <rect x="640" y="340" width="35" height="40" fill="#7f8c8d" rx="4"/>
+      </g>
+      
+      <!-- Oil depot complex -->
+      <g id="oilDepot">
+        <!-- Main storage tanks -->
+        <ellipse cx="350" cy="340" rx="60" ry="25" fill="#34495e" stroke="#2c3e50" stroke-width="3"/>
+        <ellipse cx="350" cy="340" rx="55" ry="22" fill="#2c3e50" stroke="#34495e" stroke-width="2"/>
+        <ellipse cx="350" cy="340" rx="50" ry="20" fill="#34495e" stroke="#2c3e50" stroke-width="1"/>
+        
+        <!-- Secondary tanks -->
+        <ellipse cx="280" cy="350" rx="35" ry="15" fill="#34495e" stroke="#2c3e50" stroke-width="2"/>
+        <ellipse cx="420" cy="350" rx="35" ry="15" fill="#34495e" stroke="#2c3e50" stroke-width="2"/>
+        
+        <!-- Control building -->
+        <rect x="320" y="300" width="60" height="40" fill="#7f8c8d" stroke="#2c3e50" stroke-width="2" rx="6"/>
+        <rect x="330" y="310" width="40" height="20" fill="#ecf0f1" rx="3"/>
+        <rect x="340" y="315" width="20" height="10" fill="#e74c3c" rx="2"/>
+        
+        <!-- Piping system -->
+        <rect x="315" y="340" width="70" height="8" fill="#95a5a6" stroke="#7f8c8d" stroke-width="1" rx="2"/>
+        <rect x="245" y="350" width="70" height="6" fill="#95a5a6" stroke="#7f8c8d" stroke-width="1" rx="2"/>
+        <rect x="385" y="350" width="70" height="6" fill="#95a5a6" stroke="#7f8c8d" stroke-width="1" rx="2"/>
+        
+        <!-- Warning signs -->
+        <polygon points="350,320 340,340 360,340" fill="#f39c12" stroke="#e67e22" stroke-width="2"/>
+        <text x="350" y="337" text-anchor="middle" fill="#2c3e50" font-size="0.8em" font-weight="bold">!</text>
+        <text x="350" y="370" text-anchor="middle" fill="#ecf0f1" font-size="0.7em" font-weight="bold">OIL DEPOT</text>
+      </g>
+      
+      <!-- Burning flames and fire -->
+      <g id="flames">
+        <!-- Main fire plume -->
+        <ellipse id="fire1" cx="350" cy="320" rx="25" ry="15" fill="#e74c3c" opacity="0.8"/>
+        <ellipse id="fire2" cx="350" cy="310" rx="20" ry="12" fill="#f39c12" opacity="0.7"/>
+        <ellipse id="fire3" cx="350" cy="300" rx="15" ry="10" fill="#f1c40f" opacity="0.6"/>
+        <ellipse id="fire4" cx="350" cy="290" rx="10" ry="8" fill="#ffffff" opacity="0.5"/>
+        
+        <!-- Secondary fires -->
+        <ellipse id="fire5" cx="280" cy="330" rx="15" ry="8" fill="#e74c3c" opacity="0.7"/>
+        <ellipse id="fire6" cx="420" cy="330" rx="15" ry="8" fill="#e74c3c" opacity="0.7"/>
+        <ellipse id="fire7" cx="275" cy="320" rx="10" ry="6" fill="#f39c12" opacity="0.6"/>
+        <ellipse id="fire8" cx="425" cy="320" rx="10" ry="6" fill="#f39c12" opacity="0.6"/>
+        
+        <!-- Fire sparks -->
+        <circle id="spark1" cx="340" cy="280" r="2" fill="#f1c40f" opacity="0.8"/>
+        <circle id="spark2" cx="360" cy="275" r="1.5" fill="#f1c40f" opacity="0.7"/>
+        <circle id="spark3" cx="345" cy="285" r="1" fill="#f1c40f" opacity="0.6"/>
+        <circle id="spark4" cx="355" cy="270" r="1.5" fill="#f1c40f" opacity="0.7"/>
+      </g>
+      
+      <!-- Smoke plumes -->
+      <g id="smoke">
+        <ellipse id="smoke1" cx="350" cy="250" rx="40" ry="20" fill="#95a5a6" opacity="0.4"/>
+        <ellipse id="smoke2" cx="350" cy="220" rx="60" ry="25" fill="#7f8c8d" opacity="0.3"/>
+        <ellipse id="smoke3" cx="350" cy="190" rx="80" ry="30" fill="#95a5a6" opacity="0.2"/>
+        <ellipse id="smoke4" cx="350" cy="160" rx="100" ry="35" fill="#7f8c8d" opacity="0.15"/>
+        <ellipse id="smoke5" cx="350" cy="130" rx="120" ry="40" fill="#95a5a6" opacity="0.1"/>
+      </g>
+      
+      <!-- Firebreak perimeter (initially hidden) -->
+      <g id="firebreakPerimeter" opacity="0">
+        <ellipse id="firebreak" cx="350" cy="340" rx="140" ry="50" fill="none" stroke="#f39c12" stroke-width="8" stroke-dasharray="16 8"/>
+        <ellipse cx="350" cy="340" rx="140" ry="50" fill="none" stroke="#e67e22" stroke-width="4"/>
+        <ellipse cx="350" cy="340" rx="140" ry="50" fill="none" stroke="#d35400" stroke-width="2"/>
+        
+        <!-- Firebreak construction indicators -->
+        <circle id="marker1" cx="210" cy="340" r="6" fill="#f39c12" opacity="0.8"/>
+        <circle id="marker2" cx="490" cy="340" r="6" fill="#f39c12" opacity="0.8"/>
+        <circle id="marker3" cx="350" cy="290" r="6" fill="#f39c12" opacity="0.8"/>
+        <circle id="marker4" cx="350" cy="390" r="6" fill="#f39c12" opacity="0.8"/>
+      </g>
+      
+      <!-- Firefighting equipment -->
+      <g id="firefightingEquipment">
+        <!-- Fire trucks -->
+        <g id="firetruck1">
+          <rect x="150" y="390" width="50" height="20" fill="#e74c3c" stroke="#c0392b" stroke-width="2" rx="5"/>
+          <rect x="145" y="405" width="60" height="10" fill="#34495e" rx="3"/>
+          <circle cx="160" cy="415" r="6" fill="#2c3e50"/>
+          <circle cx="190" cy="415" r="6" fill="#2c3e50"/>
+          <rect x="155" y="395" width="40" height="10" fill="#ecf0f1" rx="2"/>
+          <text x="175" y="403" text-anchor="middle" fill="#2c3e50" font-size="0.6em" font-weight="bold">FIRE</text>
+        </g>
+        
+        <g id="firetruck2">
+          <rect x="500" y="390" width="50" height="20" fill="#e74c3c" stroke="#c0392b" stroke-width="2" rx="5"/>
+          <rect x="495" y="405" width="60" height="10" fill="#34495e" rx="3"/>
+          <circle cx="510" cy="415" r="6" fill="#2c3e50"/>
+          <circle cx="540" cy="415" r="6" fill="#2c3e50"/>
+          <rect x="505" y="395" width="40" height="10" fill="#ecf0f1" rx="2"/>
+          <text x="525" y="403" text-anchor="middle" fill="#2c3e50" font-size="0.6em" font-weight="bold">FIRE</text>
+        </g>
+        
+        <!-- Water cannons -->
+        <g id="waterCannon1">
+          <rect x="160" y="385" width="8" height="15" fill="#3498db" stroke="#2980b9" stroke-width="1" rx="2"/>
+          <rect x="162" y="380" width="4" height="8" fill="#3498db" rx="1"/>
+        </g>
+        
+        <g id="waterCannon2">
+          <rect x="532" y="385" width="8" height="15" fill="#3498db" stroke="#2980b9" stroke-width="1" rx="2"/>
+          <rect x="534" y="380" width="4" height="8" fill="#3498db" rx="1"/>
+        </g>
+        
+        <!-- Water streams -->
+        <line id="waterStream1" x1="164" y1="380" x2="280" y2="340" stroke="#3498db" stroke-width="3" opacity="0.0"/>
+        <line id="waterStream2" x1="536" y1="380" x2="420" y2="340" stroke="#3498db" stroke-width="3" opacity="0.0"/>
+      </g>
+      
+      <!-- Emergency response coordination -->
+      <g id="emergencyCoordination">
+        <rect x="580" y="350" width="80" height="30" fill="#ecf0f1" stroke="#2c3e50" stroke-width="2" rx="6"/>
+        <text x="620" y="365" text-anchor="middle" fill="#2c3e50" font-size="0.7em" font-weight="bold">FIRE CONTROL</text>
+        <text x="620" y="375" text-anchor="middle" fill="#e74c3c" font-size="0.6em" font-weight="bold">ENNORE</text>
+        <circle cx="590" cy="365" r="3" fill="#e74c3c"/>
+        <circle cx="650" cy="365" r="3" fill="#f39c12"/>
+      </g>
+      
+      <!-- Scale indicator for 200m perimeter -->
+      <g id="scaleIndicator">
+        <rect x="100" y="450" width="200" height="8" fill="#ecf0f1" stroke="#2c3e50" stroke-width="1"/>
+        <text x="200" y="445" text-anchor="middle" fill="#ecf0f1" font-size="0.8em" font-weight="bold">200m FIREBREAK PERIMETER</text>
+        <text x="200" y="465" text-anchor="middle" fill="#ecf0f1" font-size="0.7em">Ennore Oil Depot Emergency Response</text>
+      </g>
+      
+      <!-- Status indicators -->
+      <text x="350" y="60" text-anchor="middle" fill="#ecf0f1" font-size="1.3em" font-weight="bold">🔥 EMERGENCY FIRE RESPONSE - ENNORE OIL DEPOT</text>
+      <text x="350" y="80" text-anchor="middle" fill="#f39c12" font-size="1.0em">Creating 200m firebreak perimeter around burning facility</text>
     </svg>
-    <div style="position:absolute;top:30px;left:30px;color:#fff;font-size:1.1em;">Creating firebreak perimeter...</div>
+    <div style="position:absolute;top:30px;left:30px;color:#ecf0f1;font-size:1.1em;background:rgba(231,76,60,0.9);padding:10px;border-radius:8px;border:2px solid #c0392b;">🚨 CRITICAL FIRE EMERGENCY - Firebreak perimeter creation in progress...</div>
   `;
+  
+  // Enhanced animation with realistic fire dynamics and firebreak construction
+  const svg = liveFeed.querySelector('svg');
+  const flames = svg.getElementById('flames');
+  const smoke = svg.getElementById('smoke');
+  const firebreakPerimeter = svg.getElementById('firebreakPerimeter');
+  const firebreak = svg.getElementById('firebreak');
+  const waterStream1 = svg.getElementById('waterStream1');
+  const waterStream2 = svg.getElementById('waterStream2');
+  const firetruck1 = svg.getElementById('firetruck1');
+  const firetruck2 = svg.getElementById('firetruck2');
+  
+  let t = 0, firebreakProgress = 0, waterActive = false;
+  
+  function animate() {
+    t++;
+    
+    // Animate flames with realistic flickering
+    let flamePulse = 1 + 0.15 * Math.sin(t/8);
+    let flamePulse2 = 1 + 0.12 * Math.cos(t/10);
+    let flamePulse3 = 1 + 0.18 * Math.sin(t/6);
+    
+    document.getElementById('fire1').setAttribute('rx', 25 * flamePulse);
+    document.getElementById('fire1').setAttribute('opacity', 0.8 + 0.2 * Math.abs(Math.sin(t/12)));
+    document.getElementById('fire2').setAttribute('rx', 20 * flamePulse2);
+    document.getElementById('fire2').setAttribute('opacity', 0.7 + 0.15 * Math.abs(Math.cos(t/10)));
+    document.getElementById('fire3').setAttribute('rx', 15 * flamePulse3);
+    document.getElementById('fire3').setAttribute('opacity', 0.6 + 0.1 * Math.abs(Math.sin(t/14)));
+    document.getElementById('fire4').setAttribute('rx', 10 * flamePulse);
+    document.getElementById('fire4').setAttribute('opacity', 0.5 + 0.1 * Math.abs(Math.cos(t/16)));
+    
+    // Secondary fires
+    document.getElementById('fire5').setAttribute('rx', 15 * flamePulse2);
+    document.getElementById('fire6').setAttribute('rx', 15 * flamePulse3);
+    document.getElementById('fire7').setAttribute('rx', 10 * flamePulse);
+    document.getElementById('fire8').setAttribute('rx', 10 * flamePulse2);
+    
+    // Animate fire sparks
+    let spark1x = 340 + 10 * Math.sin(t/15);
+    let spark1y = 280 - 5 * Math.abs(Math.sin(t/12));
+    let spark2x = 360 + 8 * Math.cos(t/18);
+    let spark2y = 275 - 3 * Math.abs(Math.cos(t/14));
+    let spark3x = 345 + 6 * Math.sin(t/20);
+    let spark3y = 285 - 4 * Math.abs(Math.sin(t/16));
+    let spark4x = 355 + 12 * Math.cos(t/22);
+    let spark4y = 270 - 6 * Math.abs(Math.cos(t/18));
+    
+    document.getElementById('spark1').setAttribute('cx', spark1x);
+    document.getElementById('spark1').setAttribute('cy', spark1y);
+    document.getElementById('spark2').setAttribute('cx', spark2x);
+    document.getElementById('spark2').setAttribute('cy', spark2y);
+    document.getElementById('spark3').setAttribute('cx', spark3x);
+    document.getElementById('spark3').setAttribute('cy', spark3y);
+    document.getElementById('spark4').setAttribute('cx', spark4x);
+    document.getElementById('spark4').setAttribute('cy', spark4y);
+    
+    // Animate smoke plumes rising and spreading
+    let smokeRise = t * 0.5;
+    let smokeSpread = 1 + 0.1 * Math.sin(t/20);
+    
+    document.getElementById('smoke1').setAttribute('cy', 250 - smokeRise * 0.1);
+    document.getElementById('smoke1').setAttribute('rx', 40 * smokeSpread);
+    document.getElementById('smoke2').setAttribute('cy', 220 - smokeRise * 0.15);
+    document.getElementById('smoke2').setAttribute('rx', 60 * smokeSpread);
+    document.getElementById('smoke3').setAttribute('cy', 190 - smokeRise * 0.2);
+    document.getElementById('smoke3').setAttribute('rx', 80 * smokeSpread);
+    document.getElementById('smoke4').setAttribute('cy', 160 - smokeRise * 0.25);
+    document.getElementById('smoke4').setAttribute('rx', 100 * smokeSpread);
+    document.getElementById('smoke5').setAttribute('cy', 130 - smokeRise * 0.3);
+    document.getElementById('smoke5').setAttribute('rx', 120 * smokeSpread);
+    
+    // Phase 1: Initial fire outbreak (0-60 frames)
+    if (t < 60) {
+      let fireIntensity = t / 60;
+      flames.setAttribute('opacity', fireIntensity);
+      smoke.setAttribute('opacity', fireIntensity * 0.8);
+    }
+    
+    // Phase 2: Fire trucks arrive and position (60-120 frames)
+    else if (t < 120) {
+      let arrivalProgress = (t - 60) / 60;
+      
+      // Fire truck 1 moves to position
+      let truck1x = 150 + (180 - 150) * arrivalProgress;
+      firetruck1.setAttribute('transform', `translate(${truck1x-150},0)`);
+      
+      // Fire truck 2 moves to position
+      let truck2x = 500 - (520 - 500) * arrivalProgress;
+      firetruck2.setAttribute('transform', `translate(${truck2x-500},0)`);
+      
+      // Water cannons activate
+      if (t > 90) {
+        waterActive = true;
+        waterStream1.setAttribute('opacity', 0.8);
+        waterStream2.setAttribute('opacity', 0.8);
+      }
+    }
+    
+    // Phase 3: Firebreak perimeter construction begins (120-240 frames)
+    else if (t < 240) {
+      firebreakProgress = (t - 120) / 120;
+      
+      // Show firebreak perimeter with progressive opacity
+      firebreakPerimeter.setAttribute('opacity', firebreakProgress);
+      
+      // Animate firebreak construction markers
+      let markerPulse = 0.5 + 0.5 * Math.abs(Math.sin(t/8));
+      document.getElementById('marker1').setAttribute('opacity', markerPulse);
+      document.getElementById('marker2').setAttribute('opacity', markerPulse);
+      document.getElementById('marker3').setAttribute('opacity', markerPulse);
+      document.getElementById('marker4').setAttribute('opacity', markerPulse);
+      
+      // Animate firebreak dash pattern
+      let dashOffset = (t * 2) % 24;
+      firebreak.setAttribute('stroke-dashoffset', dashOffset);
+    }
+    
+    // Phase 4: Firebreak complete, fire containment (240-300 frames)
+    else if (t < 300) {
+      let containmentProgress = (t - 240) / 60;
+      
+      // Reduce fire intensity as containment takes effect
+      let fireReduction = 1 - containmentProgress * 0.3;
+      flames.setAttribute('opacity', fireReduction);
+      
+      // Increase water stream effectiveness
+      waterStream1.setAttribute('stroke-width', 3 + containmentProgress * 2);
+      waterStream2.setAttribute('stroke-width', 3 + containmentProgress * 2);
+      
+      // Show success indicators
+      if (t === 241) {
+        const successMsg = document.createElement('div');
+        successMsg.style.cssText = 'position:absolute;top:120px;left:50%;transform:translateX(-50%);color:#27ae60;font-size:1.3em;font-weight:bold;background:rgba(255,255,255,0.95);padding:15px;border-radius:10px;border:3px solid #27ae60;box-shadow:0 4px 12px rgba(0,0,0,0.3);';
+        successMsg.textContent = '✅ FIREBREAK PERIMETER ESTABLISHED - Fire containment successful!';
+        liveFeed.appendChild(successMsg);
+      }
+    }
+    
+    // Phase 5: Mission complete (300+ frames)
+    else if (t < 360) {
+      // Maintain firebreak visibility
+      firebreakPerimeter.setAttribute('opacity', 1);
+      
+      // Show final status
+      if (t === 301) {
+        const finalMsg = document.createElement('div');
+        finalMsg.style.cssText = 'position:absolute;top:180px;left:50%;transform:translateX(-50%);color:#2c3e50;font-size:1.1em;font-weight:bold;background:rgba(236,240,241,0.95);padding:12px;border-radius:8px;border:2px solid #27ae60;';
+        finalMsg.textContent = '🛡️ 200m Firebreak Perimeter Active - Ennore Oil Depot Secured';
+        liveFeed.appendChild(finalMsg);
+      }
+    }
+    
+    if (t < 360) {
+      requestAnimationFrame(animate);
+    }
+  }
+  animate();
 }
 
 function animateEvacuationRoute(cmd) {
-  // LED beacons marking route
+  // Realistic railway station evacuation with LED beacons
   liveFeed.innerHTML = `
     <svg width="700" height="480" viewBox="0 0 700 480">
+      <!-- Background -->
       <rect width="700" height="480" fill="#b8c1ec"/>
-      <rect x="100" y="400" width="500" height="20" fill="#888" rx="10"/>
-      <circle id="beacon" cx="120" cy="410" r="10" fill="#ff0"/>
-      <circle id="beacon2" cx="200" cy="410" r="10" fill="#ff0"/>
-      <circle id="beacon3" cx="280" cy="410" r="10" fill="#ff0"/>
-      <circle id="beacon4" cx="360" cy="410" r="10" fill="#ff0"/>
-      <circle id="beacon5" cx="440" cy="410" r="10" fill="#ff0"/>
-      <circle id="beacon6" cx="520" cy="410" r="10" fill="#ff0"/>
+      <!-- Station building -->
+      <g id="station">
+        <rect x="80" y="120" width="540" height="100" fill="#eebbc3" stroke="#232946" stroke-width="4" rx="18"/>
+        <rect x="120" y="160" width="460" height="40" fill="#fff" stroke="#393e6a" stroke-width="2" rx="10"/>
+        <rect x="320" y="120" width="60" height="40" fill="#e63946" rx="8"/>
+        <text x="350" y="150" text-anchor="middle" fill="#232946" font-size="1.3em" font-weight="bold">CENTRAL RAILWAY STATION</text>
+        <rect x="340" y="120" width="20" height="20" fill="#fff" rx="4"/>
+        <rect x="345" y="125" width="10" height="10" fill="#e63946" rx="2"/>
+      </g>
+      <!-- Platforms and tracks -->
+      <g id="tracks">
+        <rect x="120" y="220" width="460" height="18" fill="#888" rx="6"/>
+        <rect x="120" y="250" width="460" height="18" fill="#888" rx="6"/>
+        <rect x="120" y="280" width="460" height="18" fill="#888" rx="6"/>
+        <rect x="120" y="310" width="460" height="18" fill="#888" rx="6"/>
+        <!-- Rails -->
+        <rect x="130" y="225" width="440" height="4" fill="#b8c1ec"/>
+        <rect x="130" y="255" width="440" height="4" fill="#b8c1ec"/>
+        <rect x="130" y="285" width="440" height="4" fill="#b8c1ec"/>
+        <rect x="130" y="315" width="440" height="4" fill="#b8c1ec"/>
+      </g>
+      <!-- Crowd at station entrance -->
+      <g id="crowd">
+        <circle cx="180" cy="200" r="10" fill="#e63946"/>
+        <circle cx="200" cy="210" r="9" fill="#b8c1ec"/>
+        <circle cx="220" cy="205" r="8" fill="#eebbc3"/>
+        <circle cx="240" cy="215" r="10" fill="#393e6a"/>
+        <circle cx="260" cy="210" r="9" fill="#eebbc3"/>
+        <circle cx="280" cy="205" r="8" fill="#e63946"/>
+        <circle cx="300" cy="215" r="10" fill="#b8c1ec"/>
+        <circle cx="320" cy="210" r="9" fill="#393e6a"/>
+        <circle cx="340" cy="205" r="8" fill="#eebbc3"/>
+        <circle cx="360" cy="215" r="10" fill="#e63946"/>
+        <circle cx="380" cy="210" r="9" fill="#b8c1ec"/>
+        <circle cx="400" cy="205" r="8" fill="#eebbc3"/>
+        <circle cx="420" cy="215" r="10" fill="#393e6a"/>
+        <circle cx="440" cy="210" r="9" fill="#eebbc3"/>
+        <circle cx="460" cy="205" r="8" fill="#e63946"/>
+        <circle cx="480" cy="215" r="10" fill="#b8c1ec"/>
+        <circle cx="500" cy="210" r="9" fill="#393e6a"/>
+        <circle cx="520" cy="205" r="8" fill="#eebbc3"/>
+        <circle cx="540" cy="215" r="10" fill="#e63946"/>
+        <circle cx="560" cy="210" r="9" fill="#b8c1ec"/>
+      </g>
+      <!-- LED beacon evacuation route (winding path) -->
+      <polyline id="routePath" points="350,180 350,240 400,260 500,320 600,400" fill="none" stroke="#ff0" stroke-width="8" stroke-dasharray="18 10" opacity="0.5"/>
+      <!-- LED beacons along the route -->
+      <circle id="beacon1" cx="350" cy="180" r="12" fill="#ff0" opacity="0.0"/>
+      <circle id="beacon2" cx="350" cy="240" r="12" fill="#ff0" opacity="0.0"/>
+      <circle id="beacon3" cx="400" cy="260" r="12" fill="#ff0" opacity="0.0"/>
+      <circle id="beacon4" cx="500" cy="320" r="12" fill="#ff0" opacity="0.0"/>
+      <circle id="beacon5" cx="600" cy="400" r="14" fill="#ff0" opacity="0.0"/>
+      <!-- Arrows along the route -->
+      <polygon id="arrow1" points="350,210 345,220 355,220" fill="#232946" opacity="0.0"/>
+      <polygon id="arrow2" points="375,250 370,260 380,260" fill="#232946" opacity="0.0"/>
+      <polygon id="arrow3" points="450,300 445,310 455,310" fill="#232946" opacity="0.0"/>
+      <polygon id="arrow4" points="570,380 565,390 575,390" fill="#232946" opacity="0.0"/>
+      <!-- Safe zone -->
+      <rect id="safeZone" x="580" y="410" width="80" height="40" fill="#7ec850" stroke="#232946" stroke-width="3" rx="12" opacity="0.0"/>
+      <text id="safeZoneText" x="620" y="435" text-anchor="middle" fill="#232946" font-size="1.1em" font-weight="bold" opacity="0.0">SAFE ZONE</text>
+      <!-- Status -->
+      <text x="350" y="60" text-anchor="middle" fill="#232946" font-size="1.2em" font-weight="bold">Evacuation Route - Central Railway Station</text>
+      <text x="350" y="90" text-anchor="middle" fill="#393e6a" font-size="1em">LED beacons marking safe evacuation path</text>
     </svg>
-    <div style="position:absolute;top:30px;left:30px;color:#232946;font-size:1.1em;">Marking evacuation route...</div>
+    <div style="position:absolute;top:30px;left:30px;color:#232946;font-size:1.1em;background:rgba(255,255,255,0.9);padding:8px;border-radius:6px;">🚨 Marking safe evacuation route with LED beacons...</div>
   `;
-  // Animate beacons
-  let op = 1, dir = -1;
-  const beacons = [1,2,3,4,5,6].map(i => liveFeed.querySelector(`#beacon${i||''}`));
-  setInterval(() => {
-    op += dir * 0.05;
-    if (op < 0.3) dir = 1;
-    if (op > 1) dir = -1;
-    beacons.forEach((b,i) => b && b.setAttribute('opacity', Math.max(0.3, op - i*0.1)));
-  }, 60);
+  // Animate LED beacons lighting up sequentially and arrows
+  const svg = liveFeed.querySelector('svg');
+  const beacons = [1,2,3,4,5].map(i => svg.getElementById(`beacon${i}`));
+  const arrows = [1,2,3,4].map(i => svg.getElementById(`arrow${i}`));
+  const safeZone = svg.getElementById('safeZone');
+  const safeZoneText = svg.getElementById('safeZoneText');
+  let t = 0;
+  function animate() {
+    t++;
+    // Sequentially light up beacons and arrows
+    for (let i = 0; i < beacons.length; ++i) {
+      let delay = 20 + i*20;
+      if (t > delay) {
+        let pulse = 0.7 + 0.3 * Math.abs(Math.sin((t-delay)/8));
+        beacons[i].setAttribute('opacity', pulse);
+        if (arrows[i]) arrows[i].setAttribute('opacity', Math.min(1, (t-delay-10)/10));
+      }
+    }
+    // Show safe zone at the end
+    if (t > 120) {
+      let op = Math.min(1, (t-120)/20);
+      safeZone.setAttribute('opacity', op);
+      safeZoneText.setAttribute('opacity', op);
+    }
+    if (t < 180) requestAnimationFrame(animate);
+  }
+  animate();
 }
 
 function animateMeshNetwork(cmd) {
-  // Mesh network nodes
+  // Realistic mesh network deployment in cyclone-affected Nagapattinam
   liveFeed.innerHTML = `
     <svg width="700" height="480" viewBox="0 0 700 480">
+      <!-- Cyclone sky -->
       <rect width="700" height="480" fill="#232946"/>
-      <circle cx="200" cy="240" r="30" fill="#eebbc3"/>
-      <circle cx="500" cy="240" r="30" fill="#eebbc3"/>
-      <circle cx="350" cy="120" r="30" fill="#eebbc3"/>
-      <circle cx="350" cy="360" r="30" fill="#eebbc3"/>
-      <line x1="200" y1="240" x2="350" y2="120" stroke="#b8c1ec" stroke-width="4"/>
-      <line x1="200" y1="240" x2="350" y2="360" stroke="#b8c1ec" stroke-width="4"/>
-      <line x1="500" y1="240" x2="350" y2="120" stroke="#b8c1ec" stroke-width="4"/>
-      <line x1="500" y1="240" x2="350" y2="360" stroke="#b8c1ec" stroke-width="4"/>
-      <line x1="200" y1="240" x2="500" y2="240" stroke="#eebbc3" stroke-width="6"/>
+      <ellipse cx="350" cy="80" rx="200" ry="60" fill="#b8c1ec" opacity="0.5"/>
+      <ellipse cx="200" cy="60" rx="80" ry="30" fill="#fff" opacity="0.3"/>
+      <ellipse cx="500" cy="100" rx="100" ry="40" fill="#fff" opacity="0.2"/>
+      <!-- Rain bands -->
+      <g id="rain">
+        <line x1="120" y1="40" x2="140" y2="100" stroke="#4fc3f7" stroke-width="3" opacity="0.5"/>
+        <line x1="180" y1="60" x2="200" y2="120" stroke="#4fc3f7" stroke-width="3" opacity="0.5"/>
+        <line x1="600" y1="80" x2="620" y2="140" stroke="#4fc3f7" stroke-width="3" opacity="0.5"/>
+        <line x1="520" y1="50" x2="540" y2="110" stroke="#4fc3f7" stroke-width="3" opacity="0.5"/>
+      </g>
+      <!-- Nagapattinam landscape: coast, river, buildings -->
+      <rect x="0" y="400" width="700" height="80" fill="#7ec850"/>
+      <ellipse cx="600" cy="470" rx="80" ry="20" fill="#4fc3f7" opacity="0.7"/>
+      <ellipse cx="100" cy="470" rx="60" ry="15" fill="#4fc3f7" opacity="0.5"/>
+      <rect x="320" y="420" width="60" height="30" fill="#eebbc3" stroke="#393e6a" stroke-width="2" rx="8"/>
+      <rect x="340" y="430" width="20" height="10" fill="#e63946" rx="2"/>
+      <text x="350" y="445" text-anchor="middle" fill="#232946" font-size="0.9em">Nagapattinam Relief Center</text>
+      <!-- Mesh network nodes: towers, vans, drones -->
+      <g id="nodes">
+        <!-- Towers -->
+        <rect id="tower1" x="120" y="320" width="16" height="60" fill="#b8c1ec" stroke="#232946" stroke-width="2" rx="4"/>
+        <rect id="tower2" x="560" y="340" width="16" height="60" fill="#b8c1ec" stroke="#232946" stroke-width="2" rx="4"/>
+        <!-- Mobile van -->
+        <rect id="van" x="220" y="390" width="40" height="18" fill="#eebbc3" stroke="#232946" stroke-width="2" rx="5"/>
+        <rect x="250" y="395" width="10" height="8" fill="#393e6a" rx="2"/>
+        <circle cx="230" cy="408" r="4" fill="#232946"/>
+        <circle cx="250" cy="408" r="4" fill="#232946"/>
+        <rect x="235" y="390" width="10" height="6" fill="#7ec850" rx="2"/>
+        <!-- Drone -->
+        <ellipse id="drone" cx="400" cy="200" rx="18" ry="7" fill="#232946"/>
+        <rect x="390" y="195" width="20" height="8" fill="#b8c1ec" rx="3"/>
+        <circle cx="400" cy="210" r="4" fill="#393e6a"/>
+        <!-- Rooftop node -->
+        <rect id="roofnode" x="340" y="410" width="20" height="10" fill="#ff0" stroke="#232946" stroke-width="2" rx="3"/>
+      </g>
+      <!-- Mesh links (initially faded) -->
+      <line id="link1" x1="128" y1="320" x2="400" y2="200" stroke="#0ff" stroke-width="4" opacity="0.0"/>
+      <line id="link2" x1="400" y1="200" x2="568" y2="340" stroke="#0ff" stroke-width="4" opacity="0.0"/>
+      <line id="link3" x1="128" y1="320" x2="240" y2="390" stroke="#0ff" stroke-width="4" opacity="0.0"/>
+      <line id="link4" x1="240" y1="390" x2="400" y2="200" stroke="#0ff" stroke-width="4" opacity="0.0"/>
+      <line id="link5" x1="240" y1="390" x2="350" y2="440" stroke="#0ff" stroke-width="4" opacity="0.0"/>
+      <line id="link6" x1="568" y1="340" x2="350" y2="440" stroke="#0ff" stroke-width="4" opacity="0.0"/>
+      <line id="link7" x1="400" y1="200" x2="350" y2="440" stroke="#0ff" stroke-width="4" opacity="0.0"/>
+      <!-- Communication pulses (animated) -->
+      <circle id="pulse1" cx="128" cy="320" r="7" fill="#0ff" opacity="0.0"/>
+      <circle id="pulse2" cx="400" cy="200" r="7" fill="#0ff" opacity="0.0"/>
+      <circle id="pulse3" cx="568" cy="340" r="7" fill="#0ff" opacity="0.0"/>
+      <circle id="pulse4" cx="240" cy="390" r="7" fill="#0ff" opacity="0.0"/>
+      <circle id="pulse5" cx="350" cy="440" r="7" fill="#0ff" opacity="0.0"/>
+      <!-- Cyclone effects -->
+      <g id="cycloneCloud">
+        <ellipse cx="600" cy="100" rx="60" ry="22" fill="#fff" opacity="0.3"/>
+        <ellipse cx="620" cy="120" rx="40" ry="15" fill="#b8c1ec" opacity="0.2"/>
+        <ellipse cx="580" cy="90" rx="30" ry="10" fill="#fff" opacity="0.2"/>
+      </g>
+      <!-- Status -->
+      <text x="350" y="60" text-anchor="middle" fill="#fff" font-size="1.2em" font-weight="bold">Emergency Mesh Network - Nagapattinam (Cyclone)</text>
+      <text x="350" y="90" text-anchor="middle" fill="#0ff" font-size="1em">Nodes connecting, network pulses active</text>
     </svg>
-    <div style="position:absolute;top:30px;left:30px;color:#fff;font-size:1.1em;">Establishing mesh network...</div>
+    <div style="position:absolute;top:30px;left:30px;color:#0ff;font-size:1.1em;background:rgba(35,41,70,0.95);padding:8px;border-radius:6px;">🌪️ Establishing mesh network in cyclone-affected Nagapattinam...</div>
   `;
+  // Animate mesh links and pulses
+  const svg = liveFeed.querySelector('svg');
+  const links = [1,2,3,4,5,6,7].map(i => svg.getElementById(`link${i}`));
+  const pulses = [1,2,3,4,5].map(i => svg.getElementById(`pulse${i}`));
+  let t = 0;
+  function animate() {
+    t++;
+    // Sequentially light up mesh links
+    for (let i = 0; i < links.length; ++i) {
+      let delay = 20 + i*12;
+      if (t > delay) {
+        let op = 0.5 + 0.5 * Math.abs(Math.sin((t-delay)/8));
+        links[i].setAttribute('opacity', op);
+      }
+    }
+    // Animate pulses traveling between nodes
+    if (t > 100) {
+      let phase = ((t-100)%80)/80;
+      // Pulse1: tower1 to drone
+      pulses[0].setAttribute('opacity', 0.8);
+      pulses[0].setAttribute('cx', 128 + (400-128)*phase);
+      pulses[0].setAttribute('cy', 320 + (200-320)*phase);
+      // Pulse2: drone to tower2
+      pulses[1].setAttribute('opacity', 0.8);
+      pulses[1].setAttribute('cx', 400 + (568-400)*phase);
+      pulses[1].setAttribute('cy', 200 + (340-200)*phase);
+      // Pulse3: tower2 to relief center
+      pulses[2].setAttribute('opacity', 0.8);
+      pulses[2].setAttribute('cx', 568 + (350-568)*phase);
+      pulses[2].setAttribute('cy', 340 + (440-340)*phase);
+      // Pulse4: van to relief center
+      pulses[3].setAttribute('opacity', 0.8);
+      pulses[3].setAttribute('cx', 240 + (350-240)*phase);
+      pulses[3].setAttribute('cy', 390 + (440-390)*phase);
+      // Pulse5: drone to relief center
+      pulses[4].setAttribute('opacity', 0.8);
+      pulses[4].setAttribute('cx', 400 + (350-400)*phase);
+      pulses[4].setAttribute('cy', 200 + (440-200)*phase);
+    }
+    // Animate rain lines
+    const rain = svg.getElementById('rain');
+    if (rain) {
+      let rainLines = rain.querySelectorAll('line');
+      for (let i = 0; i < rainLines.length; ++i) {
+        let y1 = parseFloat(rainLines[i].getAttribute('y1')) + (t%30);
+        let y2 = parseFloat(rainLines[i].getAttribute('y2')) + (t%30);
+        if (y1 > 140) { y1 -= 100; y2 -= 100; }
+        rainLines[i].setAttribute('y1', y1);
+        rainLines[i].setAttribute('y2', y2);
+      }
+    }
+    if (t < 300) requestAnimationFrame(animate);
+  }
+  animate();
 }
 
 function animateChemicalNeutralization(cmd) {
@@ -1143,50 +1996,524 @@ function animateDroneSurveillance(cmd) {
 }
 
 function animateWaterPurification(cmd) {
+  // Professional, continuous simulation: looping villagers, constant water flow, animated background, subtle status badge
   liveFeed.innerHTML = `
-    <svg width="700" height="480" viewBox="0 0 700 480">
+    <svg id="waterPurifySVG" width="700" height="480" viewBox="0 0 700 480">
+      <!-- Sky and animated clouds -->
       <rect width="700" height="480" fill="#b8c1ec"/>
-      <ellipse cx="350" cy="420" rx="200" ry="20" fill="#0ff" opacity="0.2"/>
-      <rect x="300" y="340" width="100" height="60" fill="#fff" stroke="#232946" stroke-width="3" rx="12"/>
-      <rect id="dirty" x="320" y="360" width="20" height="20" fill="#eebbc3" rx="4"/>
-      <rect id="clean" x="360" y="360" width="20" height="20" fill="#7ec850" rx="4" opacity="0.2"/>
-      <text x="350" y="330" text-anchor="middle" fill="#232946" font-size="1.1em">Water purification in progress...</text>
+      <ellipse id="cloud1" cx="150" cy="80" rx="60" ry="25" fill="#fff" opacity="0.7"/>
+      <ellipse id="cloud2" cx="550" cy="60" rx="80" ry="30" fill="#fff" opacity="0.6"/>
+      <ellipse id="cloud3" cx="400" cy="100" rx="40" ry="18" fill="#fff" opacity="0.5"/>
+      <!-- Ocean and animated shoreline waves -->
+      <rect x="0" y="340" width="700" height="60" fill="#4fc3f7"/>
+      <ellipse id="wave1" cx="350" cy="370" rx="350" ry="30" fill="#29b6f6" opacity="0.7"/>
+      <ellipse id="wave2" cx="350" cy="390" rx="350" ry="20" fill="#0288d1" opacity="0.5"/>
+      <!-- Beach with debris -->
+      <rect x="0" y="400" width="700" height="80" fill="#ffe0b2"/>
+      <ellipse cx="200" cy="440" rx="80" ry="18" fill="#ffd180" opacity="0.7"/>
+      <ellipse cx="500" cy="450" rx="100" ry="22" fill="#ffd180" opacity="0.6"/>
+      <ellipse cx="350" cy="445" rx="60" ry="15" fill="#ffcc80" opacity="0.5"/>
+      <!-- Damaged huts -->
+      <g id="huts">
+        <rect x="90" y="410" width="38" height="22" fill="#eebbc3" stroke="#b08d57" stroke-width="2" rx="6"/>
+        <polygon points="80,410 109,395 128,410" fill="#b08d57" stroke="#7a5c2e" stroke-width="2"/>
+        <rect x="160" y="420" width="32" height="18" fill="#eebbc3" stroke="#b08d57" stroke-width="2" rx="5"/>
+        <polygon points="150,420 176,408 192,420" fill="#b08d57" stroke="#7a5c2e" stroke-width="2"/>
+        <rect x="600" y="420" width="36" height="18" fill="#eebbc3" stroke="#b08d57" stroke-width="2" rx="5"/>
+        <polygon points="590,420 618,410 636,420" fill="#b08d57" stroke="#7a5c2e" stroke-width="2"/>
+      </g>
+      <!-- Palm trees (swaying) -->
+      <g id="palms">
+        <g id="palm1">
+          <rect x="120" y="400" width="8" height="32" fill="#8d6748"/>
+          <ellipse cx="124" cy="400" rx="18" ry="8" fill="#3fa34d"/>
+          <ellipse cx="124" cy="395" rx="14" ry="6" fill="#3fa34d"/>
+        </g>
+        <g id="palm2">
+          <rect x="650" y="410" width="7" height="25" fill="#8d6748"/>
+          <ellipse cx="654" cy="410" rx="14" ry="6" fill="#3fa34d"/>
+        </g>
+      </g>
+      <!-- Debris -->
+      <g id="debris">
+        <rect x="180" y="445" width="18" height="6" fill="#b08d57" rx="2"/>
+        <ellipse cx="300" cy="455" rx="10" ry="3" fill="#b08d57"/>
+        <rect x="500" y="455" width="16" height="5" fill="#b08d57" rx="2"/>
+      </g>
+      <!-- Relief tent -->
+      <g id="reliefTent">
+        <polygon points="350,410 370,380 390,410" fill="#b8c1ec" stroke="#232946" stroke-width="3"/>
+        <rect x="360" y="410" width="20" height="18" fill="#fff" rx="4"/>
+        <text x="370" y="425" text-anchor="middle" fill="#232946" font-size="0.8em" font-weight="bold">WATER RELIEF</text>
+      </g>
+      <!-- Water purification units (3 units) -->
+      <g id="units">
+        <g id="unit1">
+          <rect x="220" y="420" width="32" height="28" fill="#fff" stroke="#232946" stroke-width="2" rx="6"/>
+          <rect x="228" y="448" width="16" height="8" fill="#b8c1ec" rx="2"/>
+          <rect x="232" y="428" width="8" height="12" fill="#7ec850" rx="2"/>
+          <rect x="236" y="420" width="4" height="-10" fill="#ff9800" rx="1"/>
+          <rect x="224" y="416" width="24" height="4" fill="#eebbc3" rx="2"/>
+          <rect x="230" y="410" width="12" height="6" fill="#ffe082" rx="2"/>
+          <rect x="234" y="406" width="4" height="4" fill="#b8c1ec" rx="1"/>
+        </g>
+        <g id="unit2">
+          <rect x="320" y="420" width="32" height="28" fill="#fff" stroke="#232946" stroke-width="2" rx="6"/>
+          <rect x="328" y="448" width="16" height="8" fill="#b8c1ec" rx="2"/>
+          <rect x="332" y="428" width="8" height="12" fill="#7ec850" rx="2"/>
+          <rect x="336" y="420" width="4" height="-10" fill="#ff9800" rx="1"/>
+          <rect x="324" y="416" width="24" height="4" fill="#eebbc3" rx="2"/>
+          <rect x="330" y="410" width="12" height="6" fill="#ffe082" rx="2"/>
+          <rect x="334" y="406" width="4" height="4" fill="#b8c1ec" rx="1"/>
+        </g>
+        <g id="unit3">
+          <rect x="420" y="420" width="32" height="28" fill="#fff" stroke="#232946" stroke-width="2" rx="6"/>
+          <rect x="428" y="448" width="16" height="8" fill="#b8c1ec" rx="2"/>
+          <rect x="432" y="428" width="8" height="12" fill="#7ec850" rx="2"/>
+          <rect x="436" y="420" width="4" height="-10" fill="#ff9800" rx="1"/>
+          <rect x="424" y="416" width="24" height="4" fill="#eebbc3" rx="2"/>
+          <rect x="430" y="410" width="12" height="6" fill="#ffe082" rx="2"/>
+          <rect x="434" y="406" width="4" height="4" fill="#b8c1ec" rx="1"/>
+        </g>
+      </g>
+      <!-- Pipes from units to dirty water -->
+      <g id="pipes">
+        <rect id="pipe1" x="236" y="448" width="4" height="20" fill="#b8c1ec" rx="2"/>
+        <rect id="pipe2" x="336" y="448" width="4" height="20" fill="#b8c1ec" rx="2"/>
+        <rect id="pipe3" x="436" y="448" width="4" height="20" fill="#b8c1ec" rx="2"/>
+      </g>
+      <!-- Water flow (animated) -->
+      <g id="waterFlow">
+        <rect id="dirtyFlow1" x="236" y="468" width="4" height="20" fill="#29b6f6" opacity="0.5" rx="2"/>
+        <rect id="dirtyFlow2" x="336" y="468" width="4" height="20" fill="#29b6f6" opacity="0.5" rx="2"/>
+        <rect id="dirtyFlow3" x="436" y="468" width="4" height="20" fill="#29b6f6" opacity="0.5" rx="2"/>
+        <rect id="cleanTank1" x="232" y="428" width="8" height="12" fill="#7ec850" opacity="0.7" rx="2"/>
+        <rect id="cleanTank2" x="332" y="428" width="8" height="12" fill="#7ec850" opacity="0.7" rx="2"/>
+        <rect id="cleanTank3" x="432" y="428" width="8" height="12" fill="#7ec850" opacity="0.7" rx="2"/>
+      </g>
+      <!-- Villagers (looping queue) -->
+      <g id="villagers">
+        <g id="villager1">
+          <circle cx="250" cy="470" r="8" fill="#ffe0b2"/>
+          <rect x="246" y="478" width="8" height="14" fill="#eebbc3" rx="2"/>
+          <rect x="248" y="490" width="4" height="8" fill="#b8c1ec" rx="1"/>
+        </g>
+        <g id="villager2">
+          <circle cx="350" cy="470" r="8" fill="#ffe0b2"/>
+          <rect x="346" y="478" width="8" height="14" fill="#eebbc3" rx="2"/>
+          <rect x="348" y="490" width="4" height="8" fill="#b8c1ec" rx="1"/>
+        </g>
+        <g id="villager3">
+          <circle cx="450" cy="470" r="8" fill="#ffe0b2"/>
+          <rect x="446" y="478" width="8" height="14" fill="#eebbc3" rx="2"/>
+          <rect x="448" y="490" width="4" height="8" fill="#b8c1ec" rx="1"/>
+        </g>
+      </g>
+      <!-- Animated water droplet icon for professional touch -->
+      <g id="droplet">
+        <ellipse cx="670" cy="60" rx="12" ry="18" fill="#4fc3f7"/>
+        <ellipse cx="670" cy="75" rx="8" ry="5" fill="#b8c1ec" opacity="0.7"/>
+      </g>
+      <text x="350" y="60" text-anchor="middle" fill="#232946" font-size="1.2em" font-weight="bold">Deploying Water Purification Units - Coastal Villages</text>
+      <text x="350" y="90" text-anchor="middle" fill="#393e6a" font-size="1em">Tsunami-affected area - Clean water relief in progress</text>
     </svg>
+    <div id="statusBadge" style="position:absolute;top:18px;left:18px;background:rgba(35,41,70,0.55);color:#fff;font-size:1.5em;padding:6px 12px;border-radius:50px;box-shadow:0 2px 8px rgba(35,41,70,0.08);z-index:2;pointer-events:none;user-select:none;">
+      💧
+    </div>
   `;
-  // Animate dirty water turning clean
-  let cleanOp = 0.2;
-  const clean = liveFeed.querySelector('#clean');
+
+  // Animation logic
+  const svg = document.getElementById('waterPurifySVG');
+  // Background elements
+  const cloud1 = svg.getElementById('cloud1');
+  const cloud2 = svg.getElementById('cloud2');
+  const cloud3 = svg.getElementById('cloud3');
+  const wave1 = svg.getElementById('wave1');
+  const wave2 = svg.getElementById('wave2');
+  const palm1 = svg.getElementById('palm1');
+  const palm2 = svg.getElementById('palm2');
+  // Water flow
+  const dirtyFlows = [svg.getElementById('dirtyFlow1'), svg.getElementById('dirtyFlow2'), svg.getElementById('dirtyFlow3')];
+  // Villagers
+  const villagers = [svg.getElementById('villager1'), svg.getElementById('villager2'), svg.getElementById('villager3')];
+
+  // Villager queue state
+  let villagerQueue = [
+    {x: 250, y: 520, phase: 0, t: 0}, // walking in
+    {x: 350, y: 540, phase: 0, t: 20},
+    {x: 450, y: 560, phase: 0, t: 40}
+  ];
+  // Each villager: phase 0 = walking in, 1 = collecting, 2 = walking out
+  const queueStartY = 520, queueEndY = 470, exitY = 400;
+  const queueX = [250, 350, 450];
+
+  let t = 0;
   function animate() {
-    if (cleanOp < 1) {
-      cleanOp += 0.02;
-      clean.setAttribute('opacity', cleanOp);
-      requestAnimationFrame(animate);
+    t++;
+    // Animate clouds drifting
+    cloud1.setAttribute('cx', 150 + 30 * Math.sin(t/180));
+    cloud2.setAttribute('cx', 550 + 40 * Math.cos(t/220));
+    cloud3.setAttribute('cx', 400 + 20 * Math.sin(t/140));
+    // Animate ocean waves
+    wave1.setAttribute('rx', 350 + 10 * Math.sin(t/30));
+    wave2.setAttribute('rx', 350 + 8 * Math.cos(t/40));
+    // Animate palm trees swaying
+    palm1.setAttribute('transform', `rotate(${4*Math.sin(t/60)},124,432)`);
+    palm2.setAttribute('transform', `rotate(${-3*Math.cos(t/70)},654,435)`);
+    // Animate water flow (gentle pulsing)
+    for (let i = 0; i < 3; ++i) {
+      let pulse = 20 + 2 * Math.sin(t/20 + i*2);
+      dirtyFlows[i].setAttribute('height', pulse);
     }
+    // Animate villagers in a continuous loop
+    for (let i = 0; i < villagerQueue.length; ++i) {
+      let v = villagerQueue[i];
+      v.t++;
+      if (v.phase === 0) { // walking in
+        v.y -= 2;
+        if (v.y <= queueEndY + i*10) {
+          v.y = queueEndY + i*10;
+          v.phase = 1;
+          v.t = 0;
+        }
+      } else if (v.phase === 1) { // collecting water
+        if (v.t > 40 + i*10) {
+          v.phase = 2;
+          v.t = 0;
+        }
+      } else if (v.phase === 2) { // walking out
+        v.y -= 2.5;
+        if (v.y < exitY) {
+          // Reset to start, new villager
+          v.y = queueStartY + Math.random()*30;
+          v.phase = 0;
+          v.t = 0;
+        }
+      }
+      villagers[i].setAttribute('transform', `translate(0,${v.y-470})`);
+    }
+    requestAnimationFrame(animate);
   }
   animate();
 }
 
 function animateBridgeInspection(cmd) {
+  // Enhanced bridge inspection with damaged Adyar bridge, traffic jam, and detailed ultrasonic testing
   liveFeed.innerHTML = `
     <svg width="700" height="480" viewBox="0 0 700 480">
+      <!-- Sky with clouds -->
       <rect width="700" height="480" fill="#b8c1ec"/>
-      <rect x="200" y="320" width="300" height="30" fill="#888" rx="8"/>
-      <g id="drone">
-        <ellipse cx="250" cy="300" rx="18" ry="8" fill="#232946"/>
-        <rect x="232" y="290" width="36" height="16" fill="#b8c1ec" rx="6"/>
-        <rect x="242" y="280" width="16" height="8" fill="#eebbc3" rx="3"/>
+      <ellipse cx="150" cy="80" rx="60" ry="25" fill="#fff" opacity="0.7"/>
+      <ellipse cx="550" cy="60" rx="80" ry="30" fill="#fff" opacity="0.6"/>
+      <ellipse cx="400" cy="100" rx="40" ry="18" fill="#fff" opacity="0.5"/>
+      
+      <!-- Adyar River -->
+      <ellipse cx="350" cy="450" rx="320" ry="25" fill="#4fc3f7" opacity="0.8"/>
+      <ellipse cx="350" cy="450" rx="280" ry="20" fill="#29b6f6" opacity="0.6"/>
+      <ellipse cx="350" cy="450" rx="240" ry="15" fill="#0288d1" opacity="0.4"/>
+      
+      <!-- River banks -->
+      <ellipse cx="200" cy="440" rx="80" ry="15" fill="#8bc34a" opacity="0.7"/>
+      <ellipse cx="500" cy="440" rx="80" ry="15" fill="#8bc34a" opacity="0.7"/>
+      
+      <!-- Damaged Adyar Bridge with realistic damage -->
+      <g id="bridge">
+        <!-- Main bridge deck with visible damage -->
+        <rect x="120" y="280" width="460" height="40" fill="#e0e0e0" stroke="#232946" stroke-width="4" rx="8"/>
+        <rect x="120" y="290" width="460" height="20" fill="#bdbdbd" stroke="#232946" stroke-width="2" rx="4"/>
+        
+        <!-- Bridge supports/pillars -->
+        <rect x="200" y="320" width="20" height="80" fill="#888" stroke="#232946" stroke-width="2" rx="4"/>
+        <rect x="350" y="320" width="20" height="80" fill="#888" stroke="#232946" stroke-width="2" rx="4"/>
+        <rect x="480" y="320" width="20" height="80" fill="#888" stroke="#232946" stroke-width="2" rx="4"/>
+        
+        <!-- Visible damage areas -->
+        <rect x="280" y="285" width="40" height="10" fill="#e63946" opacity="0.8" rx="2"/>
+        <rect x="380" y="290" width="30" height="8" fill="#ff9800" opacity="0.7" rx="2"/>
+        <rect x="420" y="288" width="25" height="12" fill="#e63946" opacity="0.8" rx="2"/>
+        
+        <!-- Cracks in bridge surface -->
+        <path d="M 290 295 Q 300 290 310 295" stroke="#232946" stroke-width="2" fill="none"/>
+        <path d="M 390 295 Q 400 290 410 295" stroke="#232946" stroke-width="2" fill="none"/>
+        <path d="M 430 295 Q 440 290 450 295" stroke="#232946" stroke-width="2" fill="none"/>
+        
+        <!-- Bridge railings -->
+        <rect x="120" y="275" width="460" height="8" fill="#b8c1ec" stroke="#232946" stroke-width="2" rx="2"/>
+        <rect x="120" y="325" width="460" height="8" fill="#b8c1ec" stroke="#232946" stroke-width="2" rx="2"/>
+        
+        <!-- Warning signs and barriers -->
+        <rect x="110" y="270" width="20" height="50" fill="#ff0" stroke="#232946" stroke-width="2" rx="3"/>
+        <rect x="110" y="270" width="20" height="50" fill="url(#warningStripes)"/>
+        <rect x="570" y="270" width="20" height="50" fill="#ff0" stroke="#232946" stroke-width="2" rx="3"/>
+        <rect x="570" y="270" width="20" height="50" fill="url(#warningStripes)"/>
+        
+        <defs>
+          <pattern id="warningStripes" width="8" height="50" patternUnits="userSpaceOnUse">
+            <rect x="0" y="0" width="4" height="50" fill="#232946"/>
+            <rect x="4" y="0" width="4" height="50" fill="#ff0"/>
+          </pattern>
+        </defs>
       </g>
-      <rect id="scan" x="220" y="320" width="20" height="30" fill="#0ff" opacity="0.5"/>
-      <text x="350" y="270" text-anchor="middle" fill="#232946" font-size="1.1em">Bridge inspection with sensors...</text>
+      
+      <!-- Traffic jam on both sides of the bridge -->
+      <g id="trafficJam">
+        <!-- Vehicles on left side (waiting) -->
+        <g id="leftTraffic">
+          <g class="car" transform="translate(-80,0)">
+            <rect x="50" y="290" width="25" height="12" fill="#e63946" stroke="#232946" stroke-width="1" rx="3"/>
+            <circle cx="58" cy="302" r="3" fill="#232946"/>
+            <circle cx="67" cy="302" r="3" fill="#232946"/>
+            <rect x="54" y="292" width="17" height="6" fill="#fff" rx="1"/>
+          </g>
+          <g class="car" transform="translate(-120,0)">
+            <rect x="50" y="290" width="25" height="12" fill="#4caf50" stroke="#232946" stroke-width="1" rx="3"/>
+            <circle cx="58" cy="302" r="3" fill="#232946"/>
+            <circle cx="67" cy="302" r="3" fill="#232946"/>
+            <rect x="54" y="292" width="17" height="6" fill="#fff" rx="1"/>
+          </g>
+          <g class="car" transform="translate(-160,0)">
+            <rect x="50" y="290" width="25" height="12" fill="#2196f3" stroke="#232946" stroke-width="1" rx="3"/>
+            <circle cx="58" cy="302" r="3" fill="#232946"/>
+            <circle cx="67" cy="302" r="3" fill="#232946"/>
+            <rect x="54" y="292" width="17" height="6" fill="#fff" rx="1"/>
+          </g>
+          <g class="car" transform="translate(-200,0)">
+            <rect x="50" y="290" width="25" height="12" fill="#ff9800" stroke="#232946" stroke-width="1" rx="3"/>
+            <circle cx="58" cy="302" r="3" fill="#232946"/>
+            <circle cx="67" cy="302" r="3" fill="#232946"/>
+            <rect x="54" y="292" width="17" height="6" fill="#fff" rx="1"/>
+          </g>
+          <g class="car" transform="translate(-240,0)">
+            <rect x="50" y="290" width="25" height="12" fill="#9c27b0" stroke="#232946" stroke-width="1" rx="3"/>
+            <circle cx="58" cy="302" r="3" fill="#232946"/>
+            <circle cx="67" cy="302" r="3" fill="#232946"/>
+            <rect x="54" y="292" width="17" height="6" fill="#fff" rx="1"/>
+          </g>
+        </g>
+        
+        <!-- Vehicles on right side (waiting) -->
+        <g id="rightTraffic">
+          <g class="car" transform="translate(80,0)">
+            <rect x="625" y="290" width="25" height="12" fill="#e63946" stroke="#232946" stroke-width="1" rx="3"/>
+            <circle cx="633" cy="302" r="3" fill="#232946"/>
+            <circle cx="642" cy="302" r="3" fill="#232946"/>
+            <rect x="629" y="292" width="17" height="6" fill="#fff" rx="1"/>
+          </g>
+          <g class="car" transform="translate(120,0)">
+            <rect x="625" y="290" width="25" height="12" fill="#4caf50" stroke="#232946" stroke-width="1" rx="3"/>
+            <circle cx="633" cy="302" r="3" fill="#232946"/>
+            <circle cx="642" cy="302" r="3" fill="#232946"/>
+            <rect x="629" y="292" width="17" height="6" fill="#fff" rx="1"/>
+          </g>
+          <g class="car" transform="translate(160,0)">
+            <rect x="625" y="290" width="25" height="12" fill="#2196f3" stroke="#232946" stroke-width="1" rx="3"/>
+            <circle cx="633" cy="302" r="3" fill="#232946"/>
+            <circle cx="642" cy="302" r="3" fill="#232946"/>
+            <rect x="629" y="292" width="17" height="6" fill="#fff" rx="1"/>
+          </g>
+          <g class="car" transform="translate(200,0)">
+            <rect x="625" y="290" width="25" height="12" fill="#ff9800" stroke="#232946" stroke-width="1" rx="3"/>
+            <circle cx="633" cy="302" r="3" fill="#232946"/>
+            <circle cx="642" cy="302" r="3" fill="#232946"/>
+            <rect x="629" y="292" width="17" height="6" fill="#fff" rx="1"/>
+          </g>
+          <g class="car" transform="translate(240,0)">
+            <rect x="625" y="290" width="25" height="12" fill="#9c27b0" stroke="#232946" stroke-width="1" rx="3"/>
+            <circle cx="633" cy="302" r="3" fill="#232946"/>
+            <circle cx="642" cy="302" r="3" fill="#232946"/>
+            <rect x="629" y="292" width="17" height="6" fill="#fff" rx="1"/>
+          </g>
+        </g>
+      </g>
+      
+      <!-- Traffic control and emergency vehicles -->
+      <g id="emergencyVehicles">
+        <!-- Police car -->
+        <g id="policeCar">
+          <rect x="90" y="270" width="30" height="15" fill="#2196f3" stroke="#232946" stroke-width="2" rx="4"/>
+          <rect x="95" y="272" width="20" height="8" fill="#fff" rx="2"/>
+          <text x="105" y="278" text-anchor="middle" fill="#232946" font-size="0.6em" font-weight="bold">POLICE</text>
+          <circle cx="100" cy="285" r="4" fill="#232946"/>
+          <circle cx="110" cy="285" r="4" fill="#232946"/>
+          <!-- Emergency lights -->
+          <circle cx="95" cy="272" r="2" fill="#ff0"/>
+          <circle cx="115" cy="272" r="2" fill="#ff0"/>
+        </g>
+        
+        <!-- Ambulance -->
+        <g id="ambulance">
+          <rect x="580" y="270" width="30" height="15" fill="#fff" stroke="#232946" stroke-width="2" rx="4"/>
+          <rect x="585" y="272" width="20" height="8" fill="#e63946" rx="2"/>
+          <text x="595" y="278" text-anchor="middle" fill="#fff" font-size="0.6em" font-weight="bold">AMB</text>
+          <circle cx="590" cy="285" r="4" fill="#232946"/>
+          <circle cx="600" cy="285" r="4" fill="#232946"/>
+          <!-- Emergency lights -->
+          <circle cx="585" cy="272" r="2" fill="#e63946"/>
+          <circle cx="605" cy="272" r="2" fill="#e63946"/>
+        </g>
+      </g>
+      
+      <!-- Ultrasonic testing equipment and technicians -->
+      <g id="ultrasonicTesting">
+        <!-- Testing equipment cart -->
+        <g id="equipmentCart">
+          <rect x="300" y="250" width="40" height="25" fill="#232946" stroke="#393e6a" stroke-width="2" rx="4"/>
+          <rect x="305" y="255" width="30" height="15" fill="#fff" rx="2"/>
+          <rect x="310" y="260" width="20" height="5" fill="#0ff" rx="1"/>
+          <circle cx="310" cy="275" r="3" fill="#393e6a"/>
+          <circle cx="330" cy="275" r="3" fill="#393e6a"/>
+        </g>
+        
+        <!-- Ultrasonic probe being used -->
+        <g id="ultrasonicProbe">
+          <rect x="320" y="290" width="8" height="20" fill="#eebbc3" stroke="#232946" stroke-width="1" rx="2"/>
+          <circle cx="324" cy="290" r="4" fill="#0ff" opacity="0.8"/>
+          <circle cx="324" cy="290" r="6" fill="#0ff" opacity="0.4"/>
+          <circle cx="324" cy="290" r="8" fill="#0ff" opacity="0.2"/>
+        </g>
+        
+        <!-- Technician -->
+        <g id="technician">
+          <circle cx="340" cy="245" r="8" fill="#ffe0b2"/>
+          <rect x="335" y="245" width="10" height="18" fill="#3fa34d" rx="3"/>
+          <rect x="337" y="250" width="6" height="8" fill="#fff" rx="2"/>
+          <!-- Hard hat -->
+          <ellipse cx="340" cy="237" rx="8" ry="4" fill="#ff9800" rx="2"/>
+        </g>
+        
+        <!-- Testing display screen -->
+        <g id="displayScreen">
+          <rect x="280" y="200" width="80" height="40" fill="#232946" stroke="#393e6a" stroke-width="2" rx="4"/>
+          <rect x="285" y="205" width="70" height="30" fill="#0ff" opacity="0.3"/>
+          <!-- Waveform display -->
+          <path d="M 290 220 Q 300 210 310 220 Q 320 230 330 220 Q 340 210 350 220" stroke="#0ff" stroke-width="2" fill="none"/>
+          <text x="320" y="235" text-anchor="middle" fill="#fff" font-size="0.7em">ULTRASONIC</text>
+          <text x="320" y="245" text-anchor="middle" fill="#fff" font-size="0.6em">TESTING</text>
+        </g>
+      </g>
+      
+      <!-- Testing progress indicators -->
+      <g id="testingProgress">
+        <rect x="150" y="180" width="400" height="8" fill="#e0e0e0" rx="4"/>
+        <rect id="progressBar" x="150" y="180" width="0" height="8" fill="#4caf50" rx="4"/>
+        <text x="350" y="170" text-anchor="middle" fill="#232946" font-size="0.9em" font-weight="bold">ULTRASONIC TESTING PROGRESS</text>
+      </g>
+      
+      <!-- Status indicators -->
+      <text x="350" y="60" text-anchor="middle" fill="#232946" font-size="1.3em" font-weight="bold">🔍 ULTRASONIC BRIDGE INSPECTION - ADYAR BRIDGE</text>
+      <text x="350" y="80" text-anchor="middle" fill="#e63946" font-size="1.0em">Traffic halted - Structural integrity assessment in progress</text>
+      
+      <!-- Bridge name and location -->
+      <text x="350" y="470" text-anchor="middle" fill="#232946" font-size="0.9em" font-weight="bold">Adyar Bridge - Chennai</text>
     </svg>
+    <div style="position:absolute;top:30px;left:30px;color:#232946;font-size:1.1em;background:rgba(255,255,255,0.9);padding:10px;border-radius:8px;border:2px solid #e63946;">🚧 Ultrasonic testing in progress - Traffic halted for safety...</div>
   `;
-  // Animate scan bar moving across bridge
-  let scanX = 220;
-  const scan = liveFeed.querySelector('#scan');
+  
+  // Enhanced animation with realistic ultrasonic testing and traffic
+  const svg = liveFeed.querySelector('svg');
+  const ultrasonicProbe = svg.getElementById('ultrasonicProbe');
+  const progressBar = svg.getElementById('progressBar');
+  const leftTraffic = svg.getElementById('leftTraffic');
+  const rightTraffic = svg.getElementById('rightTraffic');
+  const policeCar = svg.getElementById('policeCar');
+  const ambulance = svg.getElementById('ambulance');
+  const displayScreen = svg.getElementById('displayScreen');
+  
+  let t = 0, probeX = 320, probeY = 290, progress = 0;
+  let trafficHorn = 0, emergencyLights = 0;
+  
   function animate() {
-    if (scanX < 480) {
-      scanX += 2;
-      scan.setAttribute('x', scanX);
+    t++;
+    
+    // Animate ultrasonic probe scanning across bridge
+    if (t < 60) {
+      // Phase 1: Move probe to starting position
+      probeX = 150 + (t / 60) * 50;
+      ultrasonicProbe.setAttribute('transform', `translate(${probeX-320},0)`);
+    } else if (t < 300) {
+      // Phase 2: Scan across bridge
+      let scanProgress = (t - 60) / 240;
+      probeX = 200 + scanProgress * 300;
+      ultrasonicProbe.setAttribute('transform', `translate(${probeX-320},0)`);
+      
+      // Update progress bar
+      progress = scanProgress;
+      progressBar.setAttribute('width', progress * 400);
+      
+      // Animate probe pulsing
+      let pulse = 1 + 0.2 * Math.abs(Math.sin(t/8));
+      ultrasonicProbe.setAttribute('transform', `translate(${probeX-320},0) scale(${pulse},1)`);
+      
+      // Animate waveform on display screen
+      let waveform = document.querySelector('#displayScreen path');
+      if (waveform) {
+        let waveData = [];
+        for (let i = 0; i < 10; i++) {
+          let x = 290 + i * 6;
+          let y = 220 + 10 * Math.sin(t/10 + i) * Math.random();
+          waveData.push(`${x} ${y}`);
+        }
+        waveform.setAttribute('d', `M ${waveData.join(' L ')}`);
+      }
+    } else if (t < 360) {
+      // Phase 3: Complete scan and show results
+      probeX = 500;
+      ultrasonicProbe.setAttribute('transform', `translate(${probeX-320},0)`);
+      progressBar.setAttribute('width', 400);
+      
+      // Show completion message
+      if (t === 301) {
+        const completionMsg = document.createElement('div');
+        completionMsg.style.cssText = 'position:absolute;top:120px;left:50%;transform:translateX(-50%);color:#4caf50;font-size:1.2em;font-weight:bold;background:rgba(255,255,255,0.95);padding:12px;border-radius:8px;border:3px solid #4caf50;';
+        completionMsg.textContent = '✅ ULTRASONIC TESTING COMPLETE - Bridge assessment finished!';
+        liveFeed.appendChild(completionMsg);
+      }
+    } else if (t < 420) {
+      // Phase 4: Traffic begins to move
+      let trafficProgress = (t - 360) / 60;
+      
+      // Move left traffic forward
+      leftTraffic.setAttribute('transform', `translate(${-80 + trafficProgress * 100},0)`);
+      
+      // Move right traffic forward
+      rightTraffic.setAttribute('transform', `translate(${80 - trafficProgress * 100},0)`);
+      
+      // Emergency vehicles move away
+      policeCar.setAttribute('transform', `translate(${-50 - trafficProgress * 30},0)`);
+      ambulance.setAttribute('transform', `translate(${50 + trafficProgress * 30},0)`);
+      
+      if (t === 361) {
+        const trafficMsg = document.createElement('div');
+        trafficMsg.style.cssText = 'position:absolute;top:180px;left:50%;transform:translateX(-50%);color:#2196f3;font-size:1.1em;font-weight:bold;background:rgba(255,255,255,0.95);padding:10px;border-radius:6px;border:2px solid #2196f3;';
+        trafficMsg.textContent = '🚗 TRAFFIC RESUMING - Bridge cleared for safe passage';
+        liveFeed.appendChild(trafficMsg);
+      }
+    }
+    
+    // Animate emergency vehicle lights
+    emergencyLights = Math.abs(Math.sin(t/6));
+    let emergencyColor = emergencyLights > 0.5 ? '#ff0' : '#fff';
+    document.querySelectorAll('#policeCar circle:first-child, #policeCar circle:nth-child(2)').forEach(light => {
+      light.setAttribute('fill', emergencyColor);
+    });
+    document.querySelectorAll('#ambulance circle:first-child, #ambulance circle:nth-child(2)').forEach(light => {
+      light.setAttribute('fill', emergencyLights > 0.5 ? '#e63946' : '#fff');
+    });
+    
+    // Animate traffic horn sounds (visual indicator)
+    if (t < 300) {
+      trafficHorn = Math.random() > 0.95 ? 1 : 0;
+      if (trafficHorn) {
+        // Visual horn indicator
+        let hornIndicator = document.createElement('div');
+        hornIndicator.style.cssText = 'position:absolute;top:200px;left:50%;transform:translateX(-50%);color:#ff9800;font-size:1.5em;animation:fadeOut 1s;';
+        hornIndicator.textContent = '🔊';
+        liveFeed.appendChild(hornIndicator);
+        setTimeout(() => hornIndicator.remove(), 1000);
+      }
+    }
+    
+    if (t < 420) {
       requestAnimationFrame(animate);
     }
   }
@@ -1196,85 +2523,333 @@ function animateBridgeInspection(cmd) {
 function animateAnimalRescue(cmd) {
   liveFeed.innerHTML = `
     <svg width="700" height="480" viewBox="0 0 700 480">
-      <rect width="700" height="480" fill="#7ec850"/>
-      <ellipse cx="350" cy="420" rx="200" ry="20" fill="#b8c1ec" opacity="0.2"/>
-      <g id="animal">
-        <ellipse cx="300" cy="400" rx="18" ry="10" fill="#eebbc3"/>
-        <ellipse cx="400" cy="400" rx="18" ry="10" fill="#eebbc3"/>
+      <!-- Cloudy sky and rain -->
+      <rect width="700" height="480" fill="#b8c1ec"/>
+      <ellipse cx="200" cy="80" rx="80" ry="30" fill="#fff" opacity="0.7"/>
+      <ellipse cx="500" cy="60" rx="100" ry="35" fill="#fff" opacity="0.6"/>
+      <ellipse cx="350" cy="100" rx="60" ry="22" fill="#fff" opacity="0.5"/>
+      <g id="rain">
+        <line x1="180" y1="110" x2="180" y2="150" stroke="#7ec8e3" stroke-width="2" opacity="0.5"/>
+        <line x1="220" y1="90" x2="220" y2="140" stroke="#7ec8e3" stroke-width="2" opacity="0.5"/>
+        <line x1="520" y1="90" x2="520" y2="140" stroke="#7ec8e3" stroke-width="2" opacity="0.5"/>
+        <line x1="350" y1="120" x2="350" y2="170" stroke="#7ec8e3" stroke-width="2" opacity="0.5"/>
+        <line x1="400" y1="80" x2="400" y2="130" stroke="#7ec8e3" stroke-width="2" opacity="0.5"/>
       </g>
-      <g id="rescuer">
-        <rect x="340" y="370" width="20" height="30" fill="#232946" rx="6"/>
-        <circle cx="350" cy="370" r="10" fill="#b8c1ec"/>
+      <!-- Simplified flood water coverage -->
+      <ellipse cx="350" cy="420" rx="320" ry="55" fill="#b8c1ec" opacity="0.92"/>
+      <ellipse cx="350" cy="370" rx="250" ry="35" fill="#b8c1ec" opacity="0.7"/>
+      <!-- Subtle water line -->
+      <rect x="0" y="400" width="700" height="12" fill="#b8c1ec" opacity="0.5"/>
+      <!-- Subtle water ripples -->
+      <ellipse id="ripple1" cx="220" cy="410" rx="28" ry="7" fill="#fff" opacity="0.13"/>
+      <ellipse id="ripple2" cx="520" cy="430" rx="32" ry="8" fill="#fff" opacity="0.10"/>
+      <!-- Fewer, spaced trees (some submerged) -->
+      <g id="trees">
+        <g><rect x="140" y="380" width="10" height="22" fill="#6b4f1d"/><ellipse cx="145" cy="380" rx="16" ry="10" fill="#3fa34d"/></g>
+        <g><rect x="600" y="410" width="8" height="12" fill="#6b4f1d"/><ellipse cx="604" cy="410" rx="12" ry="7" fill="#3fa34d"/></g>
+        <g><rect x="255" y="390" width="8" height="14" fill="#6b4f1d"/><ellipse cx="259" cy="390" rx="10" ry="6" fill="#3fa34d"/></g>
+        <g><rect x="425" y="395" width="8" height="13" fill="#6b4f1d"/><ellipse cx="429" cy="395" rx="10" ry="6" fill="#3fa34d"/></g>
       </g>
-      <text x="350" y="360" text-anchor="middle" fill="#232946" font-size="1.1em">Animal rescue in progress...</text>
+      <!-- Birds -->
+      <g id="birds">
+        <path d="M160,120 Q165,115 170,120" stroke="#232946" stroke-width="2" fill="none"/>
+        <path d="M540,100 Q545,95 550,100" stroke="#232946" stroke-width="2" fill="none"/>
+      </g>
+      <!-- Stranded deer on a log -->
+      <g id="deer">
+        <rect x="210" y="418" width="36" height="8" fill="#b08d57" rx="4"/>
+        <ellipse cx="228" cy="410" rx="13" ry="8" fill="#eebbc3"/>
+        <ellipse cx="238" cy="410" rx="7" ry="5" fill="#eebbc3"/>
+        <ellipse cx="242" cy="406" rx="2.5" ry="2" fill="#232946"/>
+        <rect x="240" y="400" width="2" height="8" fill="#b08d57" rx="1"/>
+        <rect x="220" y="400" width="2" height="8" fill="#b08d57" rx="1"/>
+        <!-- Antlers -->
+        <path d="M235,400 Q233,395 230,398" stroke="#b08d57" stroke-width="2" fill="none"/>
+        <path d="M241,400 Q243,395 246,398" stroke="#b08d57" stroke-width="2" fill="none"/>
+      </g>
+      <!-- Stranded elephant on a patch -->
+      <g id="elephant">
+        <ellipse cx="520" cy="430" rx="18" ry="12" fill="#b8c1ec"/>
+        <ellipse cx="530" cy="435" rx="10" ry="7" fill="#b8c1ec"/>
+        <ellipse cx="535" cy="440" rx="4" ry="2.5" fill="#b8c1ec"/>
+        <!-- Trunk -->
+        <path d="M540,440 Q545,445 540,450" stroke="#888" stroke-width="3" fill="none"/>
+        <!-- Tusks -->
+        <path d="M538,440 Q540,443 542,440" stroke="#fff" stroke-width="1" fill="none"/>
+        <path d="M537,438 Q539,441 541,438" stroke="#fff" stroke-width="1" fill="none"/>
+        <!-- Eye -->
+        <ellipse cx="534" cy="435" rx="1.2" ry="1" fill="#232946"/>
+      </g>
+      <!-- Small land/log patches -->
+      <ellipse cx="228" cy="420" rx="18" ry="6" fill="#b08d57" opacity="0.7"/>
+      <ellipse cx="520" cy="440" rx="20" ry="7" fill="#b08d57" opacity="0.7"/>
+      <!-- Rescue raft with two rescuers, rope ramp -->
+      <g id="boat" transform="translate(100,470)">
+        <ellipse cx="0" cy="0" rx="32" ry="12" fill="#393e6a"/>
+        <ellipse cx="0" cy="2" rx="30" ry="10" fill="#b8c1ec" opacity="0.7"/>
+        <!-- Rope ramp -->
+        <rect id="rope" x="-2" y="10" width="4" height="18" fill="#b08d57" rx="1.5"/>
+        <!-- Rescuer 1 (rowing) -->
+        <circle cx="-10" cy="-8" r="7" fill="#fff"/>
+        <rect x="-14" y="-8" width="8" height="14" fill="#e63946" rx="2"/>
+        <rect x="-20" y="-2" width="16" height="3" fill="#b08d57" rx="1"/>
+        <!-- Rescuer 2 (helping) -->
+        <circle cx="10" cy="-8" r="7" fill="#fff"/>
+        <rect x="6" y="-8" width="8" height="14" fill="#3fa34d" rx="2"/>
+        <!-- Forest dept logo -->
+        <ellipse cx="0" cy="0" rx="7" ry="7" fill="#fff"/>
+        <text x="0" y="4" text-anchor="middle" fill="#232946" font-size="0.7em">FD</text>
+      </g>
+      <!-- Forest department jeep/logo -->
+      <g id="jeep">
+        <rect x="600" y="390" width="40" height="18" fill="#3fa34d" rx="5"/>
+        <circle cx="610" cy="410" r="6" fill="#232946"/>
+        <circle cx="630" cy="410" r="6" fill="#232946"/>
+        <rect x="610" y="390" width="20" height="10" fill="#fff" rx="2"/>
+        <text x="620" y="400" text-anchor="middle" fill="#232946" font-size="0.7em">FD</text>
+      </g>
+      <!-- Smaller, less obtrusive flooded sign -->
+      <g id="floodSign">
+        <rect x="540" y="445" width="60" height="18" fill="#fff" stroke="#232946" stroke-width="1" rx="5" opacity="0.7"/>
+        <text x="570" y="458" text-anchor="middle" fill="#232946" font-size="0.8em" font-weight="bold">FLOODED</text>
+      </g>
+      <text x="350" y="60" text-anchor="middle" fill="#232946" font-size="1.2em">Wildlife rescue in flooded Mudumalai reserve</text>
     </svg>
   `;
-  // Animate animals moving to rescuer
-  let ax = 0;
-  const animal = liveFeed.querySelector('#animal');
+  // Animate boat moving to animals, animals being rescued, ripples, and rain
+  const svg = liveFeed.querySelector('svg');
+  const boat = svg.getElementById('boat');
+  const deer = svg.getElementById('deer');
+  const elephant = svg.getElementById('elephant');
+  const ripple1 = svg.getElementById('ripple1');
+  const ripple2 = svg.getElementById('ripple2');
+  const rope = svg.getElementById('rope');
+  const rain = svg.getElementById('rain');
+  let bx = 100, by = 470, t = 0, rescued = false, deerRescued = false, elephantRescued = false;
+  let rainOffset = 0;
   function animate() {
-    if (ax < 40) {
-      ax += 1.2;
-      animal.setAttribute('transform', `translate(${ax},0)`);
-      requestAnimationFrame(animate);
+    t++;
+    // Animate rain (move lines down, loop)
+    rainOffset = (rainOffset + 2) % 60;
+    let rainLines = rain.querySelectorAll('line');
+    rainLines.forEach((line, i) => {
+      let origY1 = [110,90,90,120,80][i];
+      let origY2 = [150,140,140,170,130][i];
+      let y1 = origY1 + rainOffset;
+      let y2 = origY2 + rainOffset;
+      if (y1 > 200) { y1 -= 100; y2 -= 100; }
+      line.setAttribute('y1', y1);
+      line.setAttribute('y2', y2);
+    });
+    // Animate water ripples
+    let ripplePulse = 1 + 0.08 * Math.sin(t/10);
+    ripple1.setAttribute('rx', 28 * ripplePulse);
+    ripple1.setAttribute('opacity', 0.13 + 0.06 * Math.abs(Math.sin(t/12)));
+    ripple2.setAttribute('rx', 32 * (1 + 0.06 * Math.cos(t/13)));
+    ripple2.setAttribute('opacity', 0.10 + 0.05 * Math.abs(Math.cos(t/15)));
+    // Move boat toward deer first, then elephant
+    if (!deerRescued && bx < 228 && by > 410) {
+      bx += 2.2; by -= 1.2;
+    } else if (!deerRescued) {
+      deerRescued = true;
     }
+    if (deerRescued && !elephantRescued && bx < 520 && by < 430) {
+      bx += 2.2; by += 0.5;
+    } else if (deerRescued && !elephantRescued) {
+      elephantRescued = true;
+    }
+    // Animate rope ramp lowering when boat reaches animal
+    if (!rescued && deerRescued && Math.abs(bx-228)<5 && Math.abs(by-410)<5) {
+      rope.setAttribute('y', 10);
+      rope.setAttribute('height', 18);
+    } else if (!rescued) {
+      rope.setAttribute('y', 10);
+      rope.setAttribute('height', 4);
+    }
+    // Animate deer being rescued (move onto boat)
+    if (deerRescued && !rescued) {
+      let dx = bx - 228, dy = by - 410;
+      deer.setAttribute('transform', `translate(${dx},${dy})`);
+      if (Math.abs(dx) < 5 && Math.abs(dy) < 5) rescued = true;
+    }
+    // Animate elephant being rescued (move onto boat)
+    if (elephantRescued && rescued) {
+      let ex = bx - 520, ey = by - 430;
+      elephant.setAttribute('transform', `translate(${ex},${ey})`);
+    }
+    boat.setAttribute('transform', `translate(${bx},${by})`);
+    requestAnimationFrame(animate);
   }
   animate();
 }
 
+// --- Radiation Monitoring (simplified) ---
 function animateRadiationMonitoring(cmd) {
   liveFeed.innerHTML = `
     <svg width="700" height="480" viewBox="0 0 700 480">
       <rect width="700" height="480" fill="#232946"/>
-      <rect x="300" y="340" width="100" height="60" fill="#b8c1ec" rx="12"/>
-      <circle id="meter" cx="350" cy="370" r="20" fill="#fff" stroke="#eebbc3" stroke-width="4"/>
-      <rect x="340" y="390" width="20" height="10" fill="#eebbc3" rx="3"/>
-      <text x="350" y="330" text-anchor="middle" fill="#fff" font-size="1.1em">Radiation monitoring...</text>
+      <!-- Nuclear Plant -->
+      <g id="nuclearPlant">
+        <ellipse cx="350" cy="370" rx="50" ry="22" fill="#b8c1ec" stroke="#232946" stroke-width="4"/>
+        <rect x="320" y="320" width="60" height="50" fill="#fff" stroke="#393e6a" stroke-width="3" rx="14"/>
+        <ellipse cx="335" cy="320" rx="10" ry="15" fill="#b8c1ec" stroke="#393e6a" stroke-width="2"/>
+        <ellipse cx="365" cy="320" rx="10" ry="15" fill="#b8c1ec" stroke="#393e6a" stroke-width="2"/>
+        <g id="radiationSymbol">
+          <circle cx="350" cy="340" r="8" fill="#ff0" stroke="#232946" stroke-width="2"/>
+          <path d="M350,340 l0,-6 a6,6 0 0,1 6,6 z" fill="#e63946"/>
+          <path d="M350,340 l5,4 a6,6 0 0,1 -5,6 z" fill="#e63946"/>
+          <path d="M350,340 l-5,4 a6,6 0 0,0 5,6 z" fill="#e63946"/>
+        </g>
+      </g>
+      <!-- Single animated radiation wave -->
+      <ellipse id="wave1" cx="350" cy="340" rx="30" ry="12" fill="#ff0" opacity="0.18"/>
+      <!-- 3 perimeter sensors -->
+      <g id="sensors">
+        <g id="sensor1">
+          <circle cx="290" cy="400" r="10" fill="#fff" stroke="#0ff" stroke-width="3"/>
+        </g>
+        <g id="sensor2">
+          <circle cx="350" cy="410" r="10" fill="#fff" stroke="#0ff" stroke-width="3"/>
+        </g>
+        <g id="sensor3">
+          <circle cx="410" cy="400" r="10" fill="#fff" stroke="#0ff" stroke-width="3"/>
+        </g>
+      </g>
+      <!-- Monitoring station -->
+      <g id="monitorStation">
+        <rect x="540" y="340" width="60" height="40" fill="#fff" stroke="#393e6a" stroke-width="3" rx="10"/>
+        <circle id="meter" cx="570" cy="360" r="10" fill="#ff0" stroke="#232946" stroke-width="2"/>
+        <rect id="scanBar" x="565" y="350" width="10" height="4" fill="#0ff" opacity="0.7" rx="2"/>
+        <text x="570" y="375" text-anchor="middle" fill="#232946" font-size="0.8em">μSv</text>
+      </g>
+      <text x="350" y="60" text-anchor="middle" fill="#fff" font-size="1.2em">Radiation monitoring at Kalpakkam nuclear plant</text>
     </svg>
   `;
-  // Animate meter needle
-  let angle = -60;
-  const meter = liveFeed.querySelector('#meter');
-  let needle = document.createElementNS('http://www.w3.org/2000/svg','line');
-  needle.setAttribute('x1','350');
-  needle.setAttribute('y1','370');
-  needle.setAttribute('x2','350');
-  needle.setAttribute('y2','355');
-  needle.setAttribute('stroke','#e63946');
-  needle.setAttribute('stroke-width','3');
-  meter.parentNode.appendChild(needle);
+  // Animate radiation wave, sensors, and monitor
+  const svg = liveFeed.querySelector('svg');
+  const wave1 = svg.getElementById('wave1');
+  const meter = svg.getElementById('meter');
+  const scanBar = svg.getElementById('scanBar');
+  const sensors = [svg.getElementById('sensor1'), svg.getElementById('sensor2'), svg.getElementById('sensor3')];
+  let t = 0, scanX = 565, scanDir = 1, meterVal = 0;
   function animate() {
-    if (angle < 60) {
-      angle += 2;
-      let rad = (angle-90)*Math.PI/180;
-      let x2 = 350 + 15*Math.cos(rad);
-      let y2 = 370 + 15*Math.sin(rad);
-      needle.setAttribute('x2',x2);
-      needle.setAttribute('y2',y2);
+    t++;
+    // Animate radiation wave
+    let wavePulse = 1 + 0.08 * Math.sin(t/10);
+    wave1.setAttribute('rx', 30 * wavePulse);
+    wave1.setAttribute('ry', 12 * wavePulse);
+    wave1.setAttribute('opacity', 0.18 + 0.08 * Math.abs(Math.sin(t/12)));
+    // Animate sensors pulsing
+    sensors.forEach((sensor, i) => {
+      let pulse = 0.7 + 0.3 * Math.abs(Math.sin(t/10 + i));
+      sensor.querySelector('circle').setAttribute('fill', `rgba(0,255,255,${pulse})`);
+    });
+    // Animate scan bar in monitor
+    scanX += scanDir * 1.5;
+    if (scanX > 575) scanDir = -1;
+    if (scanX < 565) scanDir = 1;
+    scanBar.setAttribute('x', scanX);
+    // Animate meter value (simulate reading)
+    meterVal = 0.5 + 0.5 * Math.abs(Math.sin(t/30));
+    let color = meterVal > 0.8 ? '#e63946' : meterVal > 0.6 ? '#ff0' : '#7ec850';
+    meter.setAttribute('fill', color);
       requestAnimationFrame(animate);
-    }
   }
   animate();
 }
 
+// --- Landslide Early Warning (reverted, simple) ---
 function animateLandshedWarning(cmd) {
   liveFeed.innerHTML = `
     <svg width="700" height="480" viewBox="0 0 700 480">
       <rect width="700" height="480" fill="#b8c1ec"/>
-      <polygon points="200,400 350,200 500,400" fill="#7ec850" stroke="#232946" stroke-width="4"/>
-      <rect x="320" y="320" width="60" height="40" fill="#eebbc3" rx="10"/>
-      <circle id="sensor" cx="350" cy="320" r="10" fill="#ff0"/>
-      <text x="350" y="190" text-anchor="middle" fill="#232946" font-size="1.1em">Landslide warning system active</text>
+      <!-- Hillslope -->
+      <polygon id="hill" points="150,400 350,180 600,400" fill="#7ec850" stroke="#232946" stroke-width="4"/>
+      <!-- Village at base -->
+      <g id="village">
+        <rect x="220" y="410" width="30" height="20" fill="#eebbc3" rx="4"/>
+        <rect x="230" y="420" width="10" height="10" fill="#fff" rx="2"/>
+        <rect x="500" y="410" width="30" height="20" fill="#eebbc3" rx="4"/>
+        <rect x="510" y="420" width="10" height="10" fill="#fff" rx="2"/>
+      </g>
+      <!-- Rainfall (animated) -->
+      <g id="rain">
+        <line x1="320" y1="200" x2="320" y2="240" stroke="#0ff" stroke-width="3" opacity="0.7"/>
+        <line x1="340" y1="180" x2="340" y2="230" stroke="#0ff" stroke-width="3" opacity="0.7"/>
+        <line x1="360" y1="190" x2="360" y2="240" stroke="#0ff" stroke-width="3" opacity="0.7"/>
+        <line x1="380" y1="170" x2="380" y2="230" stroke="#0ff" stroke-width="3" opacity="0.7"/>
+        <line x1="400" y1="200" x2="400" y2="240" stroke="#0ff" stroke-width="3" opacity="0.7"/>
+      </g>
+      <!-- Sensor and beacon -->
+      <g id="sensorGroup">
+        <rect x="340" y="260" width="20" height="24" fill="#fff" stroke="#393e6a" stroke-width="2" rx="5"/>
+        <circle id="beacon" cx="350" cy="260" r="12" fill="#ff0" stroke="#e63946" stroke-width="3"/>
+      </g>
+      <!-- Landslide (hidden at first) -->
+      <polygon id="landslide" points="340,270 360,280 380,400 320,400" fill="#b08d57" opacity="0"/>
+      <!-- Dust cloud -->
+      <ellipse id="dust" cx="350" cy="400" rx="0" ry="0" fill="#e0c9a6" opacity="0.5"/>
+      <text x="350" y="120" text-anchor="middle" fill="#232946" font-size="1.1em">Landslide early warning system active</text>
+      <text x="350" y="470" text-anchor="middle" fill="#393e6a" font-size="0.9em">Nilgiris District Hillslopes</text>
     </svg>
   `;
-  // Animate sensor blinking
-  let op = 1, dir = -1;
-  const sensor = liveFeed.querySelector('#sensor');
+  // Animate beacon, rainfall, and landslide
+  const svg = liveFeed.querySelector('svg');
+  const beacon = svg.getElementById('beacon');
+  const rain = svg.getElementById('rain');
+  const landslide = svg.getElementById('landslide');
+  const dust = svg.getElementById('dust');
+  let op = 1, dir = -1, t = 0, rainOffset = 0;
+  let slideY = 0, slideX = 0, slideW = 20, slideOpacity = 0, dustR = 0;
+  let landslideTriggered = false, alert = false;
   function animate() {
+    t++;
+    // Animate beacon blinking
     op += dir * 0.05;
     if (op < 0.3) dir = 1;
     if (op > 1) dir = -1;
-    sensor.setAttribute('opacity', op);
+    beacon.setAttribute('opacity', op);
+    // Animate rainfall (move lines down, loop)
+    rainOffset = (rainOffset + 3) % 40;
+    let rainLines = rain.querySelectorAll('line');
+    rainLines.forEach((line, i) => {
+      let origY1 = [200,180,190,170,200][i];
+      let origY2 = [240,230,240,230,240][i];
+      let y1 = origY1 + rainOffset;
+      let y2 = origY2 + rainOffset;
+      if (y1 > 400) { y1 -= 240; y2 -= 240; }
+      line.setAttribute('y1', y1);
+      line.setAttribute('y2', y2);
+    });
+    // Landslide event after t > 100
+    if (t > 100) {
+      if (!landslideTriggered) landslideTriggered = true;
+      if (slideOpacity < 1) slideOpacity += 0.04;
+      if (slideY < 160) slideY += 3; // vertical movement
+      if (slideX < 80) slideX += 1.5; // diagonal right
+      if (slideW < 90) slideW += 1.2; // widen as it descends
+      // Landslide polygon points: top left, top right, bottom right, bottom left
+      let topLeftX = 340 + slideX - slideW/2;
+      let topLeftY = 270 + slideY * 0.7;
+      let topRightX = 360 + slideX + slideW/2;
+      let topRightY = 280 + slideY * 0.7;
+      let botRightX = 380 + slideX + slideW/1.5;
+      let botRightY = 400;
+      let botLeftX = 320 + slideX - slideW/1.5;
+      let botLeftY = 400;
+      let points = `${topLeftX},${topLeftY} ${topRightX},${topRightY} ${botRightX},${botRightY} ${botLeftX},${botLeftY}`;
+      landslide.setAttribute('points', points);
+      landslide.setAttribute('opacity', slideOpacity);
+      // Animate dust cloud at base
+      let dustCx = (botRightX + botLeftX) / 2;
+      if (slideY > 120 && dustR < 40) dustR += 2.5;
+      dust.setAttribute('cx', dustCx);
+      dust.setAttribute('rx', dustR);
+      dust.setAttribute('ry', dustR/3);
+      dust.setAttribute('opacity', 0.5 * (slideOpacity));
+      // If landslide reaches base, highlight beacon red
+      if (slideX > 60) beacon.setAttribute('fill', '#e63946');
+    }
     requestAnimationFrame(animate);
   }
   animate();
@@ -1284,26 +2859,87 @@ function animateDataRelay(cmd) {
   liveFeed.innerHTML = `
     <svg width="700" height="480" viewBox="0 0 700 480">
       <rect width="700" height="480" fill="#232946"/>
-      <ellipse cx="350" cy="420" rx="200" ry="20" fill="#b8c1ec" opacity="0.2"/>
-      <g id="dish">
-        <ellipse cx="350" cy="320" rx="40" ry="16" fill="#eebbc3"/>
-        <rect x="340" y="300" width="20" height="30" fill="#b8c1ec" rx="6"/>
+      <!-- Andaman Islands Map Outline (stylized) -->
+      <g id="andamanMap">
+        <ellipse cx="180" cy="320" rx="40" ry="80" fill="#7ec850" opacity="0.7"/>
+        <ellipse cx="210" cy="250" rx="18" ry="36" fill="#7ec850" opacity="0.7"/>
+        <ellipse cx="230" cy="180" rx="10" ry="20" fill="#7ec850" opacity="0.7"/>
+        <ellipse cx="250" cy="120" rx="7" ry="14" fill="#7ec850" opacity="0.7"/>
       </g>
-      <g id="signal">
-        <path d="M370 320 Q400 250 500 100" stroke="#0ff" stroke-width="4" fill="none"/>
-        <circle cx="500" cy="100" r="10" fill="#0ff"/>
+      <!-- Ground Station -->
+      <g id="groundStation">
+        <rect x="160" y="370" width="40" height="30" fill="#b8c1ec" rx="8"/>
+        <ellipse cx="180" cy="400" rx="20" ry="6" fill="#393e6a" opacity="0.3"/>
+        <rect x="175" y="360" width="10" height="20" fill="#eebbc3" rx="3"/>
+        <ellipse cx="180" cy="360" rx="10" ry="4" fill="#eebbc3"/>
+        <!-- Parabolic dish -->
+        <ellipse id="dish" cx="200" cy="370" rx="10" ry="6" fill="#fff" stroke="#b8c1ec" stroke-width="2"/>
+        <rect x="198" y="370" width="4" height="10" fill="#b8c1ec" rx="1"/>
       </g>
-      <text x="350" y="290" text-anchor="middle" fill="#fff" font-size="1.1em">Satellite data relay in progress...</text>
+      <!-- Satellite in orbit -->
+      <g id="satellite">
+        <rect x="500" y="60" width="40" height="16" fill="#b8c1ec" rx="4"/>
+        <rect x="495" y="66" width="8" height="4" fill="#eebbc3" rx="2"/>
+        <rect x="547" y="66" width="8" height="4" fill="#eebbc3" rx="2"/>
+        <rect x="518" y="56" width="4" height="24" fill="#eebbc3" rx="2"/>
+        <ellipse cx="520" cy="68" rx="8" ry="8" fill="#fff" stroke="#232946" stroke-width="2"/>
+      </g>
+      <!-- Relief Camp -->
+      <g id="reliefCamp">
+        <rect x="600" y="340" width="60" height="40" fill="#eebbc3" rx="10"/>
+        <rect x="620" y="350" width="20" height="20" fill="#fff" rx="4"/>
+        <rect x="628" y="358" width="4" height="12" fill="#e63946"/>
+        <rect x="624" y="364" width="12" height="4" fill="#e63946"/>
+        <ellipse cx="630" cy="380" rx="20" ry="6" fill="#393e6a" opacity="0.3"/>
+      </g>
+      <!-- Data Beams -->
+      <g id="beams">
+        <polyline id="beam1" points="200,370 520,68" stroke="#0ff" stroke-width="4" fill="none" opacity="0.7"/>
+        <polyline id="beam2" points="520,68 630,350" stroke="#ff0" stroke-width="4" fill="none" opacity="0.7"/>
+      </g>
+      <text x="350" y="60" text-anchor="middle" fill="#fff" font-size="1.2em">Satellite data relay in progress...</text>
+      <text x="180" y="310" text-anchor="middle" fill="#232946" font-size="0.9em">Andaman Islands</text>
+      <text x="630" y="335" text-anchor="middle" fill="#232946" font-size="0.9em">Relief Camp</text>
+      <text x="520" y="50" text-anchor="middle" fill="#b8c1ec" font-size="0.9em">Satellite</text>
     </svg>
   `;
-  // Animate signal pulse
-  let op = 0.2, dir = 1;
-  const signal = liveFeed.querySelector('#signal');
+  // Animate data pulses along the beams
+  const svg = liveFeed.querySelector('svg');
+  const beam1 = svg.getElementById('beam1');
+  const beam2 = svg.getElementById('beam2');
+  let t = 0;
   function animate() {
-    op += dir * 0.03;
-    if (op > 1) dir = -1;
-    if (op < 0.2) dir = 1;
-    signal.setAttribute('opacity', op);
+    t += 1;
+    // Animate a glowing dot along beam1 (ground to satellite)
+    let p1 = t % 100 / 100;
+    let x1 = 200 + (520 - 200) * p1;
+    let y1 = 370 + (68 - 370) * p1;
+    let dot1 = svg.getElementById('dot1');
+    if (!dot1) {
+      dot1 = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      dot1.setAttribute('id', 'dot1');
+      dot1.setAttribute('r', '7');
+      dot1.setAttribute('fill', '#0ff');
+      dot1.setAttribute('opacity', '0.8');
+      svg.appendChild(dot1);
+    }
+    dot1.setAttribute('cx', x1);
+    dot1.setAttribute('cy', y1);
+    // Animate a glowing dot along beam2 (satellite to camp)
+    let p2 = ((t + 50) % 100) / 100;
+    let x2 = 520 + (630 - 520) * p2;
+    let y2 = 68 + (350 - 68) * p2;
+    let dot2 = svg.getElementById('dot2');
+    if (!dot2) {
+      dot2 = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      dot2.setAttribute('id', 'dot2');
+      dot2.setAttribute('r', '7');
+      dot2.setAttribute('fill', '#ff0');
+      dot2.setAttribute('opacity', '0.8');
+      svg.appendChild(dot2);
+    }
+    dot2.setAttribute('cx', x2);
+    dot2.setAttribute('cy', y2);
     requestAnimationFrame(animate);
   }
   animate();
@@ -1349,6 +2985,144 @@ customForm.onsubmit = (e) => {
 };
 
 renderCommandList();
+
+// --- NLP Command Input Integration ---
+const nlpForm = document.getElementById('nlpCommandForm');
+const nlpInput = document.getElementById('nlpCommandInput');
+const nlpError = document.getElementById('nlpCommandError');
+
+nlpForm.onsubmit = async (e) => {
+  e.preventDefault();
+  nlpError.style.display = 'none';
+  const userInput = nlpInput.value.trim();
+  if (!userInput) return;
+  // Call backend
+  try {
+    const res = await fetch('/api/match_command', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({user_input: userInput})
+    });
+    if (!res.ok) {
+      const err = await res.json();
+      nlpError.textContent = err.error || 'Error processing command';
+      nlpError.style.display = 'block';
+      return;
+    }
+    const cmd = await res.json();
+    // Show the matched command and parameters
+    commandDesc.innerHTML = `<b>Matched:</b> ${cmd.english}<br><b>Parameters:</b> ${JSON.stringify(cmd.parameters)}`;
+    // Trigger the correct animation
+    selectedIdx = null;
+    renderCommandList();
+    // Use the intent to trigger the right animation
+    switch (cmd.intent) {
+      case 'search_survivors': animateThermalSearch(cmd); break;
+      case 'deploy_supplies': animateAirdrop(cmd); break;
+      case 'hazard_warning': animateHazardWarning(cmd); break;
+      case 'clear_path': animateClearDebris(cmd); break;
+      case 'medical_assistance': animateMedicalCamp(cmd); break;
+      case 'structural_assessment': animateLidarScan(cmd); break;
+      case 'water_rescue': animateWaterRescue(cmd); break;
+      case 'fire_containment': animateFireContainment(cmd); break;
+      case 'evacuation_route': animateEvacuationRoute(cmd); break;
+      case 'communication_restore': animateMeshNetwork(cmd); break;
+      case 'chemical_neutralization': animateChemicalNeutralization(cmd); break;
+      case 'power_restoration': animatePowerRestoration(cmd); break;
+      case 'missing_persons': animateMissingPersons(cmd); break;
+      case 'drone_surveillance': animateDroneSurveillance(cmd); break;
+      case 'water_purification': animateWaterPurification(cmd); break;
+      case 'bridge_inspection': animateBridgeInspection(cmd); break;
+      case 'animal_rescue': animateAnimalRescue(cmd); break;
+      case 'radiation_monitoring': animateRadiationMonitoring(cmd); break;
+      case 'landshed_warning': animateLandshedWarning(cmd); break;
+      case 'data_relay': animateDataRelay(cmd); break;
+      default: animateGeneric(cmd.english);
+    }
+    nlpInput.value = '';
+  } catch (err) {
+    nlpError.textContent = 'Network or server error';
+    nlpError.style.display = 'block';
+  }
+};
+
+function animateFirebreak(cmd) {
+  // Realistic: burning oil depot, flames/smoke, firebreak perimeter, bulldozers/firetrucks, industrial context
+  liveFeed.innerHTML = `
+    <svg width="700" height="480" viewBox="0 0 700 480">
+      <!-- Sky -->
+      <rect width="700" height="480" fill="#b8c1ec"/>
+      <!-- Industrial background -->
+      <rect x="0" y="380" width="700" height="100" fill="#888"/>
+      <rect x="0" y="420" width="700" height="60" fill="#eebbc3"/>
+      <!-- Oil depot tanks -->
+      <ellipse cx="350" cy="340" rx="90" ry="30" fill="#b8c1ec" stroke="#232946" stroke-width="3"/>
+      <ellipse cx="270" cy="350" rx="40" ry="16" fill="#fff" stroke="#393e6a" stroke-width="2"/>
+      <ellipse cx="430" cy="350" rx="40" ry="16" fill="#fff" stroke="#393e6a" stroke-width="2"/>
+      <rect x="230" y="330" width="80" height="40" fill="#e0e0e0" stroke="#232946" stroke-width="2" rx="10"/>
+      <rect x="390" y="330" width="80" height="40" fill="#e0e0e0" stroke="#232946" stroke-width="2" rx="10"/>
+      <!-- Flames and smoke -->
+      <g id="flames">
+        <ellipse cx="350" cy="320" rx="18" ry="10" fill="#ff9800" opacity="0.8"/>
+        <ellipse cx="350" cy="310" rx="12" ry="8" fill="#ff5722" opacity="0.7"/>
+        <ellipse cx="350" cy="300" rx="8" ry="6" fill="#fff176" opacity="0.7"/>
+        <ellipse cx="340" cy="295" rx="7" ry="5" fill="#ff9800" opacity="0.6"/>
+        <ellipse cx="360" cy="295" rx="7" ry="5" fill="#ff9800" opacity="0.6"/>
+        <ellipse cx="350" cy="285" rx="10" ry="7" fill="#bdbdbd" opacity="0.4"/>
+        <ellipse cx="355" cy="280" rx="8" ry="5" fill="#bdbdbd" opacity="0.3"/>
+      </g>
+      <!-- Firebreak perimeter -->
+      <ellipse id="firebreak" cx="350" cy="340" rx="140" ry="50" fill="none" stroke="#ffe082" stroke-width="10" stroke-dasharray="16 8"/>
+      <ellipse cx="350" cy="340" rx="140" ry="50" fill="none" stroke="#a1887f" stroke-width="4"/>
+      <!-- Bulldozer -->
+      <g id="bulldozer">
+        <rect x="180" y="390" width="40" height="18" fill="#ffb300" stroke="#232946" stroke-width="2" rx="5"/>
+        <rect x="175" y="405" width="50" height="10" fill="#a1887f" rx="3"/>
+        <rect x="215" y="395" width="10" height="10" fill="#232946" rx="2"/>
+      </g>
+      <!-- Firetruck -->
+      <g id="firetruck">
+        <rect x="520" y="400" width="50" height="18" fill="#e53935" stroke="#232946" stroke-width="2" rx="5"/>
+        <rect x="515" y="415" width="60" height="10" fill="#bdbdbd" rx="3"/>
+        <rect x="555" y="405" width="10" height="10" fill="#232946" rx="2"/>
+      </g>
+      <!-- Warning sign -->
+      <g>
+        <polygon points="350,390 360,410 340,410" fill="#fffde7" stroke="#232946" stroke-width="2"/>
+        <text x="350" y="407" text-anchor="middle" fill="#e53935" font-size="0.8em">DANGER</text>
+      </g>
+      <!-- 200m scale -->
+      <rect x="100" y="470" width="200" height="6" fill="#232946"/>
+      <text x="200" y="465" text-anchor="middle" fill="#232946" font-size="0.9em">200m</text>
+      <text x="350" y="60" text-anchor="middle" fill="#232946" font-size="1.2em">Firebreak perimeter 200m around burning oil depot in Ennore</text>
+    </svg>
+    <div style="position:absolute;top:30px;left:30px;color:#232946;font-size:1.1em;">Bulldozers and firetrucks creating firebreak perimeter...</div>
+  `;
+  // Animate bulldozer and firetruck moving around firebreak
+  const svg = liveFeed.querySelector('svg');
+  const bulldozer = svg.getElementById('bulldozer');
+  const firetruck = svg.getElementById('firetruck');
+  const flames = svg.getElementById('flames');
+  let t = 0;
+  function animate() {
+    t++;
+    // Bulldozer moves along left half of firebreak
+    let angle1 = Math.PI + (t/80);
+    let bx = 350 + 140 * Math.cos(angle1) - 20;
+    let by = 340 + 50 * Math.sin(angle1) - 10;
+    bulldozer.setAttribute('transform', `translate(${bx-180},${by-390})`);
+    // Firetruck moves along right half of firebreak
+    let angle2 = (t/80);
+    let fx = 350 + 140 * Math.cos(angle2) - 25;
+    let fy = 340 + 50 * Math.sin(angle2) - 9;
+    firetruck.setAttribute('transform', `translate(${fx-520},${fy-400})`);
+    // Flames flicker
+    let flameScale = 1 + 0.08*Math.sin(t/6);
+    flames.setAttribute('transform', `scale(1,${flameScale})`);
+    requestAnimationFrame(animate);
+  }
+  animate();
+}
 </script>
 </body>
 </html> 

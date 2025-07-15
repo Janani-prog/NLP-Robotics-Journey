@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aura: Disaster Response AI</title>
+    
+    <!-- Leaflet CSS for Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin=""/>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- LEFT PANEL: CONTROLS -->
+        <div class="panel control-panel">
+            <header>
+                <h1>AURA</h1>
+                <p>AI-Powered Disaster Response</p>
+            </header>
+
+            <section class="command-input-section">
+                <h2>Enter Command</h2>
+                <div class="input-group">
+                    <input type="text" id="command-input" placeholder="e.g., Airdrop 50 survival kits to 13.08°N, 80.27°E">
+                    <button id="process-btn">Process</button>
+                </div>
+                 <div id="example-commands">
+                    <small>Try an example: <a href="#" id="example-link"></a></small>
+                </div>
+            </section>
+
+            <section id="parsed-output" class="hidden">
+                <h2>Parsed Command</h2>
+                <div class="output-grid">
+                    <div><strong>Intent:</strong></div><div id="output-intent"></div>
+                    <div><strong>Safety Critical:</strong></div><div id="output-safety"></div>
+                    <div><strong>Parameters:</strong></div><div id="output-params"></div>
+                </div>
+            </section>
+            
+            <section class="command-log-section">
+                <h2>Command Log</h2>
+                <div id="command-log">
+                    <div class="log-entry log-info">System initialized. Awaiting command.</div>
+                </div>
+            </section>
+        </div>
+
+        <!-- RIGHT PANEL: VISUALIZATION -->
+        <div class="panel map-panel">
+            <div id="map"></div>
+        </div>
+    </div>
+
+    <!-- CONFIRMATION DIALOG -->
+    <div id="confirmation-dialog" class="dialog-overlay hidden">
+        <div class="dialog-box">
+            <h3>Confirmation Required</h3>
+            <p id="confirmation-text">This is a safety-critical action. Please confirm you want to proceed.</p>
+            <div class="dialog-buttons">
+                <button id="confirm-btn" class="btn-confirm">Confirm & Execute</button>
+                <button id="cancel-btn" class="btn-cancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+    
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html> 

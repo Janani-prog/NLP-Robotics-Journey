@@ -1,0 +1,10 @@
+Flask==3.0.3
+scikit-learn==1.4.2
+spacy==3.7.4
+numpy==1.26.4
+pandas==2.2.2
+sentence-transformers==2.7.0
+torch==2.2.2
+
+# After installing, run this command in your terminal to get the spacy model:
+# python -m spacy download en_core_web_sm 
