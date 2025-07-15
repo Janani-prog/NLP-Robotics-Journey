@@ -50,7 +50,6 @@ The pinnacle of our journey is **Aura**, a full-stack, bilingual AI for disaster
 - `08_NLP_Simulation/`: English NLP disaster response prototype.
 - `09_Bilingual_Simulation/`: Aura—Bilingual (English & Tamil) NLP disaster response system.
 - `requirements.txt`: Python dependencies for all tasks.
-- `internship_log.md`: A chronological log of progress, challenges, and insights.
 
 ---
 
