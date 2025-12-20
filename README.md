@@ -5,7 +5,7 @@ In the critical moments following a disaster, communication is the lifeline. Thi
 
 ---
 
-## 🚀 The Journey: A Developmental Chronicle
+## The Journey: A Developmental Chronicle
 
 Our path was structured as a multi-stage evolution, with each chapter building upon the last to create a comprehensive and intelligent system.
 
@@ -39,7 +39,7 @@ The pinnacle of our journey is **Aura**, a full-stack, bilingual AI for disaster
 
 ---
 
-## 🧭 Project Blueprint
+## Project Blueprint
 - `01_Task_Dataset_Analysis/`: Dataset exploration, presentation, and summary.
 - `02_Task_Simulations/`: KITTI navigation and robot instruction simulations.
 - `03_Task_Robot_Arm_Simulation/`: Robot arm simulation and control.
@@ -53,7 +53,7 @@ The pinnacle of our journey is **Aura**, a full-stack, bilingual AI for disaster
 
 ---
 
-## 🌐 Core Technologies & Datasets
+## Core Technologies & Datasets
 - **Datasets:**
   - `mint-lab/awesome-robotics-datasets`: A curated list of robotics datasets for navigation, manipulation, and disaster scenarios.
   - `milistu/robot-instructions`: A dataset for mapping natural language to robot commands.
@@ -69,7 +69,7 @@ The pinnacle of our journey is **Aura**, a full-stack, bilingual AI for disaster
 
 ---
 
-## 🙏 Acknowledgements
+## Acknowledgements
 - This project was made possible by the invaluable guidance of **Professor S. Sangeetha, NIT Trichy.**
 - Our work stands on the shoulders of giants in the open-source robotics and NLP communities.
 - Fueled by curiosity, collaboration, and a steadfast vision for a safer, more resilient world.
